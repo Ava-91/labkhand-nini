@@ -1,0 +1,3 @@
+import type {Metadata} from "next";import ProductCatalog from "../components/ProductCatalog";import {getProducts} from "@/lib/products";
+export const metadata:Metadata={title:"همه محصولات",description:"محصولات لبخند نینی را جست‌وجو کن، دسته‌بندی کن و مرتب کن."};
+export default async function ProductsPage(){const products=await getProducts();return <main className="page-shell container"><div className="page-intro"><span className="eyebrow">فروشگاه لبخند نینی</span><h1>همه‌ی انتخاب‌های دوست‌داشتنی</h1><p>جست‌وجو کن، دسته‌بندی رو انتخاب کن و چیزی رو پیدا کن که به دلت می‌شینه.</p></div><ProductCatalog products={products} title="کاتالوگ محصولات" description="محصول موردنظرت رو سریع‌تر پیدا کن."/></main>;}
