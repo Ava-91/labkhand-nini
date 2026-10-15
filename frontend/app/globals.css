@@ -32,3 +32,7 @@ a,button,summary,select{touch-action:manipulation}
 .catalog-count[role=status]{min-height:1.8em}
 @media(max-width:680px){.mobile-menu{display:block}.nav-actions{margin-inline-start:auto}.mobile-menu[open] summary{background:#fff0f3;border-color:#c65f7d}.site-nav{position:relative}.nav-actions .nav-login{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.button,.product-card,.product-card:hover,.category-tile,.category-tile:hover{transform:none;transition:none}}
+
+.skip-link{position:fixed;top:8px;right:8px;z-index:1000;transform:translateY(-160%);padding:10px 16px;border-radius:10px;background:#443a3c;color:#fff;font-size:14px;font-weight:700}
+.skip-link:focus{transform:translateY(0)}
+#main-content:focus{outline:none}
