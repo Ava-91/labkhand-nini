@@ -19,7 +19,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="fa" dir="rtl">
       <body>
         <a className="skip-link" href="#main-content">پرش به محتوای اصلی</a>
-        <Navbar />
+        <Navbar settings={settings} />
         <div id="main-content" tabIndex={-1}>{children}</div>
         <footer className="site-footer">
           <div className="container footer-inner">
