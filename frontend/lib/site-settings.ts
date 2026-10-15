@@ -26,6 +26,18 @@ export type SiteSettings = {
   heroTrustDescription: string;
   heroFloatingTop: string;
   heroFloatingBottom: string;
+  heroBottomFirst: string;
+  heroBottomSecond: string;
+  heroBottomThird: string;
+  productsPageEyebrow: string;
+  productsPageTitle: string;
+  productsPageDescription: string;
+  catalogEyebrow: string;
+  catalogSearchPlaceholder: string;
+  catalogEmptyTitle: string;
+  catalogEmptyDescription: string;
+  productDetailNote: string;
+  productDetailBackText: string;
   featuredTitle: string;
   featuredDescription: string;
   categoryTiles: CategoryTile[];
