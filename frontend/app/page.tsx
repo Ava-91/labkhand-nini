@@ -34,7 +34,7 @@ export default async function HomePage() {
             <div className="floating-note note-bottom"><span>🎀</span><span>{settings.heroFloatingBottom}</span></div>
           </div>
         </div>
-        <div className="hero-bottom container"><span>یک دنیا کوچولوی دوست‌داشتنی</span><span>♡</span><span>برای لحظه‌های به‌یادموندنی</span><span>♡</span><span>از اولین روز تا همیشه</span></div>
+        <div className="hero-bottom container"><span>{settings.heroBottomFirst}</span><span>♡</span><span>{settings.heroBottomSecond}</span><span>♡</span><span>{settings.heroBottomThird}</span></div>
       </section>
 
       <section className="category-strip container" aria-label="دسته‌بندی محصولات">
@@ -47,7 +47,7 @@ export default async function HomePage() {
 
       <div className="container">
         {picks.length ? (
-          <ProductCatalog products={picks} title={settings.featuredTitle} description={settings.featuredDescription} limit={4} />
+          <ProductCatalog products={picks} title={settings.featuredTitle} description={settings.featuredDescription} eyebrow={settings.catalogEyebrow} searchPlaceholder={settings.catalogSearchPlaceholder} emptyTitle={settings.catalogEmptyTitle} emptyDescription={settings.catalogEmptyDescription} limit={4} />
         ) : (
           <section className="empty-state" aria-labelledby="featured-empty-title">
             <span aria-hidden="true">🧺</span>
