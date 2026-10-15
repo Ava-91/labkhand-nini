@@ -1,5 +1,108 @@
-import type {Metadata} from "next";import Link from "next/link";import {notFound} from "next/navigation";import {getDiscountedPrice,getProductBySlug} from "@/lib/products";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+
+import { getDiscountedPrice, getProductBySlug } from "@/lib/products";
 import { getSiteSettings } from "@/lib/site-settings";
-const money=(n:number)=>new Intl.NumberFormat("fa-IR").format(n)+" تومان";
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{const {slug}=await params;const p=await getProductBySlug(slug);return p?{title:p.title,description:p.description}:{title:"محصول پیدا نشد"};}
-export default async function ProductDetailPage({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const [p,settings]=await Promise.all([getProductBySlug(slug),getSiteSettings()]);if(!p)notFound();return <main className="container detail-page"><nav className="breadcrumbs" aria-label="مسیر صفحه"><Link href="/">خانه</Link><span>/</span><Link href="/products">محصولات</Link><span>/</span><span>{p.title}</span></nav><div className="detail-layout"><div className={"detail-art"+(p.image?" has-photo":"")} style={p.image?{backgroundImage:"url("+p.image+")"}:undefined} role="img" aria-label={p.title}>{!p.image?<span>{p.emoji}</span>:null}{p.discount>0?<span className="discount-badge">{new Intl.NumberFormat("fa-IR").format(p.discount)}٪ تخفیف</span>:null}</div><div className="detail-copy"><span className="product-category">{p.category}</span><h1>{p.title}</h1><p className="detail-description">{p.description}</p><div className="detail-price"><strong>{money(getDiscountedPrice(p))}</strong>{p.discount>0?<del>{money(p.price)}</del>:null}</div><p className={"detail-stock"+(p.stock>0?"":" unavailable")}>● {p.stock>0?"موجود برای انتخاب تو":"فعلاً ناموجود"}</p><div className="detail-note"><span>♡</span><p>{settings.productDetailNote}</p></div><Link href="/products" className="button button-primary button-large">{settings.productDetailBackText}</Link></div></div></main>;}
+
+const money = (price: number) =>
+  new Intl.NumberFormat("fa-IR").format(price) + " تومان";
+
+type PageProps = {
+  params: Promise<{ slug: string }>;
+};
+
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
+
+  if (!product) {
+    return { title: "محصول پیدا نشد" };
+  }
+
+  return {
+    title: product.title,
+    description: product.description,
+  };
+}
+
+export default async function ProductDetailPage({ params }: PageProps) {
+  const { slug } = await params;
+
+  const [product, settings] = await Promise.all([
+    getProductBySlug(slug),
+    getSiteSettings(),
+  ]);
+
+  // Show Next.js's not-found page when this product does not exist.
+  if (!product) {
+    notFound();
+  }
+
+  const price = money(getDiscountedPrice(product));
+  const originalPrice = money(product.price);
+  const hasDiscount = product.discount > 0;
+  const isInStock = product.stock > 0;
+
+  return (
+    <main className="container detail-page">
+      <nav className="breadcrumbs" aria-label="مسیر صفحه">
+        <Link href="/">خانه</Link>
+        <span>/</span>
+        <Link href="/products">محصولات</Link>
+        <span>/</span>
+        <span>{product.title}</span>
+      </nav>
+
+      <div className="detail-layout">
+        <div
+          className={"detail-art" + (product.image ? " has-photo" : "")}
+          style={
+            product.image
+              ? { backgroundImage: "url(" + product.image + ")" }
+              : undefined
+          }
+          role="img"
+          aria-label={product.title}
+        >
+          {!product.image && <span>{product.emoji}</span>}
+
+          {hasDiscount && (
+            <span className="discount-badge">
+              {new Intl.NumberFormat("fa-IR").format(product.discount)}٪ تخفیف
+            </span>
+          )}
+        </div>
+
+        <div className="detail-copy">
+          <span className="product-category">{product.category}</span>
+          <h1>{product.title}</h1>
+          <p className="detail-description">{product.description}</p>
+
+          <div className="detail-price">
+            <strong>{price}</strong>
+            {hasDiscount && <del>{originalPrice}</del>}
+          </div>
+
+          <p className={"detail-stock" + (isInStock ? "" : " unavailable")}>
+            ● {isInStock ? "موجود برای انتخاب تو" : "فعلاً ناموجود"}
+          </p>
+
+          <div className="detail-note">
+            <span>♡</span>
+            <p>{settings.productDetailNote}</p>
+          </div>
+
+          <Link
+            href="/products"
+            className="button button-primary button-large"
+          >
+            {settings.productDetailBackText}
+          </Link>
+        </div>
+      </div>
+    </main>
+  );
+}
