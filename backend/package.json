@@ -8,7 +8,9 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "format": "npx --yes prettier@3.6.2 --write \"config/**/*.{ts,js,json}\" \"src/**/*.{ts,js,json}\" \"*.{ts,js,json,md}\"",
+    "format:check": "npx --yes prettier@3.6.2 --check \"config/**/*.{ts,js,json}\" \"src/**/*.{ts,js,json}\" \"*.{ts,js,json,md}\""
   },
   "dependencies": {
     "@strapi/plugin-users-permissions": "5.57.0",
