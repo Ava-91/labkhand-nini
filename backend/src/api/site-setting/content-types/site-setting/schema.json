@@ -7,39 +7,147 @@
     "displayName": "Storefront Settings",
     "description": "Editable brand, navigation, homepage, and footer content for the storefront"
   },
-  "options": { "draftAndPublish": true },
+  "options": {
+    "draftAndPublish": true
+  },
   "attributes": {
-    "brandName": { "type": "string", "required": true },
-    "brandTagline": { "type": "string" },
-    "footerTagline": { "type": "string" },
-    "logo": { "type": "media", "multiple": false, "required": false, "allowedTypes": ["images"] },
-    "announcement": { "type": "string" },
-    "navLinks": { "type": "json" },
-    "footerMessage": { "type": "text" },
-    "copyrightText": { "type": "string" },
-    "seoTitle": { "type": "string" },
-    "seoDescription": { "type": "text" },
-    "heroKicker": { "type": "string" },
-    "heroTitle": { "type": "string" },
-    "heroAccent": { "type": "string" },
-    "heroDescription": { "type": "text" },
-    "heroPrimaryCta": { "type": "string" },
-    "heroSecondaryCta": { "type": "string" },
-    "heroTrustTitle": { "type": "string" },
-    "heroTrustDescription": { "type": "string" },
-    "heroFloatingTop": { "type": "string" },
-    "heroFloatingBottom": { "type": "string" },
-    "featuredTitle": { "type": "string" },
-    "featuredDescription": { "type": "text" },
-    "categoryTiles": { "type": "json" },
-    "promisesEyebrow": { "type": "string" },
-    "promisesTitle": { "type": "string" },
-    "promisesAccent": { "type": "string" },
-    "promisesDescription": { "type": "text" },
-    "promiseCards": { "type": "json" },
-    "closingEyebrow": { "type": "string" },
-    "closingTitle": { "type": "string" },
-    "closingDescription": { "type": "text" },
-    "closingCtaText": { "type": "string" }
+    "brandName": {
+      "type": "string",
+      "required": true
+    },
+    "brandTagline": {
+      "type": "string"
+    },
+    "footerTagline": {
+      "type": "string"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "announcement": {
+      "type": "string"
+    },
+    "navLinks": {
+      "type": "json"
+    },
+    "footerMessage": {
+      "type": "text"
+    },
+    "copyrightText": {
+      "type": "string"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "heroKicker": {
+      "type": "string"
+    },
+    "heroTitle": {
+      "type": "string"
+    },
+    "heroAccent": {
+      "type": "string"
+    },
+    "heroDescription": {
+      "type": "text"
+    },
+    "heroPrimaryCta": {
+      "type": "string"
+    },
+    "heroSecondaryCta": {
+      "type": "string"
+    },
+    "heroTrustTitle": {
+      "type": "string"
+    },
+    "heroTrustDescription": {
+      "type": "string"
+    },
+    "heroFloatingTop": {
+      "type": "string"
+    },
+    "heroFloatingBottom": {
+      "type": "string"
+    },
+    "featuredTitle": {
+      "type": "string"
+    },
+    "featuredDescription": {
+      "type": "text"
+    },
+    "categoryTiles": {
+      "type": "json"
+    },
+    "promisesEyebrow": {
+      "type": "string"
+    },
+    "promisesTitle": {
+      "type": "string"
+    },
+    "promisesAccent": {
+      "type": "string"
+    },
+    "promisesDescription": {
+      "type": "text"
+    },
+    "promiseCards": {
+      "type": "json"
+    },
+    "closingEyebrow": {
+      "type": "string"
+    },
+    "closingTitle": {
+      "type": "string"
+    },
+    "closingDescription": {
+      "type": "text"
+    },
+    "closingCtaText": {
+      "type": "string"
+    },
+    "heroBottomFirst": {
+      "type": "string"
+    },
+    "heroBottomSecond": {
+      "type": "string"
+    },
+    "heroBottomThird": {
+      "type": "string"
+    },
+    "productsPageEyebrow": {
+      "type": "string"
+    },
+    "productsPageTitle": {
+      "type": "string"
+    },
+    "productsPageDescription": {
+      "type": "text"
+    },
+    "catalogEyebrow": {
+      "type": "string"
+    },
+    "catalogSearchPlaceholder": {
+      "type": "string"
+    },
+    "catalogEmptyTitle": {
+      "type": "string"
+    },
+    "catalogEmptyDescription": {
+      "type": "text"
+    },
+    "productDetailNote": {
+      "type": "text"
+    },
+    "productDetailBackText": {
+      "type": "string"
+    }
   }
 }
