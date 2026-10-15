@@ -1,0 +1,98 @@
+[
+  {
+    "id": "local-1",
+    "slug": "cotton-baby-onesie",
+    "title": "بادی نخی نوزادی",
+    "description": "بادی لطیف و سبک از پنبه، مناسب پوست حساس کوچولوها.",
+    "price": 385000,
+    "discount": 10,
+    "stock": 18,
+    "category": "لباس نوزاد",
+    "emoji": "🧸",
+    "featured": true
+  },
+  {
+    "id": "local-2",
+    "slug": "soft-baby-blanket",
+    "title": "پتوی نرم نوزاد",
+    "description": "پتوی گرم و لطیف برای خواب آرام و آغوش‌های طولانی.",
+    "price": 690000,
+    "discount": 0,
+    "stock": 12,
+    "category": "خواب و آرامش",
+    "emoji": "☁️",
+    "featured": true
+  },
+  {
+    "id": "local-3",
+    "slug": "newborn-gift-set",
+    "title": "ست هدیه سیسمونی",
+    "description": "یک انتخاب دوست‌داشتنی برای دیدار اول با کوچولوی تازه‌وارد.",
+    "price": 1250000,
+    "discount": 12,
+    "stock": 7,
+    "category": "هدیه و سیسمونی",
+    "emoji": "🎁",
+    "featured": true
+  },
+  {
+    "id": "local-4",
+    "slug": "silicone-feeding-set",
+    "title": "ست غذاخوری سیلیکونی",
+    "description": "ست کاربردی برای شروع تجربه‌های خوشمزه و مستقل غذا خوردن.",
+    "price": 545000,
+    "discount": 0,
+    "stock": 20,
+    "category": "غذاخوری",
+    "emoji": "🍓",
+    "featured": false
+  },
+  {
+    "id": "local-5",
+    "slug": "baby-care-kit",
+    "title": "ست مراقبت کوچولو",
+    "description": "وسایل ضروری مراقبت روزانه در یک مجموعه جمع‌وجور.",
+    "price": 780000,
+    "discount": 8,
+    "stock": 9,
+    "category": "مراقبت روزانه",
+    "emoji": "🫧",
+    "featured": true
+  },
+  {
+    "id": "local-6",
+    "slug": "knit-baby-hat",
+    "title": "کلاه بافتنی نوزاد",
+    "description": "کلاه سبک با بافت نرم برای روزهای خنک و گردش‌های کوتاه.",
+    "price": 245000,
+    "discount": 0,
+    "stock": 15,
+    "category": "لباس نوزاد",
+    "emoji": "🌷",
+    "featured": false
+  },
+  {
+    "id": "local-7",
+    "slug": "plush-rabbit-toy",
+    "title": "عروسک خرگوشی لطیف",
+    "description": "همراهی نرم و بامزه برای لحظه‌های بازی و عکس‌های یادگاری.",
+    "price": 430000,
+    "discount": 5,
+    "stock": 11,
+    "category": "بازی و سرگرمی",
+    "emoji": "🐰",
+    "featured": false
+  },
+  {
+    "id": "local-8",
+    "slug": "baby-room-night-light",
+    "title": "چراغ خواب اتاق کودک",
+    "description": "نور ملایم برای ساختن فضایی آرام در پایان یک روز شلوغ.",
+    "price": 610000,
+    "discount": 0,
+    "stock": 6,
+    "category": "خواب و آرامش",
+    "emoji": "🌙",
+    "featured": false
+  }
+]
