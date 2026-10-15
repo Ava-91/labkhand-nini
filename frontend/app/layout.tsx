@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Navbar from "./components/Navbar";
+import { getSiteSettings } from "@/lib/site-settings";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  title: { default: "لبخند نینی | دنیای کوچولوی تو", template: "%s | لبخند نینی" },
-  description: "لباس، سیسمونی و وسایل دوست‌داشتنی نوزاد؛ انتخاب شده با عشق برای کوچولوی شما.",
-  applicationName: "لبخند نینی",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSiteSettings();
+  return {
+    title: { default: settings.seoTitle || settings.brandName, template: "%s | " + settings.brandName },
+    description: settings.seoDescription,
+    applicationName: settings.brandName,
+  };
+}
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const settings = await getSiteSettings();
   return (
     <html lang="fa" dir="rtl">
       <body>
@@ -18,12 +23,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <div id="main-content" tabIndex={-1}>{children}</div>
         <footer className="site-footer">
           <div className="container footer-inner">
-            <Link className="brand footer-brand" href="/" aria-label="لبخند نینی، صفحه اصلی">
-              <span className="brand-mark" aria-hidden="true">ن</span>
-              <span className="brand-copy"><strong>لبخند نینی</strong><small>هر انتخاب، پر از عشق</small></span>
+            <Link className="brand footer-brand" href="/" aria-label={settings.brandName + "، صفحه اصلی"}>
+              {settings.logo ? <img className="brand-logo" src={settings.logo} alt="" /> : <span className="brand-mark" aria-hidden="true">{settings.brandName.slice(0, 1)}</span>}
+              <span className="brand-copy"><strong>{settings.brandName}</strong><small>{settings.footerTagline}</small></span>
             </Link>
-            <p>با عشق برای کوچولوها آماده شده 💗</p>
-            <span>© لبخند نینی</span>
+            <p>{settings.footerMessage}</p>
+            <span>{settings.copyrightText}</span>
           </div>
         </footer>
       </body>
