@@ -14,18 +14,18 @@
   font-display:swap
 }
 :root {
-  --ink:#443a3c;
-  --muted:#817477;
-  --rose:#c65f7d;
-  --rose-dark:#a84766;
-  --cream:#fffaf6;
-  --line:#f0e4e3;
-  --green:#4c8a70
+  --ink: #443a3c;
+  --muted: #817477;
+  --rose: #c65f7d;
+  --rose-dark: #a84766;
+  --cream: #fffaf6;
+  --line: #f0e4e3;
+  --green: #4c8a70
 }
 @theme inline {
-  --color-background:var(--cream);
-  --color-foreground:var(--ink);
-  --font-sans:"Vazirmatn",Tahoma,Arial,sans-serif
+  --color-background: var(--cream);
+  --color-foreground: var(--ink);
+  --font-sans: "Vazirmatn",Tahoma,Arial,sans-serif
 }
 * {
   box-sizing:border-box
@@ -952,7 +952,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {
   font-size:23px;
   color:var(--rose-dark)
 }
-@media(max-width:980px) {
+@media (max-width:980px) {
   .hero-layout {
     gap:15px
   }
@@ -978,7 +978,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {
     max-width:620px
   }
 }
-@media(max-width:680px) {
+@media (max-width:680px) {
   .container {
     width:min(100% - 28px,560px)
   }
@@ -1189,7 +1189,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible {
     grid-template-columns:repeat(2,minmax(0,1fr))
   }
 }
-@media(prefers-reduced-motion:reduce) {
+@media (prefers-reduced-motion:reduce) {
   *,*::before,*::after {
     scroll-behavior:auto!important;
     transition-duration:.01ms!important
@@ -1258,7 +1258,7 @@ a,button,summary,select {
 .catalog-count[role=status] {
   min-height:1.8em
 }
-@media(max-width:680px) {
+@media (max-width:680px) {
   .mobile-menu {
     display:block
   }
@@ -1276,7 +1276,7 @@ a,button,summary,select {
     display:none
   }
 }
-@media(prefers-reduced-motion:reduce) {
+@media (prefers-reduced-motion:reduce) {
   html {
     scroll-behavior:auto
   }
@@ -1317,7 +1317,7 @@ a,button,summary,select {
   width:36px;
   height:36px
 }
-@media(max-width:680px) {
+@media (max-width:680px) {
   .brand-logo {
     width:37px;
     height:37px
