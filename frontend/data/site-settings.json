@@ -1,0 +1,45 @@
+{
+  "brandName": "لبخند نینی",
+  "brandTagline": "دنیای کوچولوی تو",
+  "footerTagline": "هر انتخاب، پر از عشق",
+  "announcement": "ارسال با عشق برای روزهای قشنگ کوچولوها ✨",
+  "navLinks": [
+    { "label": "خانه", "href": "/" },
+    { "label": "همه محصولات", "href": "/products" }
+  ],
+  "footerMessage": "با عشق برای کوچولوها آماده شده 💗",
+  "copyrightText": "© لبخند نینی",
+  "seoTitle": "لبخند نینی | دنیای کوچولوی تو",
+  "seoDescription": "لباس، سیسمونی و وسایل دوست‌داشتنی نوزاد؛ انتخاب شده با عشق برای کوچولوی شما.",
+  "heroKicker": "✦ برای قشنگ‌ترین اتفاق زندگی",
+  "heroTitle": "دنیای کوچولوی تو،",
+  "heroAccent": "پر از لبخند",
+  "heroDescription": "از اولین لباس کوچولو تا هدیه‌های به‌یادموندنی؛ انتخاب‌هایی لطیف و دوست‌داشتنی، با عشق برای روزهای تازه.",
+  "heroPrimaryCta": "کشف محصولات ←",
+  "heroSecondaryCta": "چرا لبخند نینی؟",
+  "heroTrustTitle": "انتخاب با عشق",
+  "heroTrustDescription": "برای روزهای اول و همه روزهای بعد",
+  "heroFloatingTop": "نرم و دوست‌داشتنی",
+  "heroFloatingBottom": "هدیه‌ای از جنس عشق",
+  "featuredTitle": "منتخب‌های کوچولوی ما",
+  "featuredDescription": "محبوب‌های لبخند نینی که با دقت و عشق انتخاب شدن.",
+  "categoryTiles": [
+    { "title": "لباس نوزاد", "description": "لطیف و راحت", "emoji": "🧸", "href": "/products" },
+    { "title": "خواب و آرامش", "description": "خواب‌های شیرین", "emoji": "☁️", "href": "/products" },
+    { "title": "هدیه و سیسمونی", "description": "برای اولین دیدار", "emoji": "🎁", "href": "/products" },
+    { "title": "مراقبت روزانه", "description": "با خیال راحت", "emoji": "🫧", "href": "/products" }
+  ],
+  "promisesEyebrow": "چرا لبخند نینی؟",
+  "promisesTitle": "چون کوچولوی تو،",
+  "promisesAccent": "همه‌ی دنیاته.",
+  "promisesDescription": "ما باور داریم چیزهای کوچیک، قشنگ‌ترین خاطره‌ها رو می‌سازن. برای همین هر انتخاب رو با توجه به راحتی، کاربرد و حس خوب در نظر می‌گیریم.",
+  "promiseCards": [
+    { "emoji": "♡", "title": "انتخاب با عشق", "description": "محصولاتی برای لحظه‌هایی که دلت می‌خواد خاص بمونن." },
+    { "emoji": "☁️", "title": "لطافت برای کوچولوها", "description": "توجه به راحتی و نیازهای روزمره‌ی نوزاد." },
+    { "emoji": "🎀", "title": "هدیه‌های به‌یادموندنی", "description": "برای اولین دیدارها و خاطره‌های تازه." }
+  ],
+  "closingEyebrow": "یک لبخند کوچولو",
+  "closingTitle": "آماده‌ای یه چیز دوست‌داشتنی پیدا کنی؟",
+  "closingDescription": "با هم، قشنگ‌ترین انتخاب رو پیدا می‌کنیم.",
+  "closingCtaText": "بریم خرید ←"
+}
