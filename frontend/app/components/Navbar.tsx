@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { auth } from "@/auth";
-import { getSiteSettings } from "@/lib/site-settings";
+import type { SiteSettings } from "@/lib/site-settings";
 import LogoutButton from "./LogoutButton";
 
-export default async function Navbar() {
-  const [session, settings] = await Promise.all([auth(), getSiteSettings()]);
+export default async function Navbar({ settings }: { settings: SiteSettings }) {
+  const session = await auth();
 
   return (
     <header className="site-header">
@@ -12,7 +12,7 @@ export default async function Navbar() {
       <nav className="site-nav container" aria-label="ناوبری اصلی">
         <Link className="brand" href="/" aria-label={settings.brandName + "، صفحه اصلی"}>
           {settings.logo ? (
-            // A plain img allows CMS-hosted logos without requiring per-domain Next.js image configuration.
+            // A plain img allows CMS-hosted logos without per-domain Next.js image configuration.
             <img className="brand-logo" src={settings.logo} alt="" />
           ) : (
             <span className="brand-mark" aria-hidden="true">{settings.brandName.slice(0, 1)}</span>
