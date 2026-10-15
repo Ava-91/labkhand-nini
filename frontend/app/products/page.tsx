@@ -1,15 +1,24 @@
 import type { Metadata } from "next";
+
 import ProductCatalog from "../components/ProductCatalog";
 import { getProducts } from "@/lib/products";
 import { getSiteSettings } from "@/lib/site-settings";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
-  return { title: settings.productsPageTitle, description: settings.productsPageDescription };
+
+  return {
+    title: settings.productsPageTitle,
+    description: settings.productsPageDescription,
+  };
 }
 
 export default async function ProductsPage() {
-  const [products, settings] = await Promise.all([getProducts(), getSiteSettings()]);
+  const [products, settings] = await Promise.all([
+    getProducts(),
+    getSiteSettings(),
+  ]);
+
   return (
     <main className="page-shell container">
       <div className="page-intro">
@@ -17,6 +26,7 @@ export default async function ProductsPage() {
         <h1>{settings.productsPageTitle}</h1>
         <p>{settings.productsPageDescription}</p>
       </div>
+
       <ProductCatalog
         products={products}
         title={settings.featuredTitle}
