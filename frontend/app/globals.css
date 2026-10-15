@@ -36,3 +36,8 @@ a,button,summary,select{touch-action:manipulation}
 .skip-link{position:fixed;top:8px;right:8px;z-index:1000;transform:translateY(-160%);padding:10px 16px;border-radius:10px;background:#443a3c;color:#fff;font-size:14px;font-weight:700}
 .skip-link:focus{transform:translateY(0)}
 #main-content:focus{outline:none}
+
+/* CMS-uploaded brand marks */
+.brand-logo{display:block;width:43px;height:43px;object-fit:contain;flex-shrink:0;border-radius:12px}
+.footer-brand .brand-logo{width:36px;height:36px}
+@media(max-width:680px){.brand-logo{width:37px;height:37px}}

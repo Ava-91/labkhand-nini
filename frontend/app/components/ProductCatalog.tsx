@@ -11,11 +11,19 @@ export default function ProductCatalog({
   products,
   title = "انتخاب‌های دوست‌داشتنی",
   description = "چیزهای کوچکی که روزهای بزرگ‌تری از عشق می‌سازند.",
+  eyebrow = "انتخاب شده با عشق",
+  searchPlaceholder = "چی برای کوچولوت می‌خوای؟",
+  emptyTitle = "چیزی پیدا نکردیم!",
+  emptyDescription = "عبارت جست‌وجو یا دسته‌بندی رو تغییر بده و دوباره بگرد.",
   limit,
 }: {
   products: Product[];
   title?: string;
   description?: string;
+  eyebrow?: string;
+  searchPlaceholder?: string;
+  emptyTitle?: string;
+  emptyDescription?: string;
   limit?: number;
 }) {
   const [query, setQuery] = useState("");
@@ -42,7 +50,7 @@ export default function ProductCatalog({
     <section className="catalog-section" id="products" aria-labelledby="catalog-heading">
       <div className="section-heading">
         <div>
-          <span className="eyebrow">انتخاب شده با عشق</span>
+          <span className="eyebrow">{eyebrow}</span>
           <h2 id="catalog-heading">{title}</h2>
           <p>{description}</p>
         </div>
@@ -55,7 +63,7 @@ export default function ProductCatalog({
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="چی برای کوچولوت می‌خوای؟"
+            placeholder={searchPlaceholder}
             aria-label="جست‌وجوی محصولات"
           />
         </label>
@@ -111,8 +119,8 @@ export default function ProductCatalog({
       ) : (
         <div className="empty-state">
           <span aria-hidden="true">🧺</span>
-          <h3>چیزی پیدا نکردیم!</h3>
-          <p>عبارت جست‌وجو یا دسته‌بندی رو تغییر بده و دوباره بگرد.</p>
+          <h3>{emptyTitle}</h3>
+          <p>{emptyDescription}</p>
           <button className="button button-primary" type="button" onClick={() => { setQuery(""); setCategory("همه دسته‌ها"); }}>
             نمایش همه محصولات
           </button>

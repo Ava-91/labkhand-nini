@@ -1,2 +1,83 @@
-import Link from "next/link";import ProductCatalog from "./components/ProductCatalog";import {getProducts} from "@/lib/products";
-export default async function HomePage(){const products=await getProducts();const featured=products.filter(p=>p.featured);const picks=featured.length?featured:products;return <main><section className="hero-section"><div className="hero-orb hero-orb-one"/><div className="hero-orb hero-orb-two"/><div className="container hero-layout"><div className="hero-copy"><span className="hero-kicker">✦ برای قشنگ‌ترین اتفاق زندگی</span><h1>دنیای کوچولوی تو،<br/><span>پر از لبخند</span></h1><p>از اولین لباس کوچولو تا هدیه‌های به‌یادموندنی؛ انتخاب‌هایی لطیف و دوست‌داشتنی، با عشق برای روزهای تازه.</p><div className="hero-actions"><Link href="/products" className="button button-primary button-large">کشف محصولات ←</Link><a href="#why-us" className="button button-outline button-large">چرا لبخند نینی؟</a></div><div className="hero-trust"><span className="trust-icon">♡</span><span><strong>انتخاب با عشق</strong><small>برای روزهای اول و همه روزهای بعد</small></span></div></div><div className="hero-art" aria-hidden="true"><div className="hero-sun">✦</div><div className="hero-blob"><span className="hero-teddy">🧸</span><span className="hero-flower flower-one">✿</span><span className="hero-flower flower-two">✿</span><span className="hero-heart heart-one">♥</span><span className="hero-heart heart-two">♡</span></div><div className="floating-note note-top"><span>☁️</span><span>نرم و دوست‌داشتنی</span></div><div className="floating-note note-bottom"><span>🎀</span><span>هدیه‌ای از جنس عشق</span></div></div></div><div className="hero-bottom container"><span>یک دنیا کوچولوی دوست‌داشتنی</span><span>♡</span><span>برای لحظه‌های به‌یادموندنی</span><span>♡</span><span>از اولین روز تا همیشه</span></div></section><section className="category-strip container" aria-label="دسته‌بندی محصولات"><Link href="/products" className="category-tile"><span>🧸</span><strong>لباس نوزاد</strong><small>لطیف و راحت</small></Link><Link href="/products" className="category-tile"><span>☁️</span><strong>خواب و آرامش</strong><small>خواب‌های شیرین</small></Link><Link href="/products" className="category-tile"><span>🎁</span><strong>هدیه و سیسمونی</strong><small>برای اولین دیدار</small></Link><Link href="/products" className="category-tile"><span>🫧</span><strong>مراقبت روزانه</strong><small>با خیال راحت</small></Link></section><div className="container"><ProductCatalog products={picks} title="منتخب‌های کوچولوی ما" description="محبوب‌های لبخند نینی که با دقت و عشق انتخاب شدن." limit={4}/></div><section className="promise-section" id="why-us"><div className="container promise-layout"><div className="promise-intro"><span className="eyebrow">چرا لبخند نینی؟</span><h2>چون کوچولوی تو،<br/><span>همه‌ی دنیاته.</span></h2><p>ما باور داریم چیزهای کوچیک، قشنگ‌ترین خاطره‌ها رو می‌سازن. برای همین هر انتخاب رو با توجه به راحتی، کاربرد و حس خوب در نظر می‌گیریم.</p></div><div className="promise-card"><span>♡</span><h3>انتخاب با عشق</h3><p>محصولاتی برای لحظه‌هایی که دلت می‌خواد خاص بمونن.</p></div><div className="promise-card"><span>☁️</span><h3>لطافت برای کوچولوها</h3><p>توجه به راحتی و نیازهای روزمره‌ی نوزاد.</p></div><div className="promise-card"><span>🎀</span><h3>هدیه‌های به‌یادموندنی</h3><p>برای اولین دیدارها و خاطره‌های تازه.</p></div></div></section><section className="closing-cta container"><span className="cta-sparkle">✦</span><div><span className="eyebrow">یک لبخند کوچولو</span><h2>آماده‌ای یه چیز دوست‌داشتنی پیدا کنی؟</h2><p>با هم، قشنگ‌ترین انتخاب رو پیدا می‌کنیم.</p></div><Link href="/products" className="button button-primary button-large">بریم خرید ←</Link></section></main>;}
+import Link from "next/link";
+import ProductCatalog from "./components/ProductCatalog";
+import { getProducts } from "@/lib/products";
+import { getSiteSettings } from "@/lib/site-settings";
+
+export default async function HomePage() {
+  const [products, settings] = await Promise.all([getProducts(), getSiteSettings()]);
+  const featured = products.filter((product) => product.featured);
+  const picks = featured.length ? featured : products;
+
+  return (
+    <main>
+      <section className="hero-section">
+        <div className="hero-orb hero-orb-one" />
+        <div className="hero-orb hero-orb-two" />
+        <div className="container hero-layout">
+          <div className="hero-copy">
+            <span className="hero-kicker">{settings.heroKicker}</span>
+            <h1>{settings.heroTitle}<br /><span>{settings.heroAccent}</span></h1>
+            <p>{settings.heroDescription}</p>
+            <div className="hero-actions">
+              <Link href="/products" className="button button-primary button-large">{settings.heroPrimaryCta}</Link>
+              <a href="#why-us" className="button button-outline button-large">{settings.heroSecondaryCta}</a>
+            </div>
+            <div className="hero-trust">
+              <span className="trust-icon" aria-hidden="true">♡</span>
+              <span><strong>{settings.heroTrustTitle}</strong><small>{settings.heroTrustDescription}</small></span>
+            </div>
+          </div>
+          <div className="hero-art" aria-hidden="true">
+            <div className="hero-sun">✦</div>
+            <div className="hero-blob"><span className="hero-teddy">🧸</span><span className="hero-flower flower-one">✿</span><span className="hero-flower flower-two">✿</span><span className="hero-heart heart-one">♥</span><span className="hero-heart heart-two">♡</span></div>
+            <div className="floating-note note-top"><span>☁️</span><span>{settings.heroFloatingTop}</span></div>
+            <div className="floating-note note-bottom"><span>🎀</span><span>{settings.heroFloatingBottom}</span></div>
+          </div>
+        </div>
+        <div className="hero-bottom container"><span>{settings.heroBottomFirst}</span><span>♡</span><span>{settings.heroBottomSecond}</span><span>♡</span><span>{settings.heroBottomThird}</span></div>
+      </section>
+
+      <section className="category-strip container" aria-label="دسته‌بندی محصولات">
+        {settings.categoryTiles.map((tile) => (
+          <Link href={tile.href} className="category-tile" key={tile.title}>
+            <span aria-hidden="true">{tile.emoji}</span><strong>{tile.title}</strong><small>{tile.description}</small>
+          </Link>
+        ))}
+      </section>
+
+      <div className="container">
+        {picks.length ? (
+          <ProductCatalog products={picks} title={settings.featuredTitle} description={settings.featuredDescription} eyebrow={settings.catalogEyebrow} searchPlaceholder={settings.catalogSearchPlaceholder} emptyTitle={settings.catalogEmptyTitle} emptyDescription={settings.catalogEmptyDescription} limit={4} />
+        ) : (
+          <section className="empty-state" aria-labelledby="featured-empty-title">
+            <span aria-hidden="true">🧺</span>
+            <h2 id="featured-empty-title">{settings.featuredTitle}</h2>
+            <p>هنوز محصولی منتشر نشده. محصولات را از پنل مدیریت Strapi منتشر کنید.</p>
+            <Link className="button button-primary" href="/products">دیدن فروشگاه</Link>
+          </section>
+        )}
+      </div>
+
+      <section className="promise-section" id="why-us">
+        <div className="container promise-layout">
+          <div className="promise-intro">
+            <span className="eyebrow">{settings.promisesEyebrow}</span>
+            <h2>{settings.promisesTitle}<br /><span>{settings.promisesAccent}</span></h2>
+            <p>{settings.promisesDescription}</p>
+          </div>
+          {settings.promiseCards.map((card) => (
+            <div className="promise-card" key={card.title}>
+              <span aria-hidden="true">{card.emoji}</span><h3>{card.title}</h3><p>{card.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="closing-cta container">
+        <span className="cta-sparkle" aria-hidden="true">✦</span>
+        <div><span className="eyebrow">{settings.closingEyebrow}</span><h2>{settings.closingTitle}</h2><p>{settings.closingDescription}</p></div>
+        <Link href="/products" className="button button-primary button-large">{settings.closingCtaText}</Link>
+      </section>
+    </main>
+  );
+}

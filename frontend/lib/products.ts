@@ -1,16 +1,93 @@
+import localProducts from "@/data/products.json";
 import { getStrapiUrl } from "./strapi";
-export type Product = { id:string; documentId?:string; slug:string; title:string; description:string; price:number; discount:number; stock:number; category:string; image?:string; emoji:string; featured:boolean };
-export const sampleProducts: Product[] = [
-{id:"sample-1",slug:"cotton-baby-onesie",title:"بادی نخی نوزادی",description:"بادی لطیف و سبک از پنبه، مناسب پوست حساس کوچولوها.",price:385000,discount:10,stock:18,category:"لباس نوزاد",emoji:"🧸",featured:true},
-{id:"sample-2",slug:"soft-baby-blanket",title:"پتوی نرم نوزاد",description:"پتوی گرم و لطیف برای خواب آرام و آغوش‌های طولانی.",price:690000,discount:0,stock:12,category:"خواب و آرامش",emoji:"☁️",featured:true},
-{id:"sample-3",slug:"newborn-gift-set",title:"ست هدیه سیسمونی",description:"یک انتخاب دوست‌داشتنی برای دیدار اول با کوچولوی تازه‌وارد.",price:1250000,discount:12,stock:7,category:"هدیه و سیسمونی",emoji:"🎁",featured:true},
-{id:"sample-4",slug:"silicone-feeding-set",title:"ست غذاخوری سیلیکونی",description:"ست کاربردی برای شروع تجربه‌های خوشمزه و مستقل غذا خوردن.",price:545000,discount:0,stock:20,category:"غذاخوری",emoji:"🍓",featured:false},
-{id:"sample-5",slug:"baby-care-kit",title:"ست مراقبت کوچولو",description:"وسایل ضروری مراقبت روزانه در یک مجموعه جمع‌وجور.",price:780000,discount:8,stock:9,category:"مراقبت روزانه",emoji:"🫧",featured:true},
-{id:"sample-6",slug:"knit-baby-hat",title:"کلاه بافتنی نوزاد",description:"کلاه سبک با بافت نرم برای روزهای خنک و گردش‌های کوتاه.",price:245000,discount:0,stock:15,category:"لباس نوزاد",emoji:"🌷",featured:false},
-{id:"sample-7",slug:"plush-rabbit-toy",title:"عروسک خرگوشی لطیف",description:"همراهی نرم و بامزه برای لحظه‌های بازی و عکس‌های یادگاری.",price:430000,discount:5,stock:11,category:"بازی و سرگرمی",emoji:"🐰",featured:false},
-{id:"sample-8",slug:"baby-room-night-light",title:"چراغ خواب اتاق کودک",description:"نور ملایم برای ساختن فضایی آرام در پایان یک روز شلوغ.",price:610000,discount:0,stock:6,category:"خواب و آرامش",emoji:"🌙",featured:false}];
-function mediaUrl(value:unknown):string|undefined { if(!value||typeof value!=="object")return; const record=value as Record<string,unknown>;const inner=record.data??value;if(Array.isArray(inner))return mediaUrl(inner[0]);if(!inner||typeof inner!=="object")return;const media=inner as Record<string,unknown>;const fields=(media.attributes&&typeof media.attributes==="object"?media.attributes:media) as Record<string,unknown>;return typeof fields.url==="string"?fields.url:undefined; }
-function mapProduct(item:Record<string,unknown>):Product { const fields=(item.attributes&&typeof item.attributes==="object"?item.attributes:item) as Record<string,unknown>;const rawCategory=fields.category as Record<string,unknown>|undefined;const categoryData=rawCategory?.data??rawCategory;const categoryFields=categoryData&&typeof categoryData==="object"?(((categoryData as Record<string,unknown>).attributes??categoryData) as Record<string,unknown>):undefined;const title=String(fields.title??fields.name??"محصول لبخند نینی");const slug=String(fields.slug??String(item.documentId??item.id??title).toLowerCase().replace(/[^a-z0-9]+/g,"-"));const category=String(categoryFields?.name??fields.categoryName??"سایر محصولات");const image=mediaUrl(fields.image??fields.images??fields.cover);const base=getStrapiUrl();const imageUrl=image&&(image.startsWith("http://")||image.startsWith("https://"))?image:image&&base?base+(image.startsWith("/")?image:"/"+image):undefined;const emojis:Record<string,string>={"لباس نوزاد":"🧸","خواب و آرامش":"☁️","هدیه و سیسمونی":"🎁","غذاخوری":"🍓","مراقبت روزانه":"🫧","بازی و سرگرمی":"🐰"};return {id:String(item.documentId??item.id??slug),documentId:typeof item.documentId==="string"?item.documentId:undefined,slug,title,description:String(fields.description??"با عشق برای روزهای قشنگ کوچولوها انتخاب شده."),price:Number(fields.price??0),discount:Number(fields.discount??0),stock:Number(fields.stock??0),category,image:imageUrl,emoji:emojis[category]??"🧸",featured:Boolean(fields.featured??fields.isFeatured??false)}; }
-export async function getProducts():Promise<Product[]> { const base=getStrapiUrl();if(!base)return sampleProducts;try{const response=await fetch(base+"/api/products?populate=*",{cache:"no-store"});if(!response.ok)return sampleProducts;const json=(await response.json()) as {data?:Record<string,unknown>[]};const mapped=(json.data??[]).map(mapProduct);return mapped.length?mapped:sampleProducts;}catch{return sampleProducts;} }
-export async function getProductBySlug(slug:string){return (await getProducts()).find(p=>p.slug===slug);}
-export function getDiscountedPrice(p:Product){return Math.max(0,Math.round(p.price*(1-Math.max(0,Math.min(100,p.discount))/100)));}
+
+export type Product = {
+  id: string;
+  documentId?: string;
+  slug: string;
+  title: string;
+  description: string;
+  price: number;
+  discount: number;
+  stock: number;
+  category: string;
+  image?: string;
+  emoji: string;
+  featured: boolean;
+};
+
+type RawRecord = Record<string, unknown>;
+type ProductResponse = { data?: RawRecord[]; meta?: { pagination?: { pageCount?: number } } };
+
+function mediaUrl(value: unknown): string | undefined {
+  if (!value || typeof value !== "object") return;
+  const record = value as RawRecord;
+  const inner = record.data ?? value;
+  if (Array.isArray(inner)) return mediaUrl(inner[0]);
+  if (!inner || typeof inner !== "object") return;
+  const media = inner as RawRecord;
+  const fields = (media.attributes && typeof media.attributes === "object" ? media.attributes : media) as RawRecord;
+  return typeof fields.url === "string" ? fields.url : undefined;
+}
+
+function mapProduct(item: RawRecord): Product {
+  const fields = (item.attributes && typeof item.attributes === "object" ? item.attributes : item) as RawRecord;
+  const rawCategory = fields.category as RawRecord | undefined;
+  const categoryData = rawCategory?.data ?? rawCategory;
+  const categoryFields = categoryData && typeof categoryData === "object"
+    ? (((categoryData as RawRecord).attributes ?? categoryData) as RawRecord)
+    : undefined;
+  const title = String(fields.title ?? fields.name ?? "محصول لبخند نینی");
+  const slug = String(fields.slug ?? String(item.documentId ?? item.id ?? title).toLowerCase().replace(/[^a-z0-9]+/g, "-"));
+  const category = String(categoryFields?.name ?? fields.categoryName ?? "سایر محصولات");
+  const image = mediaUrl(fields.image ?? fields.images ?? fields.cover);
+  const base = getStrapiUrl();
+  const imageUrl = image && (image.startsWith("http://") || image.startsWith("https://"))
+    ? image
+    : image && base ? base + (image.startsWith("/") ? image : "/" + image) : undefined;
+  const emojis: Record<string, string> = {
+    "لباس نوزاد": "🧸", "خواب و آرامش": "☁️", "هدیه و سیسمونی": "🎁",
+    "غذاخوری": "🍓", "مراقبت روزانه": "🫧", "بازی و سرگرمی": "🐰",
+  };
+  return {
+    id: String(item.documentId ?? item.id ?? slug),
+    documentId: typeof item.documentId === "string" ? item.documentId : undefined,
+    slug,
+    title,
+    description: String(fields.description ?? ""),
+    price: Number(fields.price ?? 0),
+    discount: Number(fields.discount ?? 0),
+    stock: Number(fields.stock ?? 0),
+    category,
+    image: imageUrl,
+    emoji: String(fields.emoji ?? emojis[category] ?? "🧸"),
+    featured: Boolean(fields.featured ?? fields.isFeatured ?? false),
+  };
+}
+
+export async function getProducts(): Promise<Product[]> {
+  const base = getStrapiUrl();
+  // Local JSON is only a development fallback when Strapi has not been configured.
+  if (!base) return localProducts as Product[];
+
+  try {
+    const response = await fetch(
+      base + "/api/products?populate=*&pagination[pageSize]=100",
+      { cache: "no-store" },
+    );
+    if (!response.ok) return [];
+    const json = (await response.json()) as ProductResponse;
+    return (json.data ?? []).map(mapProduct);
+  } catch {
+    // Do not silently show stale sample products when the configured CMS is down.
+    return [];
+  }
+}
+
+export async function getProductBySlug(slug: string): Promise<Product | undefined> {
+  return (await getProducts()).find((product) => product.slug === slug);
+}
+
+export function getDiscountedPrice(product: Product): number {
+  return Math.max(0, Math.round(product.price * (1 - Math.max(0, Math.min(100, product.discount)) / 100)));
+}
