@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "products",
+  "info": {
+    "singularName": "product",
+    "pluralName": "products",
+    "displayName": "Product",
+    "description": "Products displayed in the Labkhand Nini storefront"
+  },
+  "options": { "draftAndPublish": true },
+  "attributes": {
+    "title": { "type": "string", "required": true },
+    "slug": { "type": "uid", "targetField": "title", "required": true },
+    "description": { "type": "text" },
+    "price": { "type": "decimal", "required": true, "min": 0 },
+    "discount": { "type": "integer", "default": 0, "min": 0, "max": 100 },
+    "stock": { "type": "integer", "default": 0, "min": 0 },
+    "featured": { "type": "boolean", "default": false },
+    "emoji": { "type": "string", "default": "🧸" },
+    "image": { "type": "media", "multiple": false, "required": false, "allowedTypes": ["images"] },
+    "category": { "type": "relation", "relation": "manyToOne", "target": "api::category.category", "inversedBy": "products" }
+  }
+}
