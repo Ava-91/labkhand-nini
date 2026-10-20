@@ -1,9 +1,18 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import localFont from "next/font/local";
 
 import Navbar from "./components/Navbar";
 import { getSiteSettings } from "@/lib/site-settings";
 import "./globals.css";
+
+const vazirmatn = localFont({
+  src: [
+    { path: "../assets/fonts/Vazirmatn-Regular(1).woff2", weight: "400" },
+    { path: "../assets/fonts/Vazirmatn-Bold.woff2", weight: "700" },
+  ],
+  display: "swap",
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();
@@ -25,7 +34,7 @@ export default async function RootLayout({
 
   return (
     <html lang="fa" dir="rtl">
-      <body className="min-h-screen bg-[#fffaf6] font-sans text-[#443a3c] antialiased">
+      <body className={`${vazirmatn.className} min-h-screen bg-[#fffaf6] text-[#443a3c] antialiased`}>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:right-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-white focus:px-4 focus:py-3 focus:text-[#a84766] focus:shadow-lg"
