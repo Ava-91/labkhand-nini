@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import { getDiscountedPrice, type Product } from "@/lib/products";
 import ProductCard from "./ProductCard";
@@ -31,37 +31,36 @@ export default function ProductCatalog({
   const [selectedCategory, setSelectedCategory] = useState("همه دسته‌ها");
   const [sortOrder, setSortOrder] = useState("recommended");
 
-  const categories = useMemo(
-    () => ["همه دسته‌ها", ...new Set(products.map((product) => product.category))],
-    [products],
-  );
+  const categories = [
+    "همه دسته‌ها",
+    ...new Set(products.map((product) => product.category)),
+  ];
 
-  const visibleProducts = useMemo(() => {
-    const search = searchText.trim().toLocaleLowerCase("fa");
+  const search = searchText.trim().toLocaleLowerCase("fa");
+  const visibleProducts = products.filter((product) => {
+    const text = [product.title, product.description, product.category]
+      .join(" ")
+      .toLocaleLowerCase("fa");
 
-    const matches = products.filter((product) => {
-      const text = [product.title, product.description, product.category]
-        .join(" ")
-        .toLocaleLowerCase("fa");
+    const matchesSearch = text.includes(search);
+    const matchesCategory =
+      selectedCategory === "همه دسته‌ها" ||
+      product.category === selectedCategory;
 
-      const matchesSearch = text.includes(search);
-      const matchesCategory =
-        selectedCategory === "همه دسته‌ها" ||
-        product.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
-      return matchesSearch && matchesCategory;
-    });
+  if (sortOrder === "price-asc") {
+    visibleProducts.sort((a, b) => getDiscountedPrice(a) - getDiscountedPrice(b));
+  } else if (sortOrder === "price-desc") {
+    visibleProducts.sort((a, b) => getDiscountedPrice(b) - getDiscountedPrice(a));
+  } else if (sortOrder === "newest") {
+    visibleProducts.sort((a, b) => b.id.localeCompare(a.id));
+  }
 
-    if (sortOrder === "price-asc") {
-      matches.sort((a, b) => getDiscountedPrice(a) - getDiscountedPrice(b));
-    } else if (sortOrder === "price-desc") {
-      matches.sort((a, b) => getDiscountedPrice(b) - getDiscountedPrice(a));
-    } else if (sortOrder === "newest") {
-      matches.sort((a, b) => b.id.localeCompare(a.id));
-    }
-
-    return limit ? matches.slice(0, limit) : matches;
-  }, [products, searchText, selectedCategory, sortOrder, limit]);
+  const productsToShow = limit
+    ? visibleProducts.slice(0, limit)
+    : visibleProducts;
 
   function resetFilters() {
     setSearchText("");
@@ -128,9 +127,9 @@ export default function ProductCatalog({
         </label>
       </div>
 
-      {visibleProducts.length > 0 ? (
+      {productsToShow.length > 0 ? (
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {visibleProducts.map((product) => (
+          {productsToShow.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
@@ -150,7 +149,7 @@ export default function ProductCatalog({
       )}
 
       <p className="mt-5 text-center text-xs text-[#817477]" role="status" aria-live="polite">
-        {new Intl.NumberFormat("fa-IR").format(visibleProducts.length)} محصول برای انتخاب
+        {new Intl.NumberFormat("fa-IR").format(productsToShow.length)} محصول برای انتخاب
       </p>
     </section>
   );
