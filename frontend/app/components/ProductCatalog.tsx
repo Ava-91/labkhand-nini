@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
-import type { Product } from "@/lib/products";
+import { getDiscountedPrice, type Product } from "@/lib/products";
 import ProductCard from "./ProductCard";
 
 type ProductCatalogProps = {
@@ -53,9 +53,9 @@ export default function ProductCatalog({
     });
 
     if (sortOrder === "price-asc") {
-      matches.sort((a, b) => a.price - b.price);
+      matches.sort((a, b) => getDiscountedPrice(a) - getDiscountedPrice(b));
     } else if (sortOrder === "price-desc") {
-      matches.sort((a, b) => b.price - a.price);
+      matches.sort((a, b) => getDiscountedPrice(b) - getDiscountedPrice(a));
     } else if (sortOrder === "newest") {
       matches.sort((a, b) => b.id.localeCompare(a.id));
     }
