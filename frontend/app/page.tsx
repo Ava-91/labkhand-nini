@@ -1,122 +1,28 @@
 import Link from "next/link";
 
+import CategoryTiles from "./components/CategoryTiles";
+import ClosingCTA from "./components/ClosingCTA";
+import HeroSection from "./components/HeroSection";
 import ProductCatalog from "./components/ProductCatalog";
+import PromiseSection from "./components/PromiseSection";
 import { getProducts } from "@/lib/products";
 import { getSiteSettings } from "@/lib/site-settings";
 
 export default async function HomePage() {
-  // Load the products and website text at the same time.
   const [products, settings] = await Promise.all([
     getProducts(),
     getSiteSettings(),
   ]);
 
-  // Show featured products first. If there are none, show all products.
   const featuredProducts = products.filter((product) => product.featured);
-  const productsToShow = featuredProducts.length
-    ? featuredProducts
-    : products;
+  const productsToShow = featuredProducts.length > 0 ? featuredProducts : products;
 
   return (
     <main>
-      {/* Main introduction */}
-      <section className="hero-section">
-        <div className="hero-orb hero-orb-one" />
-        <div className="hero-orb hero-orb-two" />
+      <HeroSection settings={settings} />
+      <CategoryTiles settings={settings} />
 
-        <div className="container hero-layout">
-          <div className="hero-copy">
-            <span className="hero-kicker">{settings.heroKicker}</span>
-
-            <h1>
-              {settings.heroTitle}
-              <br />
-              <span>{settings.heroAccent}</span>
-            </h1>
-
-            <p>{settings.heroDescription}</p>
-
-            <div className="hero-actions">
-              <Link
-                href="/products"
-                className="button button-primary button-large"
-              >
-                {settings.heroPrimaryCta}
-              </Link>
-
-              <a
-                href="#why-us"
-                className="button button-outline button-large"
-              >
-                {settings.heroSecondaryCta}
-              </a>
-            </div>
-
-            <div className="hero-trust">
-              <span className="trust-icon" aria-hidden="true">
-                ♡
-              </span>
-              <span>
-                <strong>{settings.heroTrustTitle}</strong>
-                <small>{settings.heroTrustDescription}</small>
-              </span>
-            </div>
-          </div>
-
-          {/* Decorative illustration */}
-          <div className="hero-art" aria-hidden="true">
-            <div className="hero-sun">✦</div>
-
-            <div className="hero-blob">
-              <span className="hero-teddy">🧸</span>
-              <span className="hero-flower flower-one">✿</span>
-              <span className="hero-flower flower-two">✿</span>
-              <span className="hero-heart heart-one">♥</span>
-              <span className="hero-heart heart-two">♡</span>
-            </div>
-
-            <div className="floating-note note-top">
-              <span>☁️</span>
-              <span>{settings.heroFloatingTop}</span>
-            </div>
-
-            <div className="floating-note note-bottom">
-              <span>🎀</span>
-              <span>{settings.heroFloatingBottom}</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Short messages below the introduction */}
-        <div className="hero-bottom container">
-          <span>{settings.heroBottomFirst}</span>
-          <span>♡</span>
-          <span>{settings.heroBottomSecond}</span>
-          <span>♡</span>
-          <span>{settings.heroBottomThird}</span>
-        </div>
-      </section>
-
-      {/* Product categories */}
-      <section
-        className="category-strip container"
-        aria-label="دسته‌بندی محصولات"
-      >
-        {settings.categoryTiles.map((tile) => (
-          <Link
-            href={tile.href}
-            className="category-tile"
-            key={tile.title}
-          >
-            <span aria-hidden="true">{tile.emoji}</span>
-            <strong>{tile.title}</strong>
-            <small>{tile.description}</small>
-          </Link>
-        ))}
-      </section>
-
-      {/* Featured products */}
-      <div className="container">
+      <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
         {productsToShow.length > 0 ? (
           <ProductCatalog
             products={productsToShow}
@@ -129,64 +35,28 @@ export default async function HomePage() {
             limit={4}
           />
         ) : (
-          <section
-            className="empty-state"
-            aria-labelledby="featured-empty-title"
-          >
-            <span aria-hidden="true">🧺</span>
-            <h2 id="featured-empty-title">{settings.featuredTitle}</h2>
-            <p>
+          <section className="my-10 rounded-3xl border border-dashed border-[#e8c6d1] bg-white p-8 text-center">
+            <span className="text-5xl" aria-hidden="true">🧺</span>
+            <h2 className="mt-4 text-xl font-extrabold text-[#553d44]">
+              {settings.featuredTitle}
+            </h2>
+            <p className="mt-2 text-sm leading-7 text-[#817477]">
               هنوز محصولی منتشر نشده. محصولات را از پنل مدیریت Strapi منتشر کنید.
             </p>
-            <Link className="button button-primary" href="/products">
+            <Link
+              className="mt-5 inline-flex rounded-full bg-[#c65f7d] px-5 py-3 text-sm font-bold text-white hover:bg-[#a84766]"
+              href="/products"
+            >
               دیدن فروشگاه
             </Link>
           </section>
         )}
       </div>
 
-      {/* Why shop with us */}
-      <section className="promise-section" id="why-us">
-        <div className="container promise-layout">
-          <div className="promise-intro">
-            <span className="eyebrow">{settings.promisesEyebrow}</span>
-            <h2>
-              {settings.promisesTitle}
-              <br />
-              <span>{settings.promisesAccent}</span>
-            </h2>
-            <p>{settings.promisesDescription}</p>
-          </div>
-
-          {settings.promiseCards.map((card) => (
-            <div className="promise-card" key={card.title}>
-              <span aria-hidden="true">{card.emoji}</span>
-              <h3>{card.title}</h3>
-              <p>{card.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Final invitation to visit the shop */}
-      <section className="closing-cta container">
-        <span className="cta-sparkle" aria-hidden="true">
-          ✦
-        </span>
-
-        <div>
-          <span className="eyebrow">{settings.closingEyebrow}</span>
-          <h2>{settings.closingTitle}</h2>
-          <p>{settings.closingDescription}</p>
-        </div>
-
-        <Link
-          href="/products"
-          className="button button-primary button-large"
-        >
-          {settings.closingCtaText}
-        </Link>
-      </section>
+      <PromiseSection settings={settings} />
+      <div className="px-5 sm:px-8">
+        <ClosingCTA settings={settings} />
+      </div>
     </main>
   );
 }
