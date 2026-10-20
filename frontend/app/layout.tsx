@@ -25,8 +25,11 @@ export default async function RootLayout({
 
   return (
     <html lang="fa" dir="rtl">
-      <body>
-        <a className="skip-link" href="#main-content">
+      <body className="min-h-screen bg-[#fffaf6] font-sans text-[#443a3c] antialiased">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:right-4 focus:top-4 focus:z-50 focus:rounded-xl focus:bg-white focus:px-4 focus:py-3 focus:text-[#a84766] focus:shadow-lg"
+        >
           پرش به محتوای اصلی
         </a>
 
@@ -36,29 +39,37 @@ export default async function RootLayout({
           {children}
         </div>
 
-        <footer className="site-footer">
-          <div className="container footer-inner">
+        <footer className="mt-16 border-t border-[#f0e4e3] bg-white/70">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-5 px-5 py-8 text-sm sm:px-8 md:flex-row md:items-center md:justify-between">
             <Link
-              className="brand footer-brand"
+              className="flex items-center gap-3"
               href="/"
               aria-label={settings.brandName + "، صفحه اصلی"}
             >
               {settings.logo ? (
-                <img className="brand-logo" src={settings.logo} alt="" />
+                <img
+                  className="h-11 w-11 rounded-2xl object-cover"
+                  src={settings.logo}
+                  alt=""
+                />
               ) : (
-                <span className="brand-mark" aria-hidden="true">
+                <span className="grid h-11 w-11 place-items-center rounded-2xl rounded-bl-md bg-[#c65f7d] text-xl font-bold text-white">
                   {settings.brandName.slice(0, 1)}
                 </span>
               )}
 
-              <span className="brand-copy">
-                <strong>{settings.brandName}</strong>
-                <small>{settings.footerTagline}</small>
+              <span className="flex flex-col">
+                <strong className="text-base font-bold text-[#553d44]">
+                  {settings.brandName}
+                </strong>
+                <small className="text-xs text-[#817477]">
+                  {settings.footerTagline}
+                </small>
               </span>
             </Link>
 
-            <p>{settings.footerMessage}</p>
-            <span>{settings.copyrightText}</span>
+            <p className="max-w-xl text-[#817477]">{settings.footerMessage}</p>
+            <span className="text-xs text-[#817477]">{settings.copyrightText}</span>
           </div>
         </footer>
       </body>
