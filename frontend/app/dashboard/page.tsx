@@ -7,38 +7,38 @@ import { getProducts } from "@/lib/products";
 export default async function DashboardPage() {
   const session = await auth();
 
-  // Visitors must sign in before opening their dashboard.
   if (!session?.user) {
     redirect("/login");
   }
 
   const products = await getProducts();
-  const productCount = new Intl.NumberFormat("fa-IR").format(
-    products.length,
-  );
 
   return (
-    <main className="container dashboard-page">
-      <span className="eyebrow">حساب کاربری</span>
-      <h1>سلام {session.user.name ?? "دوست عزیز"} 👋</h1>
-      <p>
+    <main className="mx-auto min-h-[60vh] w-full max-w-5xl px-5 py-12 sm:px-8 sm:py-16">
+      <span className="text-xs font-extrabold text-[#a84766]">حساب کاربری</span>
+      <h1 className="mt-3 text-3xl font-black text-[#443a3c] sm:text-4xl">
+        سلام {session.user.name ?? "دوست عزیز"} 👋
+      </h1>
+      <p className="mt-3 text-sm leading-8 text-[#817477]">
         به لبخند نینی خوش اومدی. محصولات رو ببین و انتخاب بعدیت رو پیدا کن.
       </p>
 
-      <div className="dashboard-summary">
-        <div>
-          <span>محصولات قابل مشاهده</span>
-          <strong>{productCount}</strong>
-        </div>
-        <div>
-          <span>حساب کاربری</span>
-          <strong>فعال</strong>
-        </div>
+      <div className="mt-8 grid gap-4 sm:grid-cols-2">
+        <section className="rounded-3xl border border-[#f0e4e3] bg-white p-6">
+          <span className="text-sm text-[#817477]">محصولات قابل مشاهده</span>
+          <strong className="mt-2 block text-3xl font-black text-[#553d44]">
+            {new Intl.NumberFormat("fa-IR").format(products.length)}
+          </strong>
+        </section>
+        <section className="rounded-3xl border border-[#f0e4e3] bg-white p-6">
+          <span className="text-sm text-[#817477]">حساب کاربری</span>
+          <strong className="mt-2 block text-3xl font-black text-[#367557]">فعال</strong>
+        </section>
       </div>
 
       <Link
         href="/products"
-        className="button button-primary button-large"
+        className="mt-7 inline-flex rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white hover:bg-[#a84766]"
       >
         رفتن به فروشگاه ←
       </Link>
