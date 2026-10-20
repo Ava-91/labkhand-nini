@@ -4,81 +4,114 @@ import { auth } from "@/auth";
 import type { SiteSettings } from "@/lib/site-settings";
 import LogoutButton from "./LogoutButton";
 
-export default async function Navbar({ settings }: { settings: SiteSettings }) {
+export default async function Navbar({
+  settings,
+}: {
+  settings: SiteSettings;
+}) {
   const session = await auth();
 
   return (
-    <header className="border-b border-rose-100 bg-white">
+    <header className="relative z-20 border-b border-[#f0e4e3] bg-[#fffaf6]">
       {settings.announcement && (
-        <div className="bg-rose-100 px-4 py-2 text-center text-xs text-rose-900">
+        <p className="bg-[#f5dfe6] px-4 py-2 text-center text-xs text-[#875366]">
           {settings.announcement}
-        </div>
+        </p>
       )}
 
       <nav
-        className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4"
+        className="mx-auto flex min-h-20 w-full max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-8"
         aria-label="ناوبری اصلی"
       >
         <Link
-          className="flex items-center gap-3"
+          className="flex shrink-0 items-center gap-3"
           href="/"
           aria-label={settings.brandName + "، صفحه اصلی"}
         >
           {settings.logo ? (
-            <img className="h-11 w-11 rounded-xl object-cover" src={settings.logo} alt="" />
+            <img
+              className="h-11 w-11 rounded-2xl object-cover"
+              src={settings.logo}
+              alt=""
+            />
           ) : (
-            <span className="grid h-11 w-11 place-items-center rounded-xl bg-rose-500 text-xl font-bold text-white">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl rounded-bl-md bg-[#c65f7d] text-xl font-bold text-white">
               {settings.brandName.slice(0, 1)}
             </span>
           )}
-          <span>
-            <strong className="block text-lg">{settings.brandName}</strong>
-            <small className="block text-xs text-stone-500">{settings.brandTagline}</small>
+
+          <span className="flex flex-col leading-snug">
+            <strong className="text-base font-extrabold text-[#553d44]">
+              {settings.brandName}
+            </strong>
+            <small className="text-[10px] text-[#817477]">
+              {settings.brandTagline}
+            </small>
           </span>
         </Link>
 
-        <div className="hidden items-center gap-5 text-sm text-stone-600 md:flex">
+        <div className="hidden items-center gap-6 text-sm text-[#69595d] md:flex">
           {settings.navLinks.map((item) => (
-            <Link className="transition hover:text-rose-700" href={item.href} key={item.href + item.label}>
+            <Link
+              href={item.href}
+              key={item.href + item.label}
+              className="transition hover:text-[#a84766]"
+            >
               {item.label}
             </Link>
           ))}
         </div>
 
-        <div className="flex items-center gap-2 text-sm">
+        <div className="hidden items-center gap-3 text-sm sm:flex">
           {session ? (
             <>
-              <Link className="rounded-full border border-rose-200 px-4 py-2 hover:bg-rose-50" href="/dashboard">
+              <Link
+                className="rounded-full border border-[#f0e4e3] bg-white px-4 py-2 font-semibold transition hover:border-[#c65f7d]"
+                href="/dashboard"
+              >
                 حساب من
               </Link>
               <LogoutButton />
             </>
           ) : (
             <>
-              <Link className="px-3 py-2 hover:text-rose-700" href="/login">ورود</Link>
-              <Link className="rounded-full bg-rose-500 px-4 py-2 font-bold text-white hover:bg-rose-600" href="/register">
+              <Link className="px-2 py-2 hover:text-[#a84766]" href="/login">
+                ورود
+              </Link>
+              <Link
+                className="rounded-full bg-[#c65f7d] px-5 py-2.5 font-bold text-white shadow-sm transition hover:bg-[#a84766]"
+                href="/register"
+              >
                 عضویت
               </Link>
             </>
           )}
         </div>
 
-        <details className="relative w-full md:hidden">
-          <summary className="cursor-pointer list-none rounded-lg border border-rose-200 px-4 py-2 text-center text-sm">
-            ☰ منو
+        <details className="relative sm:hidden">
+          <summary className="cursor-pointer list-none rounded-xl border border-[#f0e4e3] bg-white px-3 py-2 text-xl">
+            <span aria-hidden="true">☰</span>
+            <span className="sr-only">باز کردن منو</span>
           </summary>
-          <div className="mt-2 grid gap-1 rounded-xl border border-rose-100 bg-white p-3 shadow-sm">
+          <div className="absolute left-0 top-12 flex min-w-44 flex-col gap-1 rounded-2xl border border-[#f0e4e3] bg-white p-3 shadow-xl">
             {settings.navLinks.map((item) => (
-              <Link className="rounded-lg px-3 py-2 hover:bg-rose-50" href={item.href} key={"mobile-" + item.href + item.label}>
+              <Link
+                href={item.href}
+                key={"mobile-" + item.href + item.label}
+                className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
+              >
                 {item.label}
               </Link>
             ))}
             {session ? (
-              <Link className="rounded-lg px-3 py-2 hover:bg-rose-50" href="/dashboard">حساب من</Link>
+              <>
+                <Link className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]" href="/dashboard">حساب من</Link>
+                <LogoutButton />
+              </>
             ) : (
               <>
-                <Link className="rounded-lg px-3 py-2 hover:bg-rose-50" href="/login">ورود</Link>
-                <Link className="rounded-lg px-3 py-2 hover:bg-rose-50" href="/register">ثبت‌نام</Link>
+                <Link className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]" href="/login">ورود</Link>
+                <Link className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]" href="/register">ثبت‌نام</Link>
               </>
             )}
           </div>

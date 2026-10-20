@@ -31,7 +31,11 @@ export default function RegisterForm() {
         return;
       }
 
-      const result = await signIn("credentials", { email, password, redirect: false });
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
       if (!result || result.error) {
         router.push("/login");
@@ -47,38 +51,82 @@ export default function RegisterForm() {
     }
   }
 
-  const fieldClass = "w-full rounded-xl border border-rose-200 bg-white px-3 py-3 outline-none focus-visible:ring-2 focus-visible:ring-rose-400";
+  const fieldClass =
+    "mt-2 w-full rounded-xl border border-[#f0e4e3] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c65f7d] focus:ring-2 focus:ring-[#c65f7d]/15";
 
   return (
-    <main className="grid min-h-[65vh] place-items-center bg-gradient-to-br from-orange-50 to-rose-100 px-4 py-10">
-      <form onSubmit={submit} className="w-full max-w-md rounded-3xl border border-rose-100 bg-white p-6 shadow-sm sm:p-8">
-        <span className="font-bold text-rose-700">به خانواده‌مون خوش اومدی</span>
-        <h1 className="mt-2 text-3xl font-black">ساخت حساب کاربری</h1>
-        <p className="mb-6 mt-2 text-sm leading-7 text-stone-600">عضو لبخند نینی شو و برای کوچولوت انتخاب کن.</p>
+    <main className="flex min-h-[65vh] items-center justify-center px-5 py-12">
+      <form
+        onSubmit={submit}
+        className="w-full max-w-md rounded-[2rem] border border-[#f0e4e3] bg-white p-6 shadow-sm sm:p-9"
+      >
+        <span className="text-xs font-extrabold text-[#a84766]">به خانواده‌مون خوش اومدی</span>
+        <h1 className="mt-3 text-2xl font-black text-[#443a3c]">ساخت حساب کاربری</h1>
+        <p className="mt-2 text-sm leading-7 text-[#817477]">
+          عضو لبخند نینی شو و برای کوچولوت انتخاب کن.
+        </p>
 
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-bold" htmlFor="username">نام کاربری</label>
-          <input className={fieldClass} id="username" autoComplete="username" required minLength={2} value={username} onChange={(event) => setUsername(event.target.value)} />
+        <div className="mt-6">
+          <label className="text-sm font-bold text-[#553d44]" htmlFor="username">نام کاربری</label>
+          <input
+            className={fieldClass}
+            id="username"
+            autoComplete="username"
+            required
+            minLength={2}
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
+          />
         </div>
 
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-bold" htmlFor="email">ایمیل</label>
-          <input className={fieldClass} id="email" type="email" autoComplete="email" required value={email} onChange={(event) => setEmail(event.target.value)} />
+        <div className="mt-4">
+          <label className="text-sm font-bold text-[#553d44]" htmlFor="email">ایمیل</label>
+          <input
+            className={fieldClass}
+            id="email"
+            type="email"
+            autoComplete="email"
+            required
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+          />
         </div>
 
-        <div className="mb-4">
-          <label className="mb-2 block text-sm font-bold" htmlFor="password">رمز عبور (حداقل ۶ کاراکتر)</label>
-          <input className={fieldClass} id="password" type="password" autoComplete="new-password" minLength={6} required value={password} onChange={(event) => setPassword(event.target.value)} />
+        <div className="mt-4">
+          <label className="text-sm font-bold text-[#553d44]" htmlFor="password">
+            رمز عبور (حداقل ۶ کاراکتر)
+          </label>
+          <input
+            className={fieldClass}
+            id="password"
+            type="password"
+            autoComplete="new-password"
+            minLength={6}
+            required
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
+          />
         </div>
 
-        {error && <p className="mb-4 rounded-xl bg-rose-50 p-3 text-sm text-rose-800" role="alert">{error}</p>}
+        {error && (
+          <p className="mt-4 rounded-xl bg-[#fff0f3] p-3 text-sm text-[#a84766]" role="alert">
+            {error}
+          </p>
+        )}
 
-        <button className="w-full rounded-full bg-rose-500 px-5 py-3 font-bold text-white hover:bg-rose-600 disabled:cursor-not-allowed disabled:opacity-60" type="submit" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-6 w-full rounded-full bg-[#c65f7d] px-5 py-3 font-bold text-white transition hover:bg-[#a84766] disabled:cursor-not-allowed disabled:opacity-60"
+        >
           {loading ? "در حال ثبت‌نام..." : "ساخت حساب"}
         </button>
 
-        <p className="mt-5 text-center text-sm text-stone-600">
-          قبلاً عضو شدی؟ <Link className="font-bold text-rose-700 hover:underline" href="/login">وارد شو</Link>
+        <p className="mt-5 text-center text-sm text-[#817477]">
+          قبلاً عضو شدی؟{" "}
+          <Link className="font-bold text-[#a84766] hover:underline" href="/login">
+            وارد شو
+          </Link>
         </p>
       </form>
     </main>

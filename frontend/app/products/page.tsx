@@ -20,12 +20,18 @@ export default async function ProductsPage() {
   ]);
 
   return (
-    <main className="mx-auto min-h-[60vh] max-w-6xl px-4 py-10">
-      <header className="mb-8 text-center">
-        <span className="font-bold text-rose-700">{settings.productsPageEyebrow}</span>
-        <h1 className="mt-2 text-3xl font-black sm:text-4xl">{settings.productsPageTitle}</h1>
-        <p className="mx-auto mt-3 max-w-2xl leading-7 text-stone-600">{settings.productsPageDescription}</p>
-      </header>
+    <main className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
+      <div className="max-w-2xl">
+        <span className="text-xs font-extrabold text-[#a84766]">
+          {settings.productsPageEyebrow}
+        </span>
+        <h1 className="mt-3 text-3xl font-black text-[#443a3c] sm:text-4xl">
+          {settings.productsPageTitle}
+        </h1>
+        <p className="mt-3 text-sm leading-8 text-[#817477]">
+          {settings.productsPageDescription}
+        </p>
+      </div>
 
       <ProductCatalog
         products={products}

@@ -16,64 +16,88 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const product = await getProductBySlug(slug);
 
-  if (!product) return { title: "محصول پیدا نشد" };
+  if (!product) {
+    return { title: "محصول پیدا نشد" };
+  }
 
-  return { title: product.title, description: product.description };
+  return {
+    title: product.title,
+    description: product.description,
+  };
 }
 
 export default async function ProductDetailPage({ params }: PageProps) {
   const { slug } = await params;
+
   const [product, settings] = await Promise.all([
     getProductBySlug(slug),
     getSiteSettings(),
   ]);
 
-  if (!product) notFound();
+  if (!product) {
+    notFound();
+  }
 
   const hasDiscount = product.discount > 0;
   const isInStock = product.stock > 0;
 
   return (
-    <main className="mx-auto min-h-[60vh] max-w-5xl px-4 py-8">
-      <nav className="mb-8 flex flex-wrap gap-2 text-sm text-stone-500" aria-label="مسیر صفحه">
-        <Link className="hover:text-rose-700" href="/">خانه</Link>
+    <main className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-16">
+      <nav className="mb-8 flex flex-wrap items-center gap-2 text-sm text-[#817477]" aria-label="مسیر صفحه">
+        <Link className="hover:text-[#a84766]" href="/">خانه</Link>
         <span>/</span>
-        <Link className="hover:text-rose-700" href="/products">محصولات</Link>
+        <Link className="hover:text-[#a84766]" href="/products">محصولات</Link>
         <span>/</span>
-        <span className="text-stone-800">{product.title}</span>
+        <span className="font-semibold text-[#443a3c]">{product.title}</span>
       </nav>
 
-      <div className="grid items-center gap-8 md:grid-cols-2">
-        <div
-          className="relative grid aspect-square min-h-64 place-items-center overflow-hidden rounded-3xl bg-gradient-to-br from-rose-100 to-violet-100 bg-cover bg-center text-8xl sm:text-9xl"
-          style={product.image ? { backgroundImage: "url(" + product.image + ")" } : undefined}
-          role="img"
-          aria-label={product.title}
-        >
-          {!product.image && <span>{product.emoji}</span>}
+      <div className="grid gap-8 md:grid-cols-2 md:items-start">
+        <div className="relative grid aspect-square place-items-center overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#fff0f3] to-[#f5effb]">
+          {product.image ? (
+            <img src={product.image} alt={product.title} className="h-full w-full object-cover" />
+          ) : (
+            <span className="text-8xl" aria-hidden="true">{product.emoji}</span>
+          )}
+
           {hasDiscount && (
-            <span className="absolute right-4 top-4 rounded-full bg-rose-500 px-3 py-1 text-sm font-bold text-white">
+            <span className="absolute right-5 top-5 rounded-full bg-[#c65f7d] px-4 py-2 text-sm font-bold text-white">
               {new Intl.NumberFormat("fa-IR").format(product.discount)}٪ تخفیف
             </span>
           )}
         </div>
 
-        <div>
-          <span className="font-bold text-rose-700">{product.category}</span>
-          <h1 className="mt-2 text-3xl leading-relaxed font-black">{product.title}</h1>
-          <p className="mt-4 leading-8 text-stone-600">{product.description}</p>
+        <div className="py-2">
+          <span className="text-sm font-bold text-[#a84766]">{product.category}</span>
+          <h1 className="mt-3 text-3xl leading-relaxed font-black text-[#443a3c] sm:text-4xl">
+            {product.title}
+          </h1>
+          <p className="mt-5 text-sm leading-8 text-[#817477]">{product.description}</p>
 
-          <div className="mt-5 flex flex-wrap items-center gap-3">
-            <strong className="text-2xl text-rose-700">{money(getDiscountedPrice(product))}</strong>
-            {hasDiscount && <del className="text-stone-400">{money(product.price)}</del>}
+          <div className="mt-7 flex flex-wrap items-center gap-4">
+            <strong className="text-2xl font-black text-[#553d44]">
+              {money(getDiscountedPrice(product))}
+            </strong>
+            {hasDiscount && (
+              <del className="text-sm text-[#a49a9c]">{money(product.price)}</del>
+            )}
           </div>
 
-          <p className={"mt-4 text-sm font-bold " + (isInStock ? "text-green-700" : "text-rose-700")}>
+          <p className={isInStock
+            ? "mt-5 inline-flex rounded-full bg-[#e8f5ee] px-4 py-2 text-sm font-bold text-[#367557]"
+            : "mt-5 inline-flex rounded-full bg-[#fbe8ec] px-4 py-2 text-sm font-bold text-[#a84766]"
+          }>
             {isInStock ? "● موجود برای انتخاب تو" : "● فعلاً ناموجود"}
           </p>
 
-          <p className="mt-5 rounded-xl bg-rose-50 p-4 leading-7 text-rose-900">{settings.productDetailNote}</p>
-          <Link className="mt-6 inline-block rounded-full bg-rose-500 px-6 py-3 font-bold text-white hover:bg-rose-600" href="/products">
+          <div className="mt-7 rounded-2xl border border-[#f0e4e3] bg-white p-5">
+            <span className="text-xl text-[#c65f7d]" aria-hidden="true">♡</span>
+            <p className="mt-2 text-sm leading-7 text-[#817477]">{settings.productDetailNote}</p>
+          </div>
+
+          <Link
+            href="/products"
+            className="mt-6 inline-flex rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#a84766]"
+          >
             {settings.productDetailBackText}
           </Link>
         </div>
