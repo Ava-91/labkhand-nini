@@ -67,51 +67,28 @@ export type SiteSettings = {
   closingCtaText: string;
 };
 
-type Raw = Record<string, unknown>;
-type SettingsResponse = { data?: Raw | null };
+type StrapiSettings = Omit<Partial<SiteSettings>, "logo"> & {
+  logo?: { url?: string } | null;
+};
 
-function getMediaUrl(value: unknown): string | undefined {
-  if (!value || typeof value !== "object") {
-    return undefined;
-  }
+type SettingsResponse = {
+  data?: StrapiSettings | null;
+};
 
-  const record = value as Raw;
-  const mediaData = record.data ?? value;
-
-  if (!mediaData || typeof mediaData !== "object" || Array.isArray(mediaData)) {
-    return undefined;
-  }
-
-  const media = mediaData as Raw;
-  const fields =
-    media.attributes && typeof media.attributes === "object"
-      ? (media.attributes as Raw)
-      : media;
-
-  if (typeof fields.url !== "string") {
-    return undefined;
-  }
-
-  const imageUrl = fields.url;
-
-  if (imageUrl.startsWith("http://") || imageUrl.startsWith("https://")) {
-    return imageUrl;
-  }
+function getImageUrl(path?: string) {
+  if (!path) return undefined;
+  if (path.startsWith("http://") || path.startsWith("https://")) return path;
 
   const strapiUrl = getStrapiUrl();
-
-  return strapiUrl
-    ? strapiUrl + (imageUrl.startsWith("/") ? imageUrl : "/" + imageUrl)
-    : imageUrl;
+  return strapiUrl ? strapiUrl + path : path;
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {
-  const defaultSettings = localSettings as SiteSettings;
+  const defaults = localSettings as SiteSettings;
   const strapiUrl = getStrapiUrl();
 
-  // Use local settings when Strapi is not configured.
   if (!strapiUrl) {
-    return defaultSettings;
+    return defaults;
   }
 
   try {
@@ -120,35 +97,19 @@ export async function getSiteSettings(): Promise<SiteSettings> {
       { cache: "no-store" },
     );
 
-    if (!response.ok) {
-      return defaultSettings;
-    }
+    if (!response.ok) return defaults;
 
     const result = (await response.json()) as SettingsResponse;
-    const data = result.data;
+    if (!result.data) return defaults;
 
-    if (!data) {
-      return defaultSettings;
-    }
+    const { logo, ...settings } = result.data;
 
-    const settings =
-      data.attributes && typeof data.attributes === "object"
-        ? (data.attributes as Raw)
-        : data;
-
-    const logo = getMediaUrl(settings.logo);
-
-    // Keep local defaults for any fields that are missing from Strapi.
     return {
-      ...defaultSettings,
-      ...Object.fromEntries(
-        Object.entries(settings).filter(
-          ([, value]) => value !== null && value !== undefined,
-        ),
-      ),
-      ...(logo ? { logo } : {}),
-    } as SiteSettings;
+      ...defaults,
+      ...settings,
+      logo: getImageUrl(logo?.url) ?? defaults.logo,
+    };
   } catch {
-    return defaultSettings;
+    return defaults;
   }
 }

@@ -7,7 +7,6 @@ import { useState } from "react";
 
 export default function LoginForm() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -39,18 +38,25 @@ export default function LoginForm() {
     }
   }
 
+  const fieldClass =
+    "mt-2 w-full rounded-xl border border-[#f0e4e3] bg-white px-4 py-3 text-sm outline-none transition focus:border-[#c65f7d] focus:ring-2 focus:ring-[#c65f7d]/15";
+
   return (
-    <main className="form-page">
-      <form onSubmit={submit} className="form-box">
-        <span className="eyebrow">خوش برگشتی</span>
-        <h1>ورود به حساب</h1>
-        <p className="form-intro">
+    <main className="flex min-h-[65vh] items-center justify-center px-5 py-12">
+      <form
+        onSubmit={submit}
+        className="w-full max-w-md rounded-[2rem] border border-[#f0e4e3] bg-white p-6 shadow-sm sm:p-9"
+      >
+        <span className="text-xs font-extrabold text-[#a84766]">خوش برگشتی</span>
+        <h1 className="mt-3 text-2xl font-black text-[#443a3c]">ورود به حساب</h1>
+        <p className="mt-2 text-sm leading-7 text-[#817477]">
           برای ادامه‌ی مسیر لبخند نینی وارد شو.
         </p>
 
-        <div className="form-field">
-          <label htmlFor="email">ایمیل</label>
+        <div className="mt-6">
+          <label className="text-sm font-bold text-[#553d44]" htmlFor="email">ایمیل</label>
           <input
+            className={fieldClass}
             id="email"
             type="email"
             autoComplete="email"
@@ -60,9 +66,10 @@ export default function LoginForm() {
           />
         </div>
 
-        <div className="form-field">
-          <label htmlFor="password">رمز عبور</label>
+        <div className="mt-4">
+          <label className="text-sm font-bold text-[#553d44]" htmlFor="password">رمز عبور</label>
           <input
+            className={fieldClass}
             id="password"
             type="password"
             autoComplete="current-password"
@@ -73,7 +80,7 @@ export default function LoginForm() {
         </div>
 
         {error && (
-          <p className="form-error" role="alert">
+          <p className="mt-4 rounded-xl bg-[#fff0f3] p-3 text-sm text-[#a84766]" role="alert">
             {error}
           </p>
         )}
@@ -81,13 +88,16 @@ export default function LoginForm() {
         <button
           type="submit"
           disabled={loading}
-          className="button button-primary form-submit"
+          className="mt-6 w-full rounded-full bg-[#c65f7d] px-5 py-3 font-bold text-white transition hover:bg-[#a84766] disabled:cursor-not-allowed disabled:opacity-60"
         >
           {loading ? "در حال ورود..." : "ورود به حساب"}
         </button>
 
-        <p className="form-switch">
-          هنوز عضو نیستی؟ <Link href="/register">ثبت‌نام کن</Link>
+        <p className="mt-5 text-center text-sm text-[#817477]">
+          هنوز عضو نیستی؟{" "}
+          <Link className="font-bold text-[#a84766] hover:underline" href="/register">
+            ثبت‌نام کن
+          </Link>
         </p>
       </form>
     </main>

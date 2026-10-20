@@ -12,82 +12,106 @@ export default async function Navbar({
   const session = await auth();
 
   return (
-    <header className="site-header">
+    <header className="relative z-20 border-b border-[#f0e4e3] bg-[#fffaf6]">
       {settings.announcement && (
-        <div className="announcement">{settings.announcement}</div>
+        <p className="bg-[#f5dfe6] px-4 py-2 text-center text-xs text-[#875366]">
+          {settings.announcement}
+        </p>
       )}
 
-      <nav className="site-nav container" aria-label="ناوبری اصلی">
+      <nav
+        className="mx-auto flex min-h-20 w-full max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-8"
+        aria-label="ناوبری اصلی"
+      >
         <Link
-          className="brand"
+          className="flex shrink-0 items-center gap-3"
           href="/"
           aria-label={settings.brandName + "، صفحه اصلی"}
         >
           {settings.logo ? (
-            // A regular img works with logos hosted by Strapi.
-            <img className="brand-logo" src={settings.logo} alt="" />
+            <img
+              className="h-11 w-11 rounded-2xl object-cover"
+              src={settings.logo}
+              alt=""
+            />
           ) : (
-            <span className="brand-mark" aria-hidden="true">
+            <span className="grid h-11 w-11 place-items-center rounded-2xl rounded-bl-md bg-[#c65f7d] text-xl font-bold text-white">
               {settings.brandName.slice(0, 1)}
             </span>
           )}
 
-          <span className="brand-copy">
-            <strong>{settings.brandName}</strong>
-            <small>{settings.brandTagline}</small>
+          <span className="flex flex-col leading-snug">
+            <strong className="text-base font-extrabold text-[#553d44]">
+              {settings.brandName}
+            </strong>
+            <small className="text-[10px] text-[#817477]">
+              {settings.brandTagline}
+            </small>
           </span>
         </Link>
 
-        <div className="nav-links">
+        <div className="hidden items-center gap-6 text-sm text-[#69595d] md:flex">
           {settings.navLinks.map((item) => (
-            <Link href={item.href} key={item.href + item.label}>
+            <Link
+              href={item.href}
+              key={item.href + item.label}
+              className="transition hover:text-[#a84766]"
+            >
               {item.label}
             </Link>
           ))}
         </div>
 
-        <div className="nav-actions">
+        <div className="hidden items-center gap-3 text-sm sm:flex">
           {session ? (
             <>
-              <Link className="button button-quiet" href="/dashboard">
+              <Link
+                className="rounded-full border border-[#f0e4e3] bg-white px-4 py-2 font-semibold transition hover:border-[#c65f7d]"
+                href="/dashboard"
+              >
                 حساب من
               </Link>
               <LogoutButton />
             </>
           ) : (
             <>
-              <Link className="nav-login" href="/login">
+              <Link className="px-2 py-2 hover:text-[#a84766]" href="/login">
                 ورود
               </Link>
-              <Link className="button button-primary" href="/register">
+              <Link
+                className="rounded-full bg-[#c65f7d] px-5 py-2.5 font-bold text-white shadow-sm transition hover:bg-[#a84766]"
+                href="/register"
+              >
                 عضویت
               </Link>
             </>
           )}
         </div>
 
-        <details className="mobile-menu">
-          <summary aria-label="باز کردن منوی موبایل">
+        <details className="relative sm:hidden">
+          <summary className="cursor-pointer list-none rounded-xl border border-[#f0e4e3] bg-white px-3 py-2 text-xl">
             <span aria-hidden="true">☰</span>
-            <span className="visually-hidden">منو</span>
+            <span className="sr-only">باز کردن منو</span>
           </summary>
-
-          <div className="mobile-menu-panel">
+          <div className="absolute left-0 top-12 flex min-w-44 flex-col gap-1 rounded-2xl border border-[#f0e4e3] bg-white p-3 shadow-xl">
             {settings.navLinks.map((item) => (
               <Link
                 href={item.href}
                 key={"mobile-" + item.href + item.label}
+                className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
               >
                 {item.label}
               </Link>
             ))}
-
             {session ? (
-              <Link href="/dashboard">حساب من</Link>
+              <>
+                <Link className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]" href="/dashboard">حساب من</Link>
+                <LogoutButton />
+              </>
             ) : (
               <>
-                <Link href="/login">ورود</Link>
-                <Link href="/register">ثبت‌نام</Link>
+                <Link className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]" href="/login">ورود</Link>
+                <Link className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]" href="/register">ثبت‌نام</Link>
               </>
             )}
           </div>

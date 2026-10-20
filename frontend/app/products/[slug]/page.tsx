@@ -12,9 +12,7 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({
-  params,
-}: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
 
@@ -36,68 +34,69 @@ export default async function ProductDetailPage({ params }: PageProps) {
     getSiteSettings(),
   ]);
 
-  // Show Next.js's not-found page when this product does not exist.
   if (!product) {
     notFound();
   }
 
-  const price = money(getDiscountedPrice(product));
-  const originalPrice = money(product.price);
   const hasDiscount = product.discount > 0;
   const isInStock = product.stock > 0;
 
   return (
-    <main className="container detail-page">
-      <nav className="breadcrumbs" aria-label="مسیر صفحه">
-        <Link href="/">خانه</Link>
+    <main className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-16">
+      <nav className="mb-8 flex flex-wrap items-center gap-2 text-sm text-[#817477]" aria-label="مسیر صفحه">
+        <Link className="hover:text-[#a84766]" href="/">خانه</Link>
         <span>/</span>
-        <Link href="/products">محصولات</Link>
+        <Link className="hover:text-[#a84766]" href="/products">محصولات</Link>
         <span>/</span>
-        <span>{product.title}</span>
+        <span className="font-semibold text-[#443a3c]">{product.title}</span>
       </nav>
 
-      <div className="detail-layout">
-        <div
-          className={"detail-art" + (product.image ? " has-photo" : "")}
-          style={
-            product.image
-              ? { backgroundImage: "url(" + product.image + ")" }
-              : undefined
-          }
-          role="img"
-          aria-label={product.title}
-        >
-          {!product.image && <span>{product.emoji}</span>}
+      <div className="grid gap-8 md:grid-cols-2 md:items-start">
+        <div className="relative grid aspect-square place-items-center overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#fff0f3] to-[#f5effb]">
+          {product.image ? (
+            <img src={product.image} alt={product.title} className="h-full w-full object-cover" />
+          ) : (
+            <span className="text-8xl" aria-hidden="true">{product.emoji}</span>
+          )}
 
           {hasDiscount && (
-            <span className="discount-badge">
+            <span className="absolute right-5 top-5 rounded-full bg-[#c65f7d] px-4 py-2 text-sm font-bold text-white">
               {new Intl.NumberFormat("fa-IR").format(product.discount)}٪ تخفیف
             </span>
           )}
         </div>
 
-        <div className="detail-copy">
-          <span className="product-category">{product.category}</span>
-          <h1>{product.title}</h1>
-          <p className="detail-description">{product.description}</p>
+        <div className="py-2">
+          <span className="text-sm font-bold text-[#a84766]">{product.category}</span>
+          <h1 className="mt-3 text-3xl leading-relaxed font-black text-[#443a3c] sm:text-4xl">
+            {product.title}
+          </h1>
+          <p className="mt-5 text-sm leading-8 text-[#817477]">{product.description}</p>
 
-          <div className="detail-price">
-            <strong>{price}</strong>
-            {hasDiscount && <del>{originalPrice}</del>}
+          <div className="mt-7 flex flex-wrap items-center gap-4">
+            <strong className="text-2xl font-black text-[#553d44]">
+              {money(getDiscountedPrice(product))}
+            </strong>
+            {hasDiscount && (
+              <del className="text-sm text-[#a49a9c]">{money(product.price)}</del>
+            )}
           </div>
 
-          <p className={"detail-stock" + (isInStock ? "" : " unavailable")}>
-            ● {isInStock ? "موجود برای انتخاب تو" : "فعلاً ناموجود"}
+          <p className={isInStock
+            ? "mt-5 inline-flex rounded-full bg-[#e8f5ee] px-4 py-2 text-sm font-bold text-[#367557]"
+            : "mt-5 inline-flex rounded-full bg-[#fbe8ec] px-4 py-2 text-sm font-bold text-[#a84766]"
+          }>
+            {isInStock ? "● موجود برای انتخاب تو" : "● فعلاً ناموجود"}
           </p>
 
-          <div className="detail-note">
-            <span>♡</span>
-            <p>{settings.productDetailNote}</p>
+          <div className="mt-7 rounded-2xl border border-[#f0e4e3] bg-white p-5">
+            <span className="text-xl text-[#c65f7d]" aria-hidden="true">♡</span>
+            <p className="mt-2 text-sm leading-7 text-[#817477]">{settings.productDetailNote}</p>
           </div>
 
           <Link
             href="/products"
-            className="button button-primary button-large"
+            className="mt-6 inline-flex rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#a84766]"
           >
             {settings.productDetailBackText}
           </Link>
