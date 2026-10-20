@@ -67,7 +67,7 @@ export type SiteSettings = {
   closingCtaText: string;
 };
 
-type StrapiSettings = Partial<SiteSettings> & {
+type StrapiSettings = Omit<Partial<SiteSettings>, "logo"> & {
   logo?: { url?: string } | null;
 };
 
