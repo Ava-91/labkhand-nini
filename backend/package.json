@@ -1,33 +1,43 @@
 {
-  "name": "labkhand-nini-backend",
+  "name": "labkhand-nini-backend-fresh",
   "version": "0.1.0",
   "private": true,
-  "description": "Strapi CMS and API for Labkhand Nini",
+  "description": "A Strapi application",
   "scripts": {
+    "build": "strapi build",
+    "console": "strapi console",
+    "deploy": "strapi deploy",
+    "dev": "strapi develop",
     "develop": "strapi develop",
     "start": "strapi start",
-    "build": "strapi build",
     "strapi": "strapi",
-    "typecheck": "tsc --noEmit",
-    "format": "npx --yes prettier@3.6.2 --write \"config/**/*.{ts,js,json}\" \"src/**/*.{ts,js,json}\" \"*.{ts,js,json,md}\"",
-    "format:check": "npx --yes prettier@3.6.2 --check \"config/**/*.{ts,js,json}\" \"src/**/*.{ts,js,json}\" \"*.{ts,js,json,md}\""
+    "upgrade": "npx @strapi/upgrade latest",
+    "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
+    "@strapi/database": "5.57.0",
+    "@strapi/plugin-cloud": "5.57.0",
     "@strapi/plugin-users-permissions": "5.57.0",
     "@strapi/strapi": "5.57.0",
-    "pg": "^8.16.3",
+    "@strapi/upload": "^5.57.0",
+    "better-sqlite3": "12.8.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.0.0",
-    "styled-components": "^6.1.0"
+    "react-router-dom": "^6.30.3",
+    "styled-components": "^6.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.0.0",
-    "@types/react": "^18.0.0",
-    "typescript": "^5.0.0"
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "typescript": "^5"
   },
   "engines": {
-    "node": ">=20.0.0 <=24.x.x",
-    "npm": ">=8.0.0"
+    "node": ">=20.0.0 <=26.x.x",
+    "npm": ">=6.0.0"
+  },
+  "strapi": {
+    "uuid": "6b478a65-282e-431c-be82-6924343f7812",
+    "installId": "387756f2c63f67e947861d325cd84b9c68f7435a307658fbad0bf5b81abba3e4"
   }
 }

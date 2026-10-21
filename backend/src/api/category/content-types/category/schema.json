@@ -7,11 +7,29 @@
     "displayName": "Category",
     "description": "Storefront product categories"
   },
-  "options": { "draftAndPublish": true },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
   "attributes": {
-    "name": { "type": "string", "required": true, "unique": true },
-    "slug": { "type": "uid", "targetField": "name", "required": true },
-    "description": { "type": "text" },
-    "products": { "type": "relation", "relation": "oneToMany", "target": "api::product.product", "mappedBy": "category" }
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product",
+      "inversedBy": "category"
+    }
   }
 }

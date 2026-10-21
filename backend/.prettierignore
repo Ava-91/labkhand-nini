@@ -1,9 +1,0 @@
-node_modules/
-.cache/
-.build/
-dist/
-coverage/
-package-lock.json
-*.db
-*.sqlite
-*.sqlite3
