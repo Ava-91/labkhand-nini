@@ -5,10 +5,10 @@ import type { SiteSettings } from "@/lib/site-settings"; // وارد کردن ن
 // ساخت بخش اصلی و ابتدایی صفحه (Hero)
 export default function HeroSection({ settings }: { settings: SiteSettings }) {
   return (
-    <section className="overflow-hidden bg-gradient-to-br from-[#fff8f2] via-[#fff0f1] to-[#f5effb]">
+    <section className="overflow-hidden bg-linear-to-br from-[#fff8f2] via-[#fff0f1] to-[#f5effb]">
       {/* پس‌زمینه گرادیانی و مخفی کردن محتوای بیرون‌زده */}
 
-      <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-12 sm:px-8 md:min-h-[470px] md:grid-cols-2 md:py-16">
+      <div className="mx-auto grid w-full max-w-6xl items-center gap-10 px-5 py-12 sm:px-8 md:min-h-117.5 md:grid-cols-2 md:py-16">
         {/* چیدمان دو ستونه در دسکتاپ و تک‌ستونه در موبایل */}
 
         <div>
@@ -73,7 +73,7 @@ export default function HeroSection({ settings }: { settings: SiteSettings }) {
             ✦ {/* ستاره تزئینی */}
           </span>
 
-          <div className="grid aspect-square w-[78%] place-items-center rounded-[48%_52%_45%_55%/49%_43%_57%_51%] border-[10px] border-white/60 bg-gradient-to-br from-[#f9dfe4] via-[#e8e0f4] to-[#e8d4db] shadow-2xl shadow-[#b16d82]/20">
+          <div className="grid aspect-square w-[78%] place-items-center rounded-[48%_52%_45%_55%/49%_43%_57%_51%] border-10px border-white/60 bg-linear-to-br from-[#f9dfe4] via-[#e8e0f4] to-[#e8d4db] shadow-2xl shadow-[#b16d82]/20">
             {/* ساخت شکل مرکزی با گرادیان، حاشیه و سایه */}
 
             <span className="text-8xl drop-shadow-lg sm:text-9xl">
