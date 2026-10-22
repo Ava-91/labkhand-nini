@@ -1,13 +1,38 @@
 # لبخند نینی — Frontend
 
-Next.js App Router storefront using the same basic structure and NextAuth + Strapi approach as [Ava-91/nextjsshop](https://github.com/Ava-91/nextjsshop), enhanced for baby products.
+A beginner-friendly first demo of the لبخند نینی shop, built with Next.js, React, TypeScript, Tailwind CSS, and optional Strapi data.
 
 ## Run locally
+
 1. Copy `.env.example` to `.env.local`.
 2. Set `STRAPI_URL` and a long random `AUTH_SECRET`.
 3. Run `npm install`, then `npm run dev`.
 4. Open http://localhost:3000.
 
-Scripts: `npm run dev`, `npm run typecheck`, `npm run lint`, `npm run build`.
+## Useful commands
 
-Structure: `app/` for routes/UI, `lib/products.ts` for product model/sample data/Strapi mapping, `lib/strapi.ts` for CMS requests, and `auth.ts` for NextAuth credentials auth. A sample catalogue keeps UI work possible before Strapi is running.
+- `npm run dev` — start the development server.
+- `npm run typecheck` — check TypeScript.
+- `npm run lint` — run ESLint.
+- `npm run build` — create a production build.
+
+## Simple project map
+
+- `app/page.tsx` — homepage.
+- `app/products/page.tsx` — product list.
+- `app/products/[slug]/page.tsx` — one product's details.
+- `app/components/ProductCatalog.tsx` — product cards, search, category filter, and sorting.
+- `app/components/Navbar.tsx` — site navigation.
+- `app/login/` and `app/register/` — account forms.
+- `app/dashboard/page.tsx` — signed-in user's dashboard.
+- `app/tailwind.css` — Tailwind entry point and local Persian font definitions.
+- `lib/products.ts` — product data and Strapi mapping.
+- `lib/strapi.ts` — requests to Strapi.
+- `lib/site-settings.ts` — website text and settings.
+- `auth.ts` — NextAuth credentials authentication.
+
+## Styling
+
+Use Tailwind utility classes directly in each component's `className`, such as `rounded-xl`, `bg-white`, `p-4`, and `text-rose-700`. This demo intentionally avoids a large custom stylesheet so the layout is easier to read and change.
+
+The app can show sample catalogue data before Strapi is running.
