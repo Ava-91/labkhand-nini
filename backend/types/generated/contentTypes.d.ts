@@ -415,7 +415,6 @@ export interface ApiCategoryCategory extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::category.category'> &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required & Schema.Attribute.Unique;
-    product: Schema.Attribute.Relation<'oneToOne', 'api::product.product'>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -439,18 +438,18 @@ export interface ApiProductProduct extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> & Schema.Attribute.Private;
     description: Schema.Attribute.Text;
-    discount: Schema.Attribute.Decimal;
+    discount: Schema.Attribute.Integer;
+    emoji: Schema.Attribute.String;
     featured: Schema.Attribute.Boolean;
-    images: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios', true>;
+    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::product.product'> &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
-    newProduct: Schema.Attribute.Boolean;
     price: Schema.Attribute.Decimal;
     publishedAt: Schema.Attribute.DateTime;
-    rating: Schema.Attribute.Decimal;
+    slug: Schema.Attribute.UID;
     stock: Schema.Attribute.Integer;
+    title: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> & Schema.Attribute.Private;
   };
