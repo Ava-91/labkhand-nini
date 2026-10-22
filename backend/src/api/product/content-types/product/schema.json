@@ -7,17 +7,49 @@
     "displayName": "Product",
     "description": "Products displayed in the Labkhand Nini storefront"
   },
-  "options": { "draftAndPublish": true },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
   "attributes": {
-    "title": { "type": "string", "required": true },
-    "slug": { "type": "uid", "targetField": "title", "required": true },
-    "description": { "type": "text" },
-    "price": { "type": "decimal", "required": true, "min": 0 },
-    "discount": { "type": "integer", "default": 0, "min": 0, "max": 100 },
-    "stock": { "type": "integer", "default": 0, "min": 0 },
-    "featured": { "type": "boolean", "default": false },
-    "emoji": { "type": "string", "default": "🧸" },
-    "image": { "type": "media", "multiple": false, "required": false, "allowedTypes": ["images"] },
-    "category": { "type": "relation", "relation": "manyToOne", "target": "api::category.category", "inversedBy": "products" }
+    "title": {
+      "type": "string"
+    },
+    "slug": {
+      "type": "uid"
+    },
+    "description": {
+      "type": "text"
+    },
+    "price": {
+      "type": "decimal"
+    },
+    "discount": {
+      "type": "integer"
+    },
+    "stock": {
+      "type": "integer"
+    },
+    "featured": {
+      "type": "boolean"
+    },
+    "emoji": {
+      "type": "string"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "category": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::category.category"
+    }
   }
 }
