@@ -1,29 +1,61 @@
-# Labkhand Nini — Strapi backend
+# 🚀 Getting started with Strapi
 
-Strapi v5 CMS/API using PostgreSQL. Product fields match the storefront contract. The **Storefront Settings** single type controls the brand identity, uploaded logo, navigation links, announcement banner, SEO text, homepage copy and cards, and footer text.
+Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
 
-## Requirements
-- Node.js 20–24
-- PostgreSQL running locally
-- A PostgreSQL database named `labkhand_nini`
+### `develop`
 
-## Setup (PowerShell)
-```powershell
-Set-Location backend
-Copy-Item .env.example .env
-# Edit .env locally: set your PostgreSQL password and generate unique secrets.
-npm install
+Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
+
+```
 npm run develop
+# or
+yarn develop
 ```
 
-Open http://127.0.0.1:1337/admin and create the first administrator. Never commit the populated `.env` file.
+### `start`
 
-## Content types
-- **Products** — title, slug, description, price, discount, stock, featured, emoji, image, category.
-- **Categories** — name, slug, description.
-- **Storefront Settings** (single type) — brand name/tagline/logo, navigation links, announcement, SEO fields, homepage hero, category tiles, promise cards, calls to action, and footer.
+Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
 
-The JSON fields `navLinks`, `categoryTiles`, and `promiseCards` are arrays. Their expected shape and initial example values are documented in `frontend/data/site-settings.json`.
+```
+npm run start
+# or
+yarn start
+```
 
-## API and permissions
-The API endpoints are `/api/products`, `/api/categories`, and `/api/site-setting`. In Strapi admin, open **Settings → Users & Permissions Plugin → Roles → Public** and allow only **find** and **findOne** for Products, Categories, and Storefront Settings if the storefront should read published content without authentication. Keep create, update, and delete restricted to administrators. Publish the single-type settings and each product/category entry for them to appear in the public API.
+### `build`
+
+Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
+
+```
+npm run build
+# or
+yarn build
+```
+
+## ⚙️ Deployment
+
+Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
+
+```
+yarn strapi deploy
+```
+
+## 📚 Learn more
+
+- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
+- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
+- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
+- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
+- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+
+Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+
+## ✨ Community
+
+- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
+- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
+- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+
+---
+
+<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
