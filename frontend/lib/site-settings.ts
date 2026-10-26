@@ -57,7 +57,6 @@ export type SiteSettings = {
   productDetailBackText: string;
   featuredTitle: string;
   featuredDescription: string;
-  categoryTiles: CategoryTile[];
   promisesEyebrow: string;
   promisesTitle: string;
   promisesAccent: string;
@@ -175,7 +174,6 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     productDetailBackText: text(settings.productDetailBackText),
     featuredTitle: text(settings.featuredTitle),
     featuredDescription: text(settings.featuredDescription),
-    categoryTiles: settings.categoryTiles ?? [],
     promisesEyebrow: text(settings.promisesEyebrow),
     promisesTitle: text(settings.promisesTitle),
     promisesAccent: text(settings.promisesAccent),

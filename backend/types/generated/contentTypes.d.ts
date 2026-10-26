@@ -474,7 +474,6 @@ export interface ApiSiteSettingSiteSetting extends Struct.SingleTypeSchema {
     catalogEmptyTitle: Schema.Attribute.String;
     catalogEyebrow: Schema.Attribute.String;
     catalogSearchPlaceholder: Schema.Attribute.String;
-    categoryTiles: Schema.Attribute.JSON;
     closingCtaText: Schema.Attribute.String;
     closingDescription: Schema.Attribute.Text;
     closingEyebrow: Schema.Attribute.String;
