@@ -68,7 +68,7 @@ export default async function Navbar({
           ))}
         </div>
 
-        <div className="hidden items-center gap-3 text-sm sm:flex">
+        <div className="hidden items-center gap-3 text-sm md:flex">
           {/* نمایش گزینه‌های حساب کاربری در صفحه‌های بزرگ‌تر */}
 
           {session ? ( // اگر کاربر وارد شده باشد
@@ -96,7 +96,7 @@ export default async function Navbar({
           )}
         </div>
 
-        <details className="relative sm:hidden">
+        <details className="relative md:hidden">
           {/* منوی بازشونده مخصوص موبایل */}
 
           <summary className="cursor-pointer list-none rounded-xl border border-[#f0e4e3] bg-white px-3 py-2 text-xl">
