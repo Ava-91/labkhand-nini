@@ -55,15 +55,24 @@ export default async function ProductDetailPage({ params }: PageProps) {
       </nav>
 
       <div className="grid items-start gap-8 md:grid-cols-2 md:gap-12">
-        <div className="relative overflow-hidden rounded-[2rem] border border-[#f0e4e3] bg-gradient-to-br from-[#fff5f5] to-[#f7f2fa] shadow-sm">
+        <div className="relative isolate aspect-video overflow-hidden rounded-[2rem] border border-[#f0e4e3] bg-gradient-to-br from-[#fff0f3] to-[#f5effb] shadow-sm">
           {product.image ? (
-            <img
-              src={product.image}
-              alt={product.title}
-              className="block h-auto w-full object-contain"
-            />
+            <>
+              <img
+                src={product.image}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 h-full w-full scale-110 object-cover opacity-35 blur-2xl"
+              />
+              <div className="absolute inset-0 bg-white/45" />
+              <img
+                src={product.image}
+                alt={product.title}
+                className="relative z-10 h-full w-full scale-[0.88] object-contain drop-shadow-xl"
+              />
+            </>
           ) : (
-            <div className="grid aspect-video place-items-center">
+            <div className="grid h-full place-items-center">
               <span className="text-8xl" aria-hidden="true">
                 {product.emoji}
               </span>
@@ -71,7 +80,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           )}
 
           {hasDiscount && (
-            <span className="absolute right-5 top-5 rounded-full bg-[#c65f7d] px-4 py-2 text-sm font-bold text-white shadow-sm">
+            <span className="absolute right-5 top-5 z-20 rounded-full bg-[#c65f7d] px-4 py-2 text-sm font-bold text-white shadow-sm">
               {new Intl.NumberFormat("fa-IR").format(product.discount)}٪ تخفیف
             </span>
           )}
