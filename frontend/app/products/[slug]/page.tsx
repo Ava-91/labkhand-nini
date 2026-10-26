@@ -55,7 +55,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
       </nav>
 
       <div className="grid items-start gap-8 md:grid-cols-2 md:gap-12">
-        <div className="relative aspect-video overflow-hidden rounded-3xl">
+        <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#faf6f1]">
           {product.image ? (
             <img
               src={product.image}
@@ -63,7 +63,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className="grid h-full place-items-center rounded-3xl bg-[#faf6f1]">
+            <div className="grid h-full place-items-center">
               <span className="text-8xl" aria-hidden="true">
                 {product.emoji}
               </span>
