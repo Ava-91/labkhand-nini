@@ -1,5 +1,6 @@
 import type { Metadata } from "next"; // تعریف اطلاعات متادیتای صفحه
 import Link from "next/link"; // ساخت لینک‌های داخلی
+import { Heart } from "lucide-react"; // آیکون قلب
 import { notFound } from "next/navigation"; // نمایش صفحه 404 در صورت نبود محصول
 
 import { getDiscountedPrice, getProductBySlug } from "@/lib/products"; // دریافت محصول و محاسبه قیمت تخفیف‌خورده
@@ -134,9 +135,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
           <div className="mt-7 rounded-2xl border border-[#f0e4e3] bg-white p-5">
             {/* کادر توضیح تکمیلی محصول */}
 
-            <span className="text-xl text-[#c65f7d]" aria-hidden="true">
-              ♡
-            </span>
+            <Heart className="text-[#c65f7d]" size={22} strokeWidth={1.7} aria-hidden="true" />
 
             <p className="mt-2 text-sm leading-7 text-[#817477]">
               {settings.productDetailNote} {/* متن تکمیلی از تنظیمات سایت */}

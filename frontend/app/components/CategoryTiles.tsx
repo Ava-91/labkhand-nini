@@ -9,7 +9,7 @@ function getCategoryIcon(title: string) {
 
   if (normalizedTitle.includes("نوزاد") || normalizedTitle.includes("بچه") || normalizedTitle.includes("کودک")) return Baby;
   if (normalizedTitle.includes("لباس") || normalizedTitle.includes("پوشاک")) return Shirt;
-  if (normalizedTitle.includes("خواب") || normalizedTitle.includes("خواب")) return Moon;
+  if (normalizedTitle.includes("خواب") || normalizedTitle.includes("استراحت")) return Moon;
   if (normalizedTitle.includes("هدیه") || normalizedTitle.includes("کادو")) return Gift;
   if (normalizedTitle.includes("مراقبت") || normalizedTitle.includes("روزانه")) return Heart;
 
