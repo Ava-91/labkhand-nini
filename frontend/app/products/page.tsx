@@ -25,23 +25,6 @@ export default async function ProductsPage() {
   return (
     // ظرف اصلی صفحه با عرض و فاصله‌های واکنش‌گرا
     <main className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
-      <div className="max-w-2xl">
-        {/* متن کوچک بالای عنوان */}
-        <span className="text-xs font-extrabold text-[#a84766]">
-          {settings.productsPageEyebrow}
-        </span>
-
-        {/* عنوان اصلی صفحه */}
-        <h1 className="mt-3 text-3xl font-black text-[#443a3c] sm:text-4xl">
-          {settings.productsPageTitle}
-        </h1>
-
-        {/* توضیحات صفحه محصولات */}
-        <p className="mt-3 text-sm leading-8 text-[#817477]">
-          {settings.productsPageDescription}
-        </p>
-      </div>
-
       {/* نمایش فهرست محصولات همراه با تنظیمات کاتالوگ */}
       <ProductCatalog
         products={products} // ارسال لیست محصولات
