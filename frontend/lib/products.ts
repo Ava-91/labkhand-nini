@@ -1,5 +1,3 @@
-import localProducts from "@/data/products.json"; // دریافت محصولات محلی از فایل JSON
-
 import { getStrapiUrl } from "./strapi"; // دریافت آدرس سرور Strapi
 
 // تعریف ساختار اطلاعات محصول
@@ -95,9 +93,11 @@ function mapProduct(item: StrapiProduct): Product {
 export async function getProducts(): Promise<Product[]> {
   const strapiUrl = getStrapiUrl(); // بررسی آدرس سرور Strapi
 
-  // اگر Strapi تنظیم نشده، از محصولات محلی استفاده کن
+  // فروشگاه فقط از Strapi داده می‌خواند و به داده‌های محلی برنمی‌گردد
   if (!strapiUrl) {
-    return localProducts as Product[];
+    throw new Error(
+      "STRAPI_URL is not configured. The storefront requires Strapi and has no local products fallback.",
+    );
   }
 
   try {
