@@ -87,7 +87,7 @@ function getImageUrl(path?: string) {
   return strapiUrl ? strapiUrl + path : path;
 }
 
-// دریافت تنظیمات فقط از Strapi؛ خطاها عمداً مخفی نمی‌شوند
+// دریافت تنظیمات فقط از Strapi؛ خطاهای اتصال و داده‌های اصلی مخفی نمی‌شوند
 export async function getSiteSettings(): Promise<SiteSettings> {
   const strapiUrl = getStrapiUrl();
 
@@ -130,11 +130,11 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     );
   }
 
-  if (!Array.isArray(settings.promiseCards)) {
-    throw new Error(
-      "The published Strapi Storefront Settings entry is missing promiseCards. Check the JSON field and publish the entry.",
-    );
-  }
+  // Optional JSON fields can be null until populated in Strapi.
+  // Keep Strapi as the only source of truth; render no cards until they are configured there.
+  const promiseCards = Array.isArray(settings.promiseCards)
+    ? settings.promiseCards
+    : [];
 
   // مقادیر خالی در CMS به‌صورت خالی نمایش داده می‌شوند؛ از داده محلی قدیمی استفاده نمی‌شود.
   const text = (value: string | null | undefined) => value ?? "";
@@ -178,7 +178,7 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     promisesTitle: text(settings.promisesTitle),
     promisesAccent: text(settings.promisesAccent),
     promisesDescription: text(settings.promisesDescription),
-    promiseCards: settings.promiseCards,
+    promiseCards,
     closingEyebrow: text(settings.closingEyebrow),
     closingTitle: text(settings.closingTitle),
     closingDescription: text(settings.closingDescription),
