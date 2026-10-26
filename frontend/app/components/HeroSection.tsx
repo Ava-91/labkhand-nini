@@ -107,7 +107,7 @@ export default function HeroSection({ settings }: { settings: SiteSettings }) {
         <span>{settings.heroBottomFirst}</span> {/* پیام اول */}
         <Heart size={12} strokeWidth={2} aria-hidden="true" /> {/* جداکننده قلب */}
         <span>{settings.heroBottomSecond}</span> {/* پیام دوم */}
-        <span aria-hidden="true">♡</span> {/* جداکننده قلب */}
+        <Heart size={12} strokeWidth={2} aria-hidden="true" /> {/* جداکننده قلب */}
         <span>{settings.heroBottomThird}</span> {/* پیام سوم */}
       </div>
     </section>
