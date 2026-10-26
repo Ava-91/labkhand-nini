@@ -14,6 +14,8 @@ function getPromiseIcon(title: string) {
 }
 
 export default function PromiseSection({ settings }: { settings: SiteSettings }) {
+  const promiseCards = Array.isArray(settings.promiseCards) ? settings.promiseCards : [];
+
   return (
     <section id="why-us" className="bg-[#fff3f2] py-14 sm:py-20">
       <div className="mx-auto grid w-full max-w-6xl gap-5 px-5 sm:px-8 md:grid-cols-2 lg:grid-cols-4">
@@ -31,7 +33,7 @@ export default function PromiseSection({ settings }: { settings: SiteSettings })
           </p>
         </div>
 
-        {settings.promiseCards.map((card) => (
+        {promiseCards.map((card) => (
           <article
             key={card.title}
             className="rounded-3xl border border-white bg-white/80 p-6 shadow-sm"
