@@ -1,6 +1,6 @@
 import Link from "next/link"; // کامپوننت لینک‌دهی در Next.js
+import { ShoppingBasket } from "lucide-react"; // آیکون سبد خرید
 
-import CategoryTiles from "./components/CategoryTiles"; // نمایش دسته‌بندی‌ها
 import ClosingCTA from "./components/ClosingCTA"; // بخش دعوت به اقدام پایانی
 import HeroSection from "./components/HeroSection"; // بخش اصلی بالای صفحه
 import ProductCatalog from "./components/ProductCatalog"; // نمایش کاتالوگ محصولات
@@ -28,9 +28,6 @@ export default async function HomePage() {
       {/* نمایش بخش معرفی اصلی سایت */}
       <HeroSection settings={settings} />
 
-      {/* نمایش دسته‌بندی‌های محصولات */}
-      <CategoryTiles settings={settings} />
-
       {/* ظرف بخش محصولات با عرض محدود و فاصله کناری */}
       <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
         {/* اگر محصولی برای نمایش وجود داشت، کاتالوگ را نشان بده */}
@@ -49,7 +46,7 @@ export default async function HomePage() {
           // اگر محصولی نبود، پیام خالی بودن فروشگاه را نمایش بده
           <section className="my-10 rounded-3xl border border-dashed border-[#e8c6d1] bg-white p-8 text-center">
             {/* آیکون سبد خرید */}
-            <span className="text-5xl" aria-hidden="true">🧺</span>
+            <ShoppingBasket className="mx-auto text-[#c65f7d]" size={44} strokeWidth={1.5} aria-hidden="true" />
 
             {/* عنوان بخش محصولات */}
             <h2 className="mt-4 text-xl font-extrabold text-[#553d44]">

@@ -1,4 +1,5 @@
 import Link from "next/link"; // ساخت لینک‌های داخلی سایت
+import { Menu } from "lucide-react"; // آیکون منوی موبایل
 
 import { auth } from "@/auth"; // بررسی وضعیت ورود کاربر
 import type { SiteSettings } from "@/lib/site-settings"; // نوع تنظیمات سایت
@@ -68,7 +69,7 @@ export default async function Navbar({
           ))}
         </div>
 
-        <div className="hidden items-center gap-3 text-sm sm:flex">
+        <div className="hidden items-center gap-3 text-sm md:flex">
           {/* نمایش گزینه‌های حساب کاربری در صفحه‌های بزرگ‌تر */}
 
           {session ? ( // اگر کاربر وارد شده باشد
@@ -96,11 +97,11 @@ export default async function Navbar({
           )}
         </div>
 
-        <details className="relative sm:hidden">
+        <details className="relative md:hidden">
           {/* منوی بازشونده مخصوص موبایل */}
 
           <summary className="cursor-pointer list-none rounded-xl border border-[#f0e4e3] bg-white px-3 py-2 text-xl">
-            <span aria-hidden="true">☰</span> {/* آیکون منو */}
+            <Menu aria-hidden="true" size={22} strokeWidth={1.8} /> {/* آیکون منو */}
             <span className="sr-only">باز کردن منو</span> {/* متن مخصوص صفحه‌خوان */}
           </summary>
 

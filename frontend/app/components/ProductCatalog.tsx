@@ -1,6 +1,7 @@
 "use client"; // مشخص می‌کند این کامپوننت در سمت کاربر اجرا می‌شود
 
 import Link from "next/link"; // ساخت لینک‌های داخلی
+import { ArrowLeft, Search, ShoppingBasket } from "lucide-react"; // آیکون‌های جست‌وجو و سبد
 import { useState } from "react"; // مدیریت وضعیت جست‌وجو و فیلترها
 
 import { getDiscountedPrice, type Product } from "@/lib/products"; // محاسبه قیمت تخفیف‌خورده و نوع محصول
@@ -103,10 +104,11 @@ export default function ProductCatalog({
 
         {limit && ( // فقط در صورت تعیین محدودیت، لینک همه محصولات نمایش داده می‌شود
           <Link
-            className="text-sm font-bold text-[#a84766] hover:text-[#81364f]"
+            className="inline-flex items-center gap-2 text-sm font-bold text-[#a84766] hover:text-[#81364f]"
             href="/products" // رفتن به صفحه کامل محصولات
           >
-            دیدن همه محصولات ←
+            دیدن همه محصولات
+            <ArrowLeft size={16} strokeWidth={1.8} aria-hidden="true" />
           </Link>
         )}
       </div>
@@ -115,9 +117,7 @@ export default function ProductCatalog({
         {/* چیدمان ورودی جست‌وجو و دو فیلتر */}
 
         <label className="flex items-center gap-3 rounded-2xl border border-[#f0e4e3] bg-white px-4 py-3 focus-within:border-[#c65f7d]">
-          <span className="text-xl text-[#a84766]" aria-hidden="true">
-            ⌕ {/* آیکون جست‌وجو */}
-          </span>
+          <Search className="shrink-0 text-[#a84766]" size={20} strokeWidth={1.8} aria-hidden="true" />
 
           <input
             type="search" // ورودی جست‌وجو
@@ -174,9 +174,7 @@ export default function ProductCatalog({
       ) : (
         // اگر هیچ محصولی مطابق فیلترها نبود
         <div className="mt-6 rounded-3xl border border-dashed border-[#e8c6d1] bg-white px-6 py-12 text-center">
-          <span className="text-5xl" aria-hidden="true">
-            🧺 {/* آیکون سبد خالی */}
-          </span>
+          <ShoppingBasket className="mx-auto text-[#c65f7d]" size={44} strokeWidth={1.5} aria-hidden="true" />
 
           <h3 className="mt-4 text-lg font-extrabold text-[#553d44]">
             {emptyTitle} {/* عنوان پیام خالی */}

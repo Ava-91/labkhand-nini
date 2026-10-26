@@ -1,4 +1,5 @@
 import Link from "next/link"; // برای ساخت لینک داخلی سایت
+import { ArrowLeft } from "lucide-react"; // آیکون هدایت به فروشگاه
 
 import type { SiteSettings } from "@/lib/site-settings"; // وارد کردن نوع تنظیمات سایت
 
@@ -25,10 +26,11 @@ export default function ClosingCTA({ settings }: { settings: SiteSettings }) {
 
       <Link
         href="/products" // هدایت کاربر به صفحه محصولات
-        className="inline-flex shrink-0 items-center justify-center rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#a84766]"
+        className="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#a84766]"
         // طراحی دکمه با تغییر رنگ هنگام هاور
       >
         {settings.closingCtaText} {/* متن دکمه دعوت به خرید */}
+        <ArrowLeft size={16} strokeWidth={1.8} aria-hidden="true" />
       </Link>
     </section>
   );

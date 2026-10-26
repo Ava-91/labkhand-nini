@@ -30,32 +30,6 @@
   "heroFloatingBottom": "هدیه‌ای از جنس عشق",
   "featuredTitle": "منتخب‌های کوچولوی ما",
   "featuredDescription": "محبوب‌های لبخند نینی که با دقت و عشق انتخاب شدن.",
-  "categoryTiles": [
-    {
-      "title": "لباس نوزاد",
-      "description": "لطیف و راحت",
-      "emoji": "🧸",
-      "href": "/products"
-    },
-    {
-      "title": "خواب و آرامش",
-      "description": "خواب‌های شیرین",
-      "emoji": "☁️",
-      "href": "/products"
-    },
-    {
-      "title": "هدیه و سیسمونی",
-      "description": "برای اولین دیدار",
-      "emoji": "🎁",
-      "href": "/products"
-    },
-    {
-      "title": "مراقبت روزانه",
-      "description": "با خیال راحت",
-      "emoji": "🫧",
-      "href": "/products"
-    }
-  ],
   "promisesEyebrow": "چرا لبخند نینی؟",
   "promisesTitle": "چون کوچولوی تو،",
   "promisesAccent": "همه‌ی دنیاته.",

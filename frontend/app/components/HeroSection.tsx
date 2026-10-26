@@ -1,4 +1,5 @@
 import Link from "next/link"; // برای ساخت لینک‌های داخلی سایت
+import { ArrowLeft, Heart, Sparkles } from "lucide-react"; // آیکون‌های تزئینی و هدایت
 
 import type { SiteSettings } from "@/lib/site-settings"; // وارد کردن نوع تنظیمات سایت
 
@@ -33,9 +34,10 @@ export default function HeroSection({ settings }: { settings: SiteSettings }) {
 
             <Link
               href="/products" // رفتن به صفحه محصولات
-              className="rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#a84766]"
+              className="inline-flex items-center gap-2 rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white shadow-md transition hover:-translate-y-0.5 hover:bg-[#a84766]"
             >
               {settings.heroPrimaryCta} {/* متن دکمه اصلی */}
+              <ArrowLeft size={16} strokeWidth={2} aria-hidden="true" />
             </Link>
 
             <a
@@ -50,7 +52,7 @@ export default function HeroSection({ settings }: { settings: SiteSettings }) {
             {/* بخش نمایش پیام اعتماد مشتری */}
 
             <span className="grid h-10 w-10 place-items-center rounded-2xl bg-white text-xl text-[#c65f7d]">
-              ♡ {/* آیکون قلب */}
+              <Heart size={21} strokeWidth={1.8} aria-hidden="true" /> {/* آیکون قلب */}
             </span>
 
             <span className="flex flex-col">
@@ -70,7 +72,7 @@ export default function HeroSection({ settings }: { settings: SiteSettings }) {
           aria-hidden="true" // مخفی کردن تزئینات از ابزارهای دسترس‌پذیری
         >
           <span className="absolute right-8 top-5 text-4xl text-[#d6a263]">
-            ✦ {/* ستاره تزئینی */}
+            <Sparkles size={30} strokeWidth={1.5} aria-hidden="true" /> {/* آیکون تزئینی */}
           </span>
 
           <div className="grid aspect-square w-[78%] place-items-center rounded-[48%_52%_45%_55%/49%_43%_57%_51%] border-10px border-white/60 bg-linear-to-br from-[#f9dfe4] via-[#e8e0f4] to-[#e8d4db] shadow-2xl shadow-[#b16d82]/20">
@@ -89,12 +91,12 @@ export default function HeroSection({ settings }: { settings: SiteSettings }) {
             🎀 {settings.heroFloatingBottom} {/* برچسب شناور پایین */}
           </span>
 
-          <span className="absolute bottom-10 left-10 text-3xl text-[#c65f7d]">
-            ✿ 
+          <span className="absolute bottom-10 left-10 text-[#c65f7d]">
+            <Sparkles size={25} strokeWidth={1.5} aria-hidden="true" />
           </span>
 
-          <span className="absolute right-8 top-1/3 text-3xl text-[#a89acb]">
-            ♡ 
+          <span className="absolute right-8 top-1/3 text-[#a89acb]">
+            <Heart size={26} strokeWidth={1.5} aria-hidden="true" />
           </span>
         </div>
       </div>
@@ -103,9 +105,9 @@ export default function HeroSection({ settings }: { settings: SiteSettings }) {
         {/* ردیف پیام‌های کوتاه در پایین بخش اصلی */}
 
         <span>{settings.heroBottomFirst}</span> {/* پیام اول */}
-        <span aria-hidden="true">♡</span> {/* جداکننده قلب */}
+        <Heart size={12} strokeWidth={2} aria-hidden="true" /> {/* جداکننده قلب */}
         <span>{settings.heroBottomSecond}</span> {/* پیام دوم */}
-        <span aria-hidden="true">♡</span> {/* جداکننده قلب */}
+        <Heart size={12} strokeWidth={2} aria-hidden="true" /> {/* جداکننده قلب */}
         <span>{settings.heroBottomThird}</span> {/* پیام سوم */}
       </div>
     </section>

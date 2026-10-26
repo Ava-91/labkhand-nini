@@ -1,5 +1,3 @@
-import localProducts from "@/data/products.json"; // دریافت محصولات محلی از فایل JSON
-
 import { getStrapiUrl } from "./strapi"; // دریافت آدرس سرور Strapi
 
 // تعریف ساختار اطلاعات محصول
@@ -95,9 +93,11 @@ function mapProduct(item: StrapiProduct): Product {
 export async function getProducts(): Promise<Product[]> {
   const strapiUrl = getStrapiUrl(); // بررسی آدرس سرور Strapi
 
-  // اگر Strapi تنظیم نشده، از محصولات محلی استفاده کن
+  // فروشگاه فقط از Strapi داده می‌خواند و به داده‌های محلی برنمی‌گردد
   if (!strapiUrl) {
-    return localProducts as Product[];
+    throw new Error(
+      "STRAPI_URL is not configured. The storefront requires Strapi and has no local products fallback.",
+    );
   }
 
   try {
@@ -107,15 +107,29 @@ export async function getProducts(): Promise<Product[]> {
       { cache: "no-store" }, // جلوگیری از استفاده از پاسخ کش‌شده
     );
 
-    if (!response.ok) return []; // در صورت خطای پاسخ، آرایه خالی برگردان
+    if (!response.ok) {
+      throw new Error(
+        "Unable to load products from Strapi (HTTP " +
+          response.status +
+          "). Check the public product.find permission and publish the products.",
+      );
+    }
 
-    // تبدیل پاسخ API به داده‌های قابل استفاده
+    // تبدیل داده‌های دریافتی از API به داده‌های قابل استفاده
     const result = (await response.json()) as ProductsResponse;
+
+    if (!Array.isArray(result.data)) {
+      throw new Error(
+        "Strapi returned an unexpected products response. Check the /api/products endpoint.",
+      );
+    }
 
     // تبدیل تمام محصولات به ساختار استاندارد
     return result.data.map(mapProduct);
-  } catch {
-    return []; // در صورت بروز خطا هنگام درخواست، آرایه خالی برگردان
+  } catch (error) {
+    // خطای ارتباطی یا پاسخ نامعتبر نباید با فروشگاه خالی پنهان شود
+    console.error("[storefront] Failed to load products from Strapi:", error);
+    throw error;
   }
 }
 

@@ -83,9 +83,6 @@
     "featuredDescription": {
       "type": "text"
     },
-    "categoryTiles": {
-      "type": "json"
-    },
     "promisesEyebrow": {
       "type": "string"
     },

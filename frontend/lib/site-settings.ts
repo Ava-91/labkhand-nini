@@ -1,131 +1,187 @@
-import localSettings from "@/data/site-settings.json"; // دریافت تنظیمات پیش‌فرض از فایل JSON
-
-import { getStrapiUrl } from "./strapi"; // دریافت آدرس سرور Strapi
+import { getStrapiUrl } from "./strapi";
 
 // تعریف ساختار لینک‌های منو
 export type NavLink = {
-  label: string; // متن لینک
-  href: string; // آدرس مقصد لینک
+  label: string;
+  href: string;
 };
 
-// تعریف ساختار کارت‌های دسته‌بندی
+// نگه‌داشتن این نوع برای سازگاری با ساختار داده‌های قبلی
 export type CategoryTile = {
-  title: string; // عنوان دسته‌بندی
-  description: string; // توضیحات دسته‌بندی
-  emoji: string; // ایموجی دسته‌بندی
-  href: string; // آدرس صفحه دسته‌بندی
+  title: string;
+  description: string;
+  emoji: string;
+  href: string;
 };
 
 // تعریف ساختار کارت‌های مزایا و تعهدات فروشگاه
 export type PromiseCard = {
-  emoji: string; // ایموجی کارت
-  title: string; // عنوان کارت
-  description: string; // توضیحات کارت
+  emoji: string;
+  title: string;
+  description: string;
 };
 
 // تعریف ساختار کامل تنظیمات سایت
 export type SiteSettings = {
-  brandName: string; // نام برند
-  brandTagline: string; // شعار برند
-  footerTagline: string; // شعار بخش پایینی سایت
-  logo?: string; // آدرس لوگو، در صورت وجود
-  announcement: string; // پیام اطلاع‌رسانی سایت
-  navLinks: NavLink[]; // لینک‌های منوی اصلی
-  footerMessage: string; // پیام فوتر
-  copyrightText: string; // متن حق نشر
-  seoTitle: string; // عنوان سئو
-  seoDescription: string; // توضیحات سئو
-  heroKicker: string; // متن کوچک بالای عنوان اصلی
-  heroTitle: string; // عنوان اصلی بخش معرفی
-  heroAccent: string; // متن برجسته در عنوان
-  heroDescription: string; // توضیحات بخش معرفی
-  heroPrimaryCta: string; // متن دکمه اصلی
-  heroSecondaryCta: string; // متن دکمه دوم
-  heroTrustTitle: string; // عنوان بخش اعتمادسازی
-  heroTrustDescription: string; // توضیحات اعتمادسازی
-  heroFloatingTop: string; // متن بخش شناور بالایی
-  heroFloatingBottom: string; // متن بخش شناور پایینی
-  heroBottomFirst: string; // متن مورد اول پایین بخش معرفی
-  heroBottomSecond: string; // متن مورد دوم پایین بخش معرفی
-  heroBottomThird: string; // متن مورد سوم پایین بخش معرفی
-  productsPageEyebrow: string; // متن کوچک بالای عنوان صفحه محصولات
-  productsPageTitle: string; // عنوان صفحه محصولات
-  productsPageDescription: string; // توضیحات صفحه محصولات
-  catalogEyebrow: string; // متن کوچک بالای کاتالوگ
-  catalogSearchPlaceholder: string; // متن راهنمای کادر جست‌وجو
-  catalogEmptyTitle: string; // عنوان حالت بدون محصول یا نتیجه
-  catalogEmptyDescription: string; // توضیح حالت بدون محصول یا نتیجه
-  productDetailNote: string; // یادداشت صفحه جزئیات محصول
-  productDetailBackText: string; // متن لینک بازگشت از جزئیات محصول
-  featuredTitle: string; // عنوان محصولات ویژه
-  featuredDescription: string; // توضیحات محصولات ویژه
-  categoryTiles: CategoryTile[]; // فهرست کارت‌های دسته‌بندی
-  promisesEyebrow: string; // متن کوچک بالای بخش مزایا
-  promisesTitle: string; // عنوان بخش مزایا
-  promisesAccent: string; // متن برجسته در عنوان مزایا
-  promisesDescription: string; // توضیحات بخش مزایا
-  promiseCards: PromiseCard[]; // فهرست کارت‌های مزایا
-  closingEyebrow: string; // متن کوچک بالای بخش پایانی
-  closingTitle: string; // عنوان بخش پایانی
-  closingDescription: string; // توضیحات بخش پایانی
-  closingCtaText: string; // متن دکمه دعوت به اقدام
+  brandName: string;
+  brandTagline: string;
+  footerTagline: string;
+  logo?: string;
+  announcement: string;
+  navLinks: NavLink[];
+  footerMessage: string;
+  copyrightText: string;
+  seoTitle: string;
+  seoDescription: string;
+  heroKicker: string;
+  heroTitle: string;
+  heroAccent: string;
+  heroDescription: string;
+  heroPrimaryCta: string;
+  heroSecondaryCta: string;
+  heroTrustTitle: string;
+  heroTrustDescription: string;
+  heroFloatingTop: string;
+  heroFloatingBottom: string;
+  heroBottomFirst: string;
+  heroBottomSecond: string;
+  heroBottomThird: string;
+  productsPageEyebrow: string;
+  productsPageTitle: string;
+  productsPageDescription: string;
+  catalogEyebrow: string;
+  catalogSearchPlaceholder: string;
+  catalogEmptyTitle: string;
+  catalogEmptyDescription: string;
+  productDetailNote: string;
+  productDetailBackText: string;
+  featuredTitle: string;
+  featuredDescription: string;
+  promisesEyebrow: string;
+  promisesTitle: string;
+  promisesAccent: string;
+  promisesDescription: string;
+  promiseCards: PromiseCard[];
+  closingEyebrow: string;
+  closingTitle: string;
+  closingDescription: string;
+  closingCtaText: string;
 };
 
-// تعریف ساختار تنظیمات دریافتی از Strapi
-// همه فیلدهای تنظیمات اختیاری هستند و لوگو ساختار جداگانه‌ای دارد
-type StrapiSettings = Omit<Partial<SiteSettings>, "logo"> & {
-  logo?: { url?: string } | null; // اطلاعات لوگو از سرور
+// شکل پاسخ تنظیمات فروشگاه در Strapi
+type StrapiSettings = Partial<Omit<SiteSettings, "logo">> & {
+  logo?: { url?: string } | null;
 };
 
-// تعریف ساختار پاسخ API تنظیمات
 type SettingsResponse = {
-  data?: StrapiSettings | null; // تنظیمات دریافتی یا مقدار خالی
+  data?: StrapiSettings | null;
+  error?: { message?: string };
 };
 
-// تبدیل مسیر تصویر به آدرس قابل استفاده
+// تبدیل مسیر فایل رسانه‌ای به آدرس کامل
 function getImageUrl(path?: string) {
-  if (!path) return undefined; // اگر مسیری وجود ندارد، مقدار خالی برگردان
-
-  // اگر مسیر از قبل آدرس کامل است، همان را برگردان
+  if (!path) return undefined;
   if (path.startsWith("http://") || path.startsWith("https://")) return path;
 
-  const strapiUrl = getStrapiUrl(); // دریافت آدرس سرور Strapi
-  return strapiUrl ? strapiUrl + path : path; // ساخت آدرس کامل یا حفظ مسیر اصلی
+  const strapiUrl = getStrapiUrl();
+  return strapiUrl ? strapiUrl + path : path;
 }
 
-// دریافت تنظیمات سایت از Strapi یا فایل محلی
+// دریافت تنظیمات فقط از Strapi؛ خطاهای اتصال و داده‌های اصلی مخفی نمی‌شوند
 export async function getSiteSettings(): Promise<SiteSettings> {
-  const defaults = localSettings as SiteSettings; // تنظیمات پیش‌فرض محلی
-  const strapiUrl = getStrapiUrl(); // دریافت آدرس سرور
+  const strapiUrl = getStrapiUrl();
 
-  // اگر سرور تنظیم نشده باشد، تنظیمات محلی را برگردان
   if (!strapiUrl) {
-    return defaults;
-  }
-
-  try {
-    // درخواست تنظیمات سایت همراه با اطلاعات لوگو
-    const response = await fetch(
-      strapiUrl + "/api/site-setting?populate=logo",
-      { cache: "no-store" }, // دریافت اطلاعات تازه و بدون کش
+    throw new Error(
+      "STRAPI_URL is not configured. The storefront requires Strapi and has no local settings fallback.",
     );
-
-    if (!response.ok) return defaults; // در صورت خطای پاسخ، استفاده از تنظیمات محلی
-
-    // تبدیل پاسخ API به ساختار تعریف‌شده
-    const result = (await response.json()) as SettingsResponse;
-
-    if (!result.data) return defaults; // اگر تنظیماتی دریافت نشد، تنظیمات محلی را برگردان
-
-    // جدا کردن لوگو از سایر تنظیمات
-    const { logo, ...settings } = result.data;
-
-    return {
-      ...defaults, // استفاده از تنظیمات محلی برای مقادیر پیش‌فرض
-      ...settings, // جایگزینی مقادیر موجود با تنظیمات دریافتی از سرور
-      logo: getImageUrl(logo?.url) ?? defaults.logo, // تعیین آدرس لوگو یا استفاده از لوگوی پیش‌فرض
-    };
-  } catch {
-    return defaults; // در صورت بروز خطا، تنظیمات محلی را برگردان
   }
+
+  const response = await fetch(
+    strapiUrl + "/api/site-setting?populate=logo",
+    { cache: "no-store" },
+  );
+
+  if (!response.ok) {
+    throw new Error(
+      `Unable to load storefront settings from Strapi (HTTP ${response.status}). Check the public site-setting.find permission and publish the settings entry.`,
+    );
+  }
+
+  const result = (await response.json()) as SettingsResponse;
+
+  if (!result.data) {
+    throw new Error(
+      "Strapi returned no published Storefront Settings entry. Create and publish the single-type entry in Strapi.",
+    );
+  }
+
+  const settings = result.data;
+
+  if (!settings.brandName?.trim()) {
+    throw new Error(
+      "The published Strapi Storefront Settings entry is missing brandName. Check that the correct entry is published.",
+    );
+  }
+
+  if (!Array.isArray(settings.navLinks)) {
+    throw new Error(
+      "The published Strapi Storefront Settings entry is missing navLinks. Check the JSON field and publish the entry.",
+    );
+  }
+
+  // Optional JSON fields can be null until populated in Strapi.
+  // Keep Strapi as the only source of truth; render no cards until they are configured there.
+  const promiseCards = Array.isArray(settings.promiseCards)
+    ? settings.promiseCards
+    : [];
+
+  // مقادیر خالی در CMS به‌صورت خالی نمایش داده می‌شوند؛ از داده محلی قدیمی استفاده نمی‌شود.
+  const text = (value: string | null | undefined) => value ?? "";
+
+  return {
+    brandName: settings.brandName,
+    brandTagline: text(settings.brandTagline),
+    footerTagline: text(settings.footerTagline),
+    logo: getImageUrl(settings.logo?.url),
+    announcement: text(settings.announcement),
+    navLinks: settings.navLinks,
+    footerMessage: text(settings.footerMessage),
+    copyrightText: text(settings.copyrightText),
+    seoTitle: text(settings.seoTitle),
+    seoDescription: text(settings.seoDescription),
+    heroKicker: text(settings.heroKicker),
+    heroTitle: text(settings.heroTitle),
+    heroAccent: text(settings.heroAccent),
+    heroDescription: text(settings.heroDescription),
+    heroPrimaryCta: text(settings.heroPrimaryCta),
+    heroSecondaryCta: text(settings.heroSecondaryCta),
+    heroTrustTitle: text(settings.heroTrustTitle),
+    heroTrustDescription: text(settings.heroTrustDescription),
+    heroFloatingTop: text(settings.heroFloatingTop),
+    heroFloatingBottom: text(settings.heroFloatingBottom),
+    heroBottomFirst: text(settings.heroBottomFirst),
+    heroBottomSecond: text(settings.heroBottomSecond),
+    heroBottomThird: text(settings.heroBottomThird),
+    productsPageEyebrow: text(settings.productsPageEyebrow),
+    productsPageTitle: text(settings.productsPageTitle),
+    productsPageDescription: text(settings.productsPageDescription),
+    catalogEyebrow: text(settings.catalogEyebrow),
+    catalogSearchPlaceholder: text(settings.catalogSearchPlaceholder),
+    catalogEmptyTitle: text(settings.catalogEmptyTitle),
+    catalogEmptyDescription: text(settings.catalogEmptyDescription),
+    productDetailNote: text(settings.productDetailNote),
+    productDetailBackText: text(settings.productDetailBackText),
+    featuredTitle: text(settings.featuredTitle),
+    featuredDescription: text(settings.featuredDescription),
+    promisesEyebrow: text(settings.promisesEyebrow),
+    promisesTitle: text(settings.promisesTitle),
+    promisesAccent: text(settings.promisesAccent),
+    promisesDescription: text(settings.promisesDescription),
+    promiseCards,
+    closingEyebrow: text(settings.closingEyebrow),
+    closingTitle: text(settings.closingTitle),
+    closingDescription: text(settings.closingDescription),
+    closingCtaText: text(settings.closingCtaText),
+  };
 }

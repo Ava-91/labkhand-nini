@@ -12,6 +12,7 @@
     "format:check": "npx --yes prettier@3.6.2 --check \"app/**/*.{ts,tsx,js,jsx,css}\" \"lib/**/*.{ts,tsx,js,jsx,json}\" \"data/**/*.json\" \"types/**/*.{ts,tsx}\" \"*.{ts,tsx,json,md}\""
   },
   "dependencies": {
+    "lucide-react": "^0.468.0",
     "next": "16.4.0",
     "next-auth": "^5.0.0-beta.32",
     "react": "19.2.8",

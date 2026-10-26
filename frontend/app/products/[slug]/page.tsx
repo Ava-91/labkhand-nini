@@ -1,153 +1,135 @@
-import type { Metadata } from "next"; // تعریف اطلاعات متادیتای صفحه
-import Link from "next/link"; // ساخت لینک‌های داخلی
-import { notFound } from "next/navigation"; // نمایش صفحه 404 در صورت نبود محصول
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowLeft, Heart, PackageCheck } from "lucide-react";
+import { notFound } from "next/navigation";
 
-import { getDiscountedPrice, getProductBySlug } from "@/lib/products"; // دریافت محصول و محاسبه قیمت تخفیف‌خورده
-import { getSiteSettings } from "@/lib/site-settings"; // دریافت تنظیمات سایت
+import { getDiscountedPrice, getProductBySlug } from "@/lib/products";
+import { getSiteSettings } from "@/lib/site-settings";
 
-// تبدیل قیمت به اعداد فارسی همراه واحد تومان
 const money = (price: number) =>
   new Intl.NumberFormat("fa-IR").format(price) + " تومان";
 
-// تعریف نوع پارامترهای صفحه
 type PageProps = {
-  params: Promise<{ slug: string }>; // دریافت شناسه متنی محصول از آدرس
+  params: Promise<{ slug: string }>;
 };
 
-// تولید عنوان و توضیحات سئو برای صفحه محصول
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params; // دریافت اسلاگ محصول
-  const product = await getProductBySlug(slug); // پیدا کردن محصول
+  const { slug } = await params;
+  const product = await getProductBySlug(slug);
 
-  if (!product) {
-    return { title: "محصول پیدا نشد" }; // عنوان صفحه در صورت نبود محصول
-  }
+  if (!product) return { title: "محصول پیدا نشد" };
 
   return {
-    title: product.title, // عنوان صفحه از نام محصول
-    description: product.description, // توضیحات صفحه برای موتورهای جست‌وجو
+    title: product.title,
+    description: product.description,
   };
 }
 
-// نمایش صفحه جزئیات یک محصول
 export default async function ProductDetailPage({ params }: PageProps) {
-  const { slug } = await params; // استخراج اسلاگ از آدرس
-
+  const { slug } = await params;
   const [product, settings] = await Promise.all([
-    getProductBySlug(slug), // دریافت اطلاعات محصول
-    getSiteSettings(), // دریافت تنظیمات سایت به‌صورت هم‌زمان
+    getProductBySlug(slug),
+    getSiteSettings(),
   ]);
 
-  if (!product) {
-    notFound(); // نمایش صفحه 404 اگر محصول پیدا نشود
-  }
+  if (!product) notFound();
 
-  const hasDiscount = product.discount > 0; // بررسی وجود تخفیف
-  const isInStock = product.stock > 0; // بررسی موجود بودن محصول
+  const hasDiscount = product.discount > 0;
+  const isInStock = product.stock > 0;
 
   return (
-    <main className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-16">
-      {/* محتوای اصلی صفحه با عرض محدود و فاصله واکنش‌گرا */}
-
+    <main className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-10 sm:px-8 sm:py-14">
       <nav
-        className="mb-8 flex flex-wrap items-center gap-2 text-sm text-[#817477]"
-        aria-label="مسیر صفحه" // معرفی مسیر صفحه به ابزارهای دسترس‌پذیری
+        className="mb-10 flex flex-wrap items-center gap-2 text-sm text-[#817477]"
+        aria-label="مسیر صفحه"
       >
-        <Link className="hover:text-[#a84766]" href="/">
-          خانه {/* لینک صفحه اصلی */}
+        <Link href="/" className="transition hover:text-[#a84766]">
+          خانه
         </Link>
         <span>/</span>
-        <Link className="hover:text-[#a84766]" href="/products">
-          محصولات {/* لینک فهرست محصولات */}
+        <Link href="/products" className="transition hover:text-[#a84766]">
+          محصولات
         </Link>
         <span>/</span>
-        <span className="font-semibold text-[#443a3c]">
-          {product.title} {/* نام محصول فعلی در مسیر */}
-        </span>
+        <span className="font-semibold text-[#443a3c]">{product.title}</span>
       </nav>
 
-      <div className="grid gap-8 md:grid-cols-2 md:items-start">
-        {/* تقسیم صفحه به دو ستون در نمایشگرهای بزرگ */}
-
-        <div className="relative grid aspect-square place-items-center overflow-hidden rounded-[2rem] bg-gradient-to-br from-[#fff0f3] to-[#f5effb]">
-          {/* بخش تصویر محصول با پس‌زمینه گرادیانی */}
-
-          {product.image ? ( // اگر تصویر محصول وجود داشته باشد
+      <div className="grid items-start gap-8 md:grid-cols-2 md:gap-12">
+        <div className="relative aspect-square overflow-hidden rounded-3xl bg-[#faf6f1]">
+          {product.image ? (
             <img
-              src={product.image} // آدرس تصویر محصول
-              alt={product.title} // متن جایگزین تصویر
-              className="h-full w-full object-cover" // پرکردن کادر بدون تغییر نسبت تصویر
+              src={product.image}
+              alt={product.title}
+              className="h-full w-full object-cover"
             />
           ) : (
-            <span className="text-8xl" aria-hidden="true">
-              {product.emoji} {/* نمایش ایموجی در نبود تصویر */}
-            </span>
+            <div className="grid h-full place-items-center">
+              <span className="text-8xl" aria-hidden="true">
+                {product.emoji}
+              </span>
+            </div>
           )}
 
-          {hasDiscount && ( // نمایش نشان تخفیف فقط برای محصولات تخفیف‌دار
-            <span className="absolute right-5 top-5 rounded-full bg-[#c65f7d] px-4 py-2 text-sm font-bold text-white">
+          {hasDiscount && (
+            <span className="absolute right-4 top-4 rounded-full bg-[#c65f7d] px-4 py-2 text-sm font-bold text-white">
               {new Intl.NumberFormat("fa-IR").format(product.discount)}٪ تخفیف
-              {/* نمایش درصد تخفیف با اعداد فارسی */}
             </span>
           )}
         </div>
 
-        <div className="py-2">
-          <span className="text-sm font-bold text-[#a84766]">
-            {product.category} {/* دسته‌بندی محصول */}
+        <div className="pt-1 sm:pt-3">
+          <span className="inline-flex rounded-full bg-[#fff0f3] px-3 py-1.5 text-sm font-bold text-[#a84766]">
+            {product.category}
           </span>
 
-          <h1 className="mt-3 text-3xl leading-relaxed font-black text-[#443a3c] sm:text-4xl">
-            {product.title} {/* عنوان اصلی صفحه */}
+          <h1 className="mt-4 text-3xl leading-relaxed font-black text-[#443a3c] sm:text-4xl">
+            {product.title}
           </h1>
 
-          <p className="mt-5 text-sm leading-8 text-[#817477]">
-            {product.description} {/* توضیحات محصول */}
+          <p className="mt-4 text-sm leading-8 text-[#817477] sm:text-base">
+            {product.description}
           </p>
 
-          <div className="mt-7 flex flex-wrap items-center gap-4">
-            {/* بخش نمایش قیمت */}
+          <div className="mt-7 rounded-2xl bg-[#fff8f8] p-5 sm:p-6">
+            <div className="flex flex-wrap items-center gap-3">
+              <strong className="text-2xl font-black text-[#553d44] sm:text-3xl">
+                {money(getDiscountedPrice(product))}
+              </strong>
+              {hasDiscount && (
+                <del className="text-sm text-[#a49a9c]">
+                  {money(product.price)}
+                </del>
+              )}
+            </div>
 
-            <strong className="text-2xl font-black text-[#553d44]">
-              {money(getDiscountedPrice(product))}
-              {/* نمایش قیمت نهایی با اعمال تخفیف */}
-            </strong>
-
-            {hasDiscount && ( // نمایش قیمت قبلی در صورت وجود تخفیف
-              <del className="text-sm text-[#a49a9c]">
-                {money(product.price)} {/* قیمت اصلی خط‌خورده */}
-              </del>
-            )}
+            <p
+              className={`mt-4 inline-flex items-center gap-2 text-sm font-bold ${
+                isInStock ? "text-[#367557]" : "text-[#a84766]"
+              }`}
+            >
+              <PackageCheck size={17} strokeWidth={1.8} aria-hidden="true" />
+              {isInStock ? "موجود برای انتخاب تو" : "فعلاً ناموجود"}
+            </p>
           </div>
 
-          <p
-            className={isInStock
-              ? "mt-5 inline-flex rounded-full bg-[#e8f5ee] px-4 py-2 text-sm font-bold text-[#367557]"
-              : "mt-5 inline-flex rounded-full bg-[#fbe8ec] px-4 py-2 text-sm font-bold text-[#a84766]"
-            }
-            // تغییر رنگ نشان موجودی بر اساس وضعیت محصول
-          >
-            {isInStock ? "● موجود برای انتخاب تو" : "● فعلاً ناموجود"}
-            {/* نمایش وضعیت موجودی */}
-          </p>
-
-          <div className="mt-7 rounded-2xl border border-[#f0e4e3] bg-white p-5">
-            {/* کادر توضیح تکمیلی محصول */}
-
-            <span className="text-xl text-[#c65f7d]" aria-hidden="true">
-              ♡
-            </span>
-
-            <p className="mt-2 text-sm leading-7 text-[#817477]">
-              {settings.productDetailNote} {/* متن تکمیلی از تنظیمات سایت */}
+          <div className="mt-5 flex gap-3 rounded-2xl border border-[#f0e4e3] bg-white p-4 sm:p-5">
+            <Heart
+              className="mt-1 shrink-0 text-[#c65f7d]"
+              size={20}
+              strokeWidth={1.7}
+              aria-hidden="true"
+            />
+            <p className="text-sm leading-7 text-[#817477]">
+              {settings.productDetailNote}
             </p>
           </div>
 
           <Link
-            href="/products" // بازگشت به فهرست محصولات
-            className="mt-6 inline-flex rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#a84766]"
+            href="/products"
+            className="mt-7 inline-flex items-center gap-2 rounded-full border border-[#e9cbd3] px-5 py-3 text-sm font-bold text-[#a84766] transition hover:bg-[#fff0f3]"
           >
-            {settings.productDetailBackText} {/* متن دکمه بازگشت */}
+            <ArrowLeft size={16} strokeWidth={1.8} aria-hidden="true" />
+            {settings.productDetailBackText}
           </Link>
         </div>
       </div>

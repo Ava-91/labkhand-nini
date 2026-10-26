@@ -42,7 +42,7 @@ Open http://127.0.0.1:1337/admin to create the first Strapi administrator. See [
 ## Managing storefront content in Strapi
 - **Products:** create/edit Products, upload an image, set category, stock, price, discount, and featured status, then publish.
 - **Categories:** manage the Categories collection and publish each category.
-- **Logo, navbar, announcement, homepage and footer:** open the **Storefront Settings** single type, upload the logo, edit the fields, and publish. The `navLinks`, `categoryTiles`, and `promiseCards` fields are JSON arrays; each item has the structure shown in `frontend/data/site-settings.json`.
+- **Logo, navbar, announcement, homepage and footer:** open the **Storefront Settings** single type, upload the logo, edit the fields, and publish. The `navLinks` and `promiseCards` fields are JSON arrays; each item has the structure shown in `frontend/data/site-settings.json`.
 - **Public read access:** in **Settings → Users & Permissions Plugin → Roles → Public**, allow `find`/ `findOne` for Products, Categories, and Storefront Settings. Do not enable write permissions for the Public role.
 
 The frontend intentionally keeps layout, styles, and interactive behavior in code. Content and merchandising copy should be changed through Strapi rather than editing React components.
