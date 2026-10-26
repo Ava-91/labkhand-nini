@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowLeft, Package, UserRound } from "lucide-react";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
@@ -25,22 +26,22 @@ export default async function DashboardPage() {
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         <section className="rounded-3xl border border-[#f0e4e3] bg-white p-6">
-          <span className="text-sm text-[#817477]">محصولات قابل مشاهده</span>
+          <span className="inline-flex items-center gap-2 text-sm text-[#817477]"><Package size={16} strokeWidth={1.8} aria-hidden="true" /> محصولات قابل مشاهده</span>
           <strong className="mt-2 block text-3xl font-black text-[#553d44]">
             {new Intl.NumberFormat("fa-IR").format(products.length)}
           </strong>
         </section>
         <section className="rounded-3xl border border-[#f0e4e3] bg-white p-6">
-          <span className="text-sm text-[#817477]">حساب کاربری</span>
+          <span className="inline-flex items-center gap-2 text-sm text-[#817477]"><UserRound size={16} strokeWidth={1.8} aria-hidden="true" /> حساب کاربری</span>
           <strong className="mt-2 block text-3xl font-black text-[#367557]">فعال</strong>
         </section>
       </div>
 
       <Link
         href="/products"
-        className="mt-7 inline-flex rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white hover:bg-[#a84766]"
+        className="mt-7 inline-flex items-center gap-2 rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white hover:bg-[#a84766]"
       >
-        رفتن به فروشگاه ←
+        رفتن به فروشگاه <ArrowLeft size={16} strokeWidth={1.8} aria-hidden="true" />
       </Link>
     </main>
   );
