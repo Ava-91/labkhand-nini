@@ -69,8 +69,7 @@ const config = ({ env }: Core.Config.Shared.ConfigParams): Core.Config.Database 
       connection: {
         // Resolve relative paths from the backend root, not the process's launch directory.
         filename: path.resolve(
-          __dirname,
-          '..',
+          process.cwd(),
           env('DATABASE_FILENAME', '.tmp/data.db')
         ),
       },
