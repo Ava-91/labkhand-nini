@@ -1,7 +1,7 @@
 "use client"; // مشخص می‌کند این کامپوننت در سمت کاربر اجرا می‌شود
 
 import Link from "next/link"; // ساخت لینک‌های داخلی
-import { Search, ShoppingBasket } from "lucide-react"; // آیکون‌های جست‌وجو و سبد
+import { ArrowLeft, Search, ShoppingBasket } from "lucide-react"; // آیکون‌های جست‌وجو و سبد
 import { useState } from "react"; // مدیریت وضعیت جست‌وجو و فیلترها
 
 import { getDiscountedPrice, type Product } from "@/lib/products"; // محاسبه قیمت تخفیف‌خورده و نوع محصول
@@ -104,10 +104,11 @@ export default function ProductCatalog({
 
         {limit && ( // فقط در صورت تعیین محدودیت، لینک همه محصولات نمایش داده می‌شود
           <Link
-            className="text-sm font-bold text-[#a84766] hover:text-[#81364f]"
+            className="inline-flex items-center gap-2 text-sm font-bold text-[#a84766] hover:text-[#81364f]"
             href="/products" // رفتن به صفحه کامل محصولات
           >
-            دیدن همه محصولات ←
+            دیدن همه محصولات
+            <ArrowLeft size={16} strokeWidth={1.8} aria-hidden="true" />
           </Link>
         )}
       </div>
