@@ -55,17 +55,19 @@ export default async function ProductDetailPage({ params }: PageProps) {
       </nav>
 
       <div className="grid items-start gap-8 md:grid-cols-2 md:gap-12">
-        <div className="relative grid aspect-square place-items-center overflow-hidden rounded-[2rem] border border-[#f0e4e3] bg-gradient-to-br from-[#fff5f5] to-[#f7f2fa] p-5 shadow-sm sm:p-8">
+        <div className="relative overflow-hidden rounded-[2rem] border border-[#f0e4e3] bg-gradient-to-br from-[#fff5f5] to-[#f7f2fa] shadow-sm">
           {product.image ? (
             <img
               src={product.image}
               alt={product.title}
-              className="h-full w-full object-contain"
+              className="block h-auto w-full object-contain"
             />
           ) : (
-            <span className="text-8xl" aria-hidden="true">
-              {product.emoji}
-            </span>
+            <div className="grid aspect-video place-items-center">
+              <span className="text-8xl" aria-hidden="true">
+                {product.emoji}
+              </span>
+            </div>
           )}
 
           {hasDiscount && (
