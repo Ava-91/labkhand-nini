@@ -1,6 +1,6 @@
 import type { Metadata } from "next"; // تعریف اطلاعات متادیتای صفحه
 import Link from "next/link"; // ساخت لینک‌های داخلی
-import { Heart } from "lucide-react"; // آیکون قلب
+import { ArrowLeft, Heart, PackageCheck } from "lucide-react"; // آیکون‌های قلب، بازگشت و موجودی
 import { notFound } from "next/navigation"; // نمایش صفحه 404 در صورت نبود محصول
 
 import { getDiscountedPrice, getProductBySlug } from "@/lib/products"; // دریافت محصول و محاسبه قیمت تخفیف‌خورده
@@ -128,7 +128,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
             }
             // تغییر رنگ نشان موجودی بر اساس وضعیت محصول
           >
-            {isInStock ? "● موجود برای انتخاب تو" : "● فعلاً ناموجود"}
+            <PackageCheck className="mr-2" size={16} strokeWidth={1.8} aria-hidden="true" />{isInStock ? "موجود برای انتخاب تو" : "فعلاً ناموجود"}
             {/* نمایش وضعیت موجودی */}
           </p>
 
@@ -144,9 +144,10 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
           <Link
             href="/products" // بازگشت به فهرست محصولات
-            className="mt-6 inline-flex rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#a84766]"
+            className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#c65f7d] px-6 py-3 text-sm font-bold text-white transition hover:bg-[#a84766]"
           >
             {settings.productDetailBackText} {/* متن دکمه بازگشت */}
+            <ArrowLeft size={16} strokeWidth={1.8} aria-hidden="true" />
           </Link>
         </div>
       </div>
