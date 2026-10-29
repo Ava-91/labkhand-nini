@@ -100,7 +100,7 @@ export default async function Navbar({
           </label>
         </form>
 
-        <div className="hidden shrink-0 items-center gap-3 text-sm md:flex">
+        <div className="hidden shrink-0 items-center gap-3 text-sm lg:flex">
           {/* نمایش گزینه‌های حساب کاربری در صفحه‌های متوسط و بزرگ‌تر */}
 
           {session ? ( // اگر کاربر وارد شده باشد
@@ -128,7 +128,7 @@ export default async function Navbar({
           )}
         </div>
 
-        <details className="relative shrink-0 md:hidden">
+        <details className="relative shrink-0 lg:hidden">
           {/* منوی بازشونده مخصوص موبایل */}
 
           <summary className="cursor-pointer list-none rounded-xl border border-[#f0e4e3] bg-white p-2 text-xl">
