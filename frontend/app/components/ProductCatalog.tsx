@@ -1,7 +1,7 @@
 "use client"; // مشخص می‌کند این کامپوننت در سمت کاربر اجرا می‌شود
 
 import Link from "next/link"; // ساخت لینک‌های داخلی
-import { ArrowLeft, Search, ShoppingBasket } from "lucide-react"; // آیکون‌های جست‌وجو و سبد
+import { ArrowLeft, ShoppingBasket } from "lucide-react"; // آیکون‌های هدایت و سبد
 import { useState } from "react"; // مدیریت وضعیت جست‌وجو و فیلترها
 
 import { getDiscountedPrice, type Product } from "@/lib/products"; // محاسبه قیمت تخفیف‌خورده و نوع محصول
@@ -13,7 +13,7 @@ type ProductCatalogProps = {
   title?: string; // عنوان بخش
   description?: string; // توضیحات بخش
   eyebrow?: string; // متن کوچک بالای عنوان
-  searchPlaceholder?: string; // متن راهنمای جست‌وجو
+  initialSearch?: string; // عبارت جست‌وجوی ارسال‌شده از نوار بالای سایت
   emptyTitle?: string; // عنوان حالت بدون نتیجه
   emptyDescription?: string; // توضیح حالت بدون نتیجه
   limit?: number; // محدودیت تعداد محصولات
@@ -25,12 +25,12 @@ export default function ProductCatalog({
   title = "انتخاب‌های دوست‌داشتنی", // عنوان پیش‌فرض
   description = "چیزهای کوچکی که روزهای بزرگ‌تری از عشق می‌سازند.", // توضیح پیش‌فرض
   eyebrow = "انتخاب شده با عشق", // متن بالای عنوان
-  searchPlaceholder = "چی برای کوچولوت می‌خوای؟", // راهنمای جست‌وجو
+  initialSearch = "", // عبارت جست‌وجوی اولیه
   emptyTitle = "چیزی پیدا نکردیم!", // عنوان نبود محصول
   emptyDescription = "عبارت جست‌وجو یا دسته‌بندی رو تغییر بده و دوباره بگرد.", // راهنمای تغییر فیلتر
   limit, // تعداد محصولات قابل نمایش
 }: ProductCatalogProps) {
-  const [searchText, setSearchText] = useState(""); // ذخیره عبارت جست‌وجو
+  const [searchText, setSearchText] = useState(initialSearch); // ذخیره عبارت جست‌وجوی دریافتی از URL
   const [selectedCategory, setSelectedCategory] = useState("همه دسته‌ها"); // دسته‌بندی انتخاب‌شده
   const [sortOrder, setSortOrder] = useState("recommended"); // روش مرتب‌سازی
 
@@ -113,22 +113,7 @@ export default function ProductCatalog({
         )}
       </div>
 
-      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_220px_220px]">
-        {/* چیدمان ورودی جست‌وجو و دو فیلتر */}
-
-        <label className="flex items-center gap-3 rounded-2xl border border-[#f0e4e3] bg-white px-4 py-3 focus-within:border-[#c65f7d]">
-          <Search className="shrink-0 text-[#a84766]" size={20} strokeWidth={1.8} aria-hidden="true" />
-
-          <input
-            type="search" // ورودی جست‌وجو
-            value={searchText} // مقدار فعلی جست‌وجو
-            onChange={(event) => setSearchText(event.target.value)} // به‌روزرسانی با تایپ کاربر
-            placeholder={searchPlaceholder} // متن راهنمای ورودی
-            aria-label="جست‌وجوی محصولات" // نام قابل‌دسترسی ورودی
-            className="w-full bg-transparent text-sm outline-none placeholder:text-[#a49a9c]"
-          />
-        </label>
-
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <label>
           <span className="sr-only">فیلتر بر اساس دسته‌بندی</span>
           {/* عنوان مخفی برای ابزارهای دسترس‌پذیری */}
