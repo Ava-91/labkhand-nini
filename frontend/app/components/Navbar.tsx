@@ -1,5 +1,5 @@
 import Link from "next/link"; // ساخت لینک‌های داخلی سایت
-import { Menu } from "lucide-react"; // آیکون منوی موبایل
+import { Menu, Search } from "lucide-react"; // آیکون‌های منو و جست‌وجو
 
 import { auth } from "@/auth"; // بررسی وضعیت ورود کاربر
 import type { SiteSettings } from "@/lib/site-settings"; // نوع تنظیمات سایت
@@ -147,6 +147,35 @@ export default async function Navbar({
           </div>
         </details>
       </nav>
+
+      <form
+        action="/products"
+        method="get"
+        role="search"
+        className="mx-auto flex w-full max-w-6xl px-5 pb-4 sm:px-8"
+      >
+        <label className="flex w-full items-center gap-3 rounded-2xl border border-[#f0e4e3] bg-white px-4 py-3 transition focus-within:border-[#c65f7d]">
+          <Search
+            className="shrink-0 text-[#a84766]"
+            size={20}
+            strokeWidth={1.8}
+            aria-hidden="true"
+          />
+          <input
+            type="search"
+            name="q"
+            placeholder="چی برای کوچولوت می‌خوای؟"
+            aria-label="جست‌وجوی محصولات"
+            className="w-full bg-transparent text-sm outline-none placeholder:text-[#a49a9c]"
+          />
+          <button
+            type="submit"
+            className="shrink-0 rounded-full bg-[#c65f7d] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#a84766]"
+          >
+            جست‌وجو
+          </button>
+        </label>
+      </form>
     </header>
   );
 }
