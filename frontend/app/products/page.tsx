@@ -15,7 +15,18 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // کامپوننت اصلی صفحه محصولات
-export default async function ProductsPage({,  searchParams,,}: {,  searchParams: Promise<{ q?: string }>;,}) {,  // دریافت محصولات، تنظیمات و عبارت جست‌وجو به‌صورت هم‌زمان,  const [{ q }, products, settings] = await Promise.all([,    searchParams,,    getProducts(),,    getSiteSettings(),,  ]);,  return (
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  // دریافت محصولات، تنظیمات و عبارت جست‌وجو به‌صورت هم‌زمان
+  const [{ q }, products, settings] = await Promise.all([
+    searchParams,
+    getProducts(),
+    getSiteSettings(),
+  ]);
+  return (
     // ظرف اصلی صفحه با عرض و فاصله‌های واکنش‌گرا
     <main className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
       {/* نمایش فهرست محصولات همراه با تنظیمات کاتالوگ */}
