@@ -31,7 +31,7 @@ export default async function ProductsPage({\n  searchParams,\n}: {\n  searchPar
         title={settings.featuredTitle} // عنوان کاتالوگ
         description={settings.featuredDescription} // توضیحات کاتالوگ
         eyebrow={settings.catalogEyebrow} // متن کوچک بالای کاتالوگ
-        searchPlaceholder={settings.catalogSearchPlaceholder} // متن راهنمای جست‌وجو
+        initialSearch={q ?? ""} // اعمال عبارت جست‌وجو از نوار بالای سایت
         emptyTitle={settings.catalogEmptyTitle} // عنوان حالت بدون نتیجه
         emptyDescription={settings.catalogEmptyDescription} // توضیح حالت بدون نتیجه
       />
