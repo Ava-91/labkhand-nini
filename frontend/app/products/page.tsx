@@ -4,13 +4,12 @@ import ProductCatalog from "../components/ProductCatalog"; // کامپوننت �
 import { getProducts } from "@/lib/products"; // دریافت لیست محصولات
 import { getSiteSettings } from "@/lib/site-settings"; // دریافت تنظیمات سایت
 
-// تولید عنوان و توضیحات متادیتای صفحه
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await getSiteSettings(); // دریافت تنظیمات سایت
+  const settings = await getSiteSettings(); 
 
   return {
-    title: settings.productsPageTitle, // عنوان صفحه
-    description: settings.productsPageDescription, // توضیحات صفحه
+    title: settings.productsPageTitle,
+    description: settings.productsPageDescription,
   };
 }
 
