@@ -15,13 +15,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // کامپوننت اصلی صفحه محصولات
-export default async function ProductsPage() {
-  // دریافت محصولات و تنظیمات به‌صورت هم‌زمان
-  const [products, settings] = await Promise.all([
+export default async function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  // دریافت محصولات، تنظیمات و عبارت جست‌وجو به‌صورت هم‌زمان
+  const [{ q }, products, settings] = await Promise.all([
+    searchParams,
     getProducts(),
     getSiteSettings(),
   ]);
-
   return (
     // ظرف اصلی صفحه با عرض و فاصله‌های واکنش‌گرا
     <main className="mx-auto min-h-[60vh] w-full max-w-6xl px-5 py-12 sm:px-8 sm:py-16">
@@ -31,7 +35,7 @@ export default async function ProductsPage() {
         title={settings.featuredTitle} // عنوان کاتالوگ
         description={settings.featuredDescription} // توضیحات کاتالوگ
         eyebrow={settings.catalogEyebrow} // متن کوچک بالای کاتالوگ
-        searchPlaceholder={settings.catalogSearchPlaceholder} // متن راهنمای جست‌وجو
+        initialSearch={q ?? ""} // اعمال عبارت جست‌وجو از نوار بالای سایت
         emptyTitle={settings.catalogEmptyTitle} // عنوان حالت بدون نتیجه
         emptyDescription={settings.catalogEmptyDescription} // توضیح حالت بدون نتیجه
       />

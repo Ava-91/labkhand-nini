@@ -1,3 +1,4 @@
+import Image from "next/image"; // نمایش بهینه تصویر عروسک
 import Link from "next/link"; // برای ساخت لینک‌های داخلی سایت
 import { ArrowLeft, Heart, Sparkles } from "lucide-react"; // آیکون‌های تزئینی و هدایت
 
@@ -78,9 +79,14 @@ export default function HeroSection({ settings }: { settings: SiteSettings }) {
           <div className="grid aspect-square w-[78%] place-items-center rounded-[48%_52%_45%_55%/49%_43%_57%_51%] border-10px border-white/60 bg-linear-to-br from-[#f9dfe4] via-[#e8e0f4] to-[#e8d4db] shadow-2xl shadow-[#b16d82]/20">
             {/* ساخت شکل مرکزی با گرادیان، حاشیه و سایه */}
 
-            <span className="text-8xl drop-shadow-lg sm:text-9xl">
-              🧸 {/* نمایش ایموجی عروسک */}
-            </span>
+            <Image
+              src="/images/bear.png"
+              alt=""
+              width={320}
+              height={320}
+              priority
+              className="h-auto w-56 drop-shadow-lg sm:w-72"
+            />
           </div>
 
           <span className="absolute left-4 top-1/4 rounded-2xl border border-[#f2e2e6] bg-white px-4 py-3 text-xs font-bold shadow-lg">
