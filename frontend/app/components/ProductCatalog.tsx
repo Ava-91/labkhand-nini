@@ -113,6 +113,7 @@ export default function ProductCatalog({
         )}
       </div>
 
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
         <label>
           <span className="sr-only">فیلتر بر اساس دسته‌بندی</span>
           {/* عنوان مخفی برای ابزارهای دسترس‌پذیری */}
