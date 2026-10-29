@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 // کامپوننت اصلی صفحه محصولات
-export default async function ProductsPage() {
+export default async function ProductsPage({\n  searchParams,\n}: {\n  searchParams: Promise<{ q?: string }>;\n}) {
   // دریافت محصولات و تنظیمات به‌صورت هم‌زمان
   const [products, settings] = await Promise.all([
     getProducts(),
