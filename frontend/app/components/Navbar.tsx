@@ -24,58 +24,89 @@ export default async function Navbar({
       )}
 
       <nav
-        className="mx-auto flex min-h-20 w-full max-w-6xl items-center justify-between gap-4 px-5 py-4 sm:px-8"
+        className="mx-auto flex min-h-20 w-full max-w-6xl items-center gap-3 px-4 py-3 sm:gap-5 sm:px-8"
         // چیدمان افقی و واکنش‌گرای نوار ناوبری
         aria-label="ناوبری اصلی" // معرفی منو برای دسترس‌پذیری
       >
         <Link
-          className="flex shrink-0 items-center gap-3"
+          className="flex shrink-0 items-center gap-2 sm:gap-3"
           href="/" // رفتن به صفحه اصلی
           aria-label={settings.brandName + "، صفحه اصلی"} // توضیح لینک برای ابزارهای دسترس‌پذیری
         >
           {settings.logo ? ( // اگر لوگو تنظیم شده باشد
             <img
-              className="h-11 w-11 rounded-2xl object-cover"
+              className="h-9 w-9 rounded-2xl object-cover sm:h-11 sm:w-11"
               src={settings.logo} // آدرس تصویر لوگو
               alt="" // لوگو تزئینی در نظر گرفته شده است
             />
           ) : (
-            <span className="grid h-11 w-11 place-items-center rounded-2xl rounded-bl-md bg-[#c65f7d] text-xl font-bold text-white">
+            <span className="grid h-9 w-9 place-items-center rounded-2xl rounded-bl-md bg-[#c65f7d] text-lg font-bold text-white sm:h-11 sm:w-11 sm:text-xl">
               {settings.brandName.slice(0, 1)} {/* نمایش حرف اول نام برند به‌جای لوگو */}
             </span>
           )}
 
           <span className="flex flex-col leading-snug">
-            <strong className="text-base font-extrabold text-[#553d44]">
+            <strong className="text-sm font-extrabold text-[#553d44] sm:text-base">
               {settings.brandName} {/* نمایش نام برند */}
             </strong>
-            <small className="text-[10px] text-[#817477]">
+            <small className="hidden text-[10px] text-[#817477] sm:block">
               {settings.brandTagline} {/* نمایش شعار برند */}
             </small>
           </span>
         </Link>
 
-        <div className="hidden items-center gap-6 text-sm text-[#69595d] md:flex">
-          {/* نمایش لینک‌های اصلی در صفحه‌های متوسط و بزرگ */}
+        <div className="hidden shrink-0 items-center gap-5 text-sm text-[#69595d] lg:flex">
+          {/* نمایش لینک‌های اصلی در صفحه‌های بزرگ */}
 
           {settings.navLinks.map((item) => ( // پیمایش لینک‌های منو
             <Link
               href={item.href} // آدرس مقصد لینک
               key={item.href + item.label} // کلید یکتا برای React
-              className="transition hover:text-[#a84766]" // تغییر رنگ هنگام هاور
+              className="whitespace-nowrap transition hover:text-[#a84766]" // تغییر رنگ هنگام هاور
             >
               {item.label} {/* متن لینک */}
             </Link>
           ))}
         </div>
 
-        <div className="hidden items-center gap-3 text-sm md:flex">
-          {/* نمایش گزینه‌های حساب کاربری در صفحه‌های بزرگ‌تر */}
+        <form
+          action="/products"
+          method="get"
+          role="search"
+          className="mx-auto flex min-w-0 max-w-md flex-1"
+        >
+          <label className="flex min-w-0 w-full items-center gap-2 rounded-full border border-[#ead9dc] bg-white px-3 py-2 transition focus-within:border-[#c65f7d] focus-within:ring-2 focus-within:ring-[#c65f7d]/10 sm:gap-3 sm:px-4">
+            <Search
+              className="shrink-0 text-[#a84766]"
+              size={18}
+              strokeWidth={1.8}
+              aria-hidden="true"
+            />
+            <input
+              type="search"
+              name="q"
+              placeholder="جست‌وجوی محصولات..."
+              aria-label="جست‌وجوی محصولات"
+              className="min-w-0 w-full bg-transparent text-xs text-[#553d44] outline-none placeholder:text-[#a49a9c] sm:text-sm"
+            />
+            <button
+              type="submit"
+              aria-label="جست‌وجو"
+              className="shrink-0 rounded-full bg-[#c65f7d] p-2 text-white transition hover:bg-[#a84766] sm:px-4 sm:py-2 sm:text-xs sm:font-bold"
+            >
+              <Search className="sm:hidden" size={15} aria-hidden="true" />
+              <span className="hidden sm:inline">جست‌وجو</span>
+            </button>
+          </label>
+        </form>
+
+        <div className="hidden shrink-0 items-center gap-3 text-sm md:flex">
+          {/* نمایش گزینه‌های حساب کاربری در صفحه‌های متوسط و بزرگ‌تر */}
 
           {session ? ( // اگر کاربر وارد شده باشد
             <>
               <Link
-                className="rounded-full border border-[#f0e4e3] bg-white px-4 py-2 font-semibold transition hover:border-[#c65f7d]"
+                className="whitespace-nowrap rounded-full border border-[#f0e4e3] bg-white px-4 py-2 font-semibold transition hover:border-[#c65f7d]"
                 href="/dashboard" // رفتن به پنل کاربر
               >
                 حساب من
@@ -84,11 +115,11 @@ export default async function Navbar({
             </>
           ) : ( // اگر کاربر وارد نشده باشد
             <>
-              <Link className="px-2 py-2 hover:text-[#a84766]" href="/login">
+              <Link className="whitespace-nowrap px-2 py-2 hover:text-[#a84766]" href="/login">
                 ورود {/* لینک صفحه ورود */}
               </Link>
               <Link
-                className="rounded-full bg-[#c65f7d] px-5 py-2.5 font-bold text-white shadow-sm transition hover:bg-[#a84766]"
+                className="whitespace-nowrap rounded-full bg-[#c65f7d] px-4 py-2.5 font-bold text-white shadow-sm transition hover:bg-[#a84766] sm:px-5"
                 href="/register" // رفتن به صفحه ثبت‌نام
               >
                 عضویت
@@ -97,11 +128,11 @@ export default async function Navbar({
           )}
         </div>
 
-        <details className="relative md:hidden">
+        <details className="relative shrink-0 md:hidden">
           {/* منوی بازشونده مخصوص موبایل */}
 
-          <summary className="cursor-pointer list-none rounded-xl border border-[#f0e4e3] bg-white px-3 py-2 text-xl">
-            <Menu aria-hidden="true" size={22} strokeWidth={1.8} /> {/* آیکون منو */}
+          <summary className="cursor-pointer list-none rounded-xl border border-[#f0e4e3] bg-white p-2 text-xl">
+            <Menu aria-hidden="true" size={21} strokeWidth={1.8} /> {/* آیکون منو */}
             <span className="sr-only">باز کردن منو</span> {/* متن مخصوص صفحه‌خوان */}
           </summary>
 
@@ -147,35 +178,6 @@ export default async function Navbar({
           </div>
         </details>
       </nav>
-
-      <form
-        action="/products"
-        method="get"
-        role="search"
-        className="mx-auto flex w-full max-w-6xl px-5 pb-4 sm:px-8"
-      >
-        <label className="flex w-full items-center gap-3 rounded-2xl border border-[#f0e4e3] bg-white px-4 py-3 transition focus-within:border-[#c65f7d]">
-          <Search
-            className="shrink-0 text-[#a84766]"
-            size={20}
-            strokeWidth={1.8}
-            aria-hidden="true"
-          />
-          <input
-            type="search"
-            name="q"
-            placeholder="چی برای کوچولوت می‌خوای؟"
-            aria-label="جست‌وجوی محصولات"
-            className="w-full bg-transparent text-sm outline-none placeholder:text-[#a49a9c]"
-          />
-          <button
-            type="submit"
-            className="shrink-0 rounded-full bg-[#c65f7d] px-4 py-2 text-xs font-bold text-white transition hover:bg-[#a84766]"
-          >
-            جست‌وجو
-          </button>
-        </label>
-      </form>
     </header>
   );
 }
