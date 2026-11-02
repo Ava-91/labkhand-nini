@@ -11,7 +11,7 @@ permissions:
 jobs:
   # Per-directory audit artifacts are named independently for monorepo jobs.
   frontend:
-    uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@automation/reusable-workflow-inputs
+    uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@main
     with:
       working-directory: frontend
       node-version: "24"
@@ -20,7 +20,7 @@ jobs:
       test-command: "npm run typecheck"
       build-command: "npm run build"
   backend:
-    uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@automation/reusable-workflow-inputs
+    uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@main
     with:
       working-directory: backend
       node-version: "24"
@@ -29,9 +29,9 @@ jobs:
       test-command: "echo No separate backend test suite is configured"
       build-command: "npm run build"
   security:
-    uses: Ava-91/Ava-91/.github/workflows/reusable-security.yml@automation/reusable-workflow-inputs
+    uses: Ava-91/Ava-91/.github/workflows/reusable-security.yml@main
   docs:
-    uses: Ava-91/Ava-91/.github/workflows/reusable-docs.yml@automation/reusable-workflow-inputs
+    uses: Ava-91/Ava-91/.github/workflows/reusable-docs.yml@main
     with:
       paths: "./README.md ./frontend/README.md ./backend/README.md"
       exclude: "--exclude localhost --exclude 127.0.0.1 --exclude forums.strapi.io"
