@@ -1,0 +1,35 @@
+name: Shared monorepo automation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  frontend:
+    uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@automation/reusable-workflow-inputs
+    with:
+      working-directory: frontend
+      node-version: "24"
+      install-command: "npm ci"
+      lint-command: "npm run lint"
+      test-command: "npm run typecheck"
+      build-command: "npm run build"
+  backend:
+    uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@automation/reusable-workflow-inputs
+    with:
+      working-directory: backend
+      node-version: "24"
+      install-command: "npm ci"
+      lint-command: "npx tsc --noEmit"
+      test-command: "npm run build"
+      build-command: "npm run build"
+  security:
+    uses: Ava-91/Ava-91/.github/workflows/reusable-security.yml@automation/reusable-workflow-inputs
+  docs:
+    uses: Ava-91/Ava-91/.github/workflows/reusable-docs.yml@automation/reusable-workflow-inputs
+    with:
+      paths: "./README.md ./frontend/README.md ./backend/README.md"
