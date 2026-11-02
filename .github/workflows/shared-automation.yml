@@ -15,7 +15,7 @@ jobs:
       working-directory: frontend
       node-version: "24"
       install-command: "npm ci"
-      lint-command: "npm run format:check"
+      lint-command: "npm run lint"
       test-command: "npm run typecheck"
       build-command: "npm run build"
   backend:
