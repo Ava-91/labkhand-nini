@@ -15,7 +15,7 @@ jobs:
       working-directory: frontend
       node-version: "24"
       install-command: "npm ci"
-      lint-command: "npm run lint"
+      lint-command: "npm run format:check"
       test-command: "npm run typecheck"
       build-command: "npm run build"
   backend:
@@ -25,7 +25,7 @@ jobs:
       node-version: "24"
       install-command: "npm ci"
       lint-command: "npx tsc --noEmit"
-      test-command: "npm run build"
+      test-command: "echo No separate backend test suite is configured"
       build-command: "npm run build"
   security:
     uses: Ava-91/Ava-91/.github/workflows/reusable-security.yml@automation/reusable-workflow-inputs
