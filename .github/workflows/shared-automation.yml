@@ -33,4 +33,4 @@ jobs:
     uses: Ava-91/Ava-91/.github/workflows/reusable-docs.yml@automation/reusable-workflow-inputs
     with:
       paths: "./README.md ./frontend/README.md ./backend/README.md"
-      exclude: "--exclude localhost --exclude 127.0.0.1"
+      exclude: "--exclude localhost --exclude 127.0.0.1 --exclude forums.strapi.io"
