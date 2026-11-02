@@ -9,6 +9,7 @@ permissions:
   contents: read
 
 jobs:
+  # Per-directory audit artifacts are named independently for monorepo jobs.
   frontend:
     uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@automation/reusable-workflow-inputs
     with:
