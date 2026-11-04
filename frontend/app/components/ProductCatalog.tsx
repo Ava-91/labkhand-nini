@@ -13,6 +13,7 @@ type ProductCatalogProps = {
   title?: string; // عنوان بخش
   description?: string; // توضیحات بخش
   eyebrow?: string; // متن کوچک بالای عنوان
+  searchPlaceholder?: string; // متن راهنمای فیلد جست‌وجوی محصولات
   initialSearch?: string; // عبارت جست‌وجوی ارسال‌شده از نوار بالای سایت
   emptyTitle?: string; // عنوان حالت بدون نتیجه
   emptyDescription?: string; // توضیح حالت بدون نتیجه
@@ -25,6 +26,7 @@ export default function ProductCatalog({
   title = "انتخاب‌های دوست‌داشتنی", // عنوان پیش‌فرض
   description = "چیزهای کوچکی که روزهای بزرگ‌تری از عشق می‌سازند.", // توضیح پیش‌فرض
   eyebrow = "انتخاب شده با عشق", // متن بالای عنوان
+  searchPlaceholder = "جست‌وجوی محصولات...", // متن راهنمای فیلد جست‌وجو
   initialSearch = "", // عبارت جست‌وجوی اولیه
   emptyTitle = "چیزی پیدا نکردیم!", // عنوان نبود محصول
   emptyDescription = "عبارت جست‌وجو یا دسته‌بندی رو تغییر بده و دوباره بگرد.", // راهنمای تغییر فیلتر
@@ -113,7 +115,18 @@ export default function ProductCatalog({
         )}
       </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+      <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <label>
+          <span className="sr-only">جست‌وجوی محصولات</span>
+          <input
+            type="search"
+            value={searchText}
+            onChange={(event) => setSearchText(event.target.value)}
+            placeholder={searchPlaceholder}
+            className="w-full rounded-2xl border border-[#f0e4e3] bg-white px-4 py-3 text-sm outline-none placeholder:text-[#a99b9e] focus:border-[#c65f7d]"
+          />
+        </label>
+
         <label>
           <span className="sr-only">فیلتر بر اساس دسته‌بندی</span>
           {/* عنوان مخفی برای ابزارهای دسترس‌پذیری */}
