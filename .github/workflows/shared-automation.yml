@@ -9,29 +9,31 @@ permissions:
   contents: read
 
 jobs:
-  # Per-directory audit artifacts are named independently for monorepo jobs.
+  # Reusable workflows are pinned to an immutable commit.
   frontend:
-    uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@main
+    uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@7e8cc426238d8a5d5a778837dd7ac69f6eaaf188
     with:
       working-directory: frontend
       node-version: "24"
       install-command: "npm ci"
       lint-command: "npm run lint"
-      test-command: "npm run typecheck"
+      typecheck-command: "npm run typecheck"
+      test-command: "npm test --if-present"
       build-command: "npm run build"
   backend:
-    uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@main
+    uses: Ava-91/Ava-91/.github/workflows/reusable-node.yml@7e8cc426238d8a5d5a778837dd7ac69f6eaaf188
     with:
       working-directory: backend
       node-version: "24"
       install-command: "npm ci"
-      lint-command: "npx tsc --noEmit"
-      test-command: "echo No separate backend test suite is configured"
+      lint-command: "npm run lint --if-present"
+      typecheck-command: "npx tsc --noEmit"
+      test-command: "npm test --if-present"
       build-command: "npm run build"
   security:
-    uses: Ava-91/Ava-91/.github/workflows/reusable-security.yml@main
+    uses: Ava-91/Ava-91/.github/workflows/reusable-security.yml@7e8cc426238d8a5d5a778837dd7ac69f6eaaf188
   docs:
-    uses: Ava-91/Ava-91/.github/workflows/reusable-docs.yml@main
+    uses: Ava-91/Ava-91/.github/workflows/reusable-docs.yml@7e8cc426238d8a5d5a778837dd7ac69f6eaaf188
     with:
       paths: "./README.md ./frontend/README.md ./backend/README.md"
-      exclude: "--exclude localhost --exclude 127.0.0.1 --exclude forums.strapi.io"
+      exclude: "--exclude localhost --exclude 127.0.0.1"
