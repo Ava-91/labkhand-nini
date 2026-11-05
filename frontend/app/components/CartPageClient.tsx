@@ -232,17 +232,26 @@ export default function CartPageClient({
         </div>
         <p className="mt-3 text-xs leading-6 text-[#817477]">
           {catalogAvailable
-            ? "هزینه ارسال و تخفیف نهایی در مرحله بعد محاسبه می‌شود."
+            ? "با ادامه، اطلاعات ارسال را وارد می‌کنی و سفارش ثبت می‌شود."
             : "این مبلغ بر اساس داده‌های ذخیره‌شده است و تا به‌روزرسانی اطلاعات محصولات قطعی نیست."}
         </p>
-        <button
-          type="button"
-          disabled
-          className="mt-5 w-full cursor-not-allowed rounded-full bg-[#c65f7d]/70 px-6 py-3.5 text-sm font-bold text-white opacity-80"
-          title="به‌زودی"
-        >
-          ادامه خرید (به‌زودی)
-        </button>
+        {catalogAvailable ? (
+          <Link
+            href="/checkout"
+            className="mt-5 flex w-full items-center justify-center rounded-full bg-[#c65f7d] px-6 py-3.5 text-sm font-bold text-white transition hover:bg-[#a84766]"
+          >
+            ادامه پرداخت
+          </Link>
+        ) : (
+          <button
+            type="button"
+            disabled
+            className="mt-5 w-full cursor-not-allowed rounded-full bg-[#c65f7d]/70 px-6 py-3.5 text-sm font-bold text-white opacity-80"
+            title="تا دریافت اطلاعات به‌روز محصولات، تسویه حساب ممکن نیست"
+          >
+            ادامه پرداخت (نیاز به اتصال)
+          </button>
+        )}
         <Link
           href="/products"
           className="mt-3 block text-center text-sm font-bold text-[#a84766] hover:text-[#81364f]"
