@@ -4,6 +4,7 @@ import { Menu, Search } from "lucide-react"; // آیکون‌های منو و ج
 import { auth } from "@/auth"; // بررسی وضعیت ورود کاربر
 import type { SiteSettings } from "@/lib/site-settings"; // نوع تنظیمات سایت
 import CartButton from "./CartButton"; // دکمه سبد خرید
+import WishlistLinkButton from "./WishlistLinkButton"; // دکمه علاقه‌مندی‌ها
 import LogoutButton from "./LogoutButton"; // کامپوننت دکمه خروج
 
 // ساخت نوار ناوبری به‌صورت async برای دریافت سشن کاربر
@@ -103,6 +104,7 @@ export default async function Navbar({
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <CartButton />
+          <WishlistLinkButton />
 
           <div className="hidden items-center gap-3 text-sm lg:flex">
             {/* نمایش گزینه‌های حساب کاربری در صفحه‌های متوسط و بزرگ‌تر */}
@@ -158,6 +160,12 @@ export default async function Navbar({
                 href="/cart"
               >
                 سبد خرید
+              </Link>
+              <Link
+                className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
+                href="/wishlist"
+              >
+                علاقه‌مندی‌ها
               </Link>
 
               {session ? ( // اگر کاربر وارد شده باشد
