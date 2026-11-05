@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { getDiscountedPrice, getProducts } from "@/lib/products";
 import { getStrapiUrl } from "@/lib/strapi";
 
 type CheckoutBody = {
@@ -8,20 +9,69 @@ type CheckoutBody = {
   address?: string;
   notes?: string;
   items?: unknown;
-  subtotal?: number;
-  orderCode?: string;
+};
+
+type ClientLine = {
+  productId: string;
+  quantity: number;
 };
 
 function isNonEmptyString(value: unknown, min = 1): value is string {
   return typeof value === "string" && value.trim().length >= min;
 }
 
+function parseClientLines(raw: unknown): ClientLine[] | null {
+  if (!Array.isArray(raw) || raw.length === 0) return null;
+
+  const lines: ClientLine[] = [];
+
+  for (const entry of raw) {
+    if (!entry || typeof entry !== "object") return null;
+
+    const productId = (entry as { productId?: unknown }).productId;
+    const quantity = (entry as { quantity?: unknown }).quantity;
+
+    if (typeof productId !== "string" || productId.trim().length === 0) {
+      return null;
+    }
+
+    if (
+      typeof quantity !== "number" ||
+      !Number.isInteger(quantity) ||
+      quantity < 1
+    ) {
+      return null;
+    }
+
+    lines.push({ productId: productId.trim(), quantity });
+  }
+
+  return lines;
+}
+
+function generateOrderCode(): string {
+  const now = Date.now().toString(36).toUpperCase();
+  const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
+  return "LN-" + now + "-" + rand;
+}
+
 export async function POST(request: Request) {
   const strapiUrl = getStrapiUrl();
+  const apiToken = process.env.STRAPI_API_TOKEN?.trim();
 
   if (!strapiUrl) {
     return NextResponse.json(
       { error: "سرویس سفارش پیکربندی نشده است (STRAPI_URL)." },
+      { status: 503 },
+    );
+  }
+
+  if (!apiToken) {
+    return NextResponse.json(
+      {
+        error:
+          "توکن API سرور تنظیم نشده است. STRAPI_API_TOKEN را در محیط فرانت‌اند قرار بده و Public create روی Order را باز نکن.",
+      },
       { status: 503 },
     );
   }
@@ -34,16 +84,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "بدنه درخواست نامعتبر است." }, { status: 400 });
   }
 
+  const clientLines = parseClientLines(body.items);
+
   if (
     !isNonEmptyString(body.customerName, 2) ||
     !isNonEmptyString(body.phone, 8) ||
     !isNonEmptyString(body.address, 8) ||
-    !isNonEmptyString(body.orderCode, 4) ||
-    !Array.isArray(body.items) ||
-    body.items.length === 0 ||
-    typeof body.subtotal !== "number" ||
-    !Number.isFinite(body.subtotal) ||
-    body.subtotal < 0
+    !clientLines
   ) {
     return NextResponse.json(
       { error: "اطلاعات سفارش ناقص یا نامعتبر است." },
@@ -51,14 +98,92 @@ export async function POST(request: Request) {
     );
   }
 
+  let products;
+  try {
+    products = await getProducts();
+  } catch (error) {
+    console.error("[checkout] Failed to load catalog for order pricing:", error);
+    return NextResponse.json(
+      { error: "دریافت قیمت و موجودی محصولات ممکن نشد. بعداً دوباره تلاش کن." },
+      { status: 502 },
+    );
+  }
+
+  const byId = new Map(products.map((p) => [p.id, p]));
+  // Merge duplicate productIds from the client into a single quantity
+  const quantityById = new Map<string, number>();
+  for (const line of clientLines) {
+    quantityById.set(
+      line.productId,
+      (quantityById.get(line.productId) ?? 0) + line.quantity,
+    );
+  }
+
+  const orderLines: {
+    productId: string;
+    slug: string;
+    title: string;
+    quantity: number;
+    unitPrice: number;
+    lineTotal: number;
+    discount: number;
+  }[] = [];
+
+  for (const [productId, quantity] of quantityById) {
+    const product = byId.get(productId);
+
+    if (!product) {
+      return NextResponse.json(
+        { error: "یکی از محصولات سبد در کاتالوگ پیدا نشد." },
+        { status: 400 },
+      );
+    }
+
+    if (product.stock <= 0 || quantity > product.stock) {
+      return NextResponse.json(
+        {
+          error:
+            "موجودی «" +
+            product.title +
+            "» کافی نیست (حداکثر " +
+            String(product.stock) +
+            " عدد).",
+        },
+        { status: 400 },
+      );
+    }
+
+    const unitPrice = getDiscountedPrice(product);
+    orderLines.push({
+      productId: product.id,
+      slug: product.slug,
+      title: product.title,
+      quantity,
+      unitPrice,
+      lineTotal: unitPrice * quantity,
+      discount: product.discount,
+    });
+  }
+
+  if (orderLines.length === 0) {
+    return NextResponse.json(
+      { error: "سبد خرید خالی است." },
+      { status: 400 },
+    );
+  }
+
+  const subtotal = orderLines.reduce((sum, line) => sum + line.lineTotal, 0);
+  const orderCode = generateOrderCode();
+
+  // status and paymentMethod are always set server-side — never from the client
   const orderData = {
-    orderCode: body.orderCode.trim(),
+    orderCode,
     customerName: body.customerName.trim(),
     phone: body.phone.trim(),
     address: body.address.trim(),
     notes: typeof body.notes === "string" ? body.notes.trim() : "",
-    items: body.items,
-    subtotal: body.subtotal,
+    items: orderLines,
+    subtotal,
     status: "pending",
     paymentMethod: "simulated",
   };
@@ -66,7 +191,10 @@ export async function POST(request: Request) {
   try {
     const response = await fetch(strapiUrl + "/api/orders", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + apiToken,
+      },
       body: JSON.stringify({ data: orderData }),
       cache: "no-store",
     });
@@ -83,7 +211,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
           {
             error:
-              "دسترسی ثبت سفارش در Strapi فعال نیست. برای نقش Public اجازه create روی Order را فعال کن.",
+              "توکن STRAPI_API_TOKEN نامعتبر است یا اجازه create روی Order ندارد. Public create را فعال نکن؛ از Full access API token با دسترسی Order استفاده کن.",
           },
           { status: 502 },
         );
@@ -104,19 +232,18 @@ export async function POST(request: Request) {
       };
     };
 
-    // Support both Strapi v4 (attributes) and flatter v5 shapes
     const data = result.data;
-    const orderCode =
+    const savedCode =
       data?.orderCode ?? data?.attributes?.orderCode ?? orderData.orderCode;
     const status =
       data?.status ?? data?.attributes?.status ?? orderData.status;
-    const subtotal =
+    const savedSubtotal =
       data?.subtotal ?? data?.attributes?.subtotal ?? orderData.subtotal;
 
     return NextResponse.json({
-      orderCode,
+      orderCode: savedCode,
       status,
-      subtotal: Number(subtotal),
+      subtotal: Number(savedSubtotal),
     });
   } catch (error) {
     console.error("[checkout] Failed to reach Strapi:", error);

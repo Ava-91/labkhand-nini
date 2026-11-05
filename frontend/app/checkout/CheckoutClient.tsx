@@ -15,7 +15,7 @@ import { useCart } from "../components/CartProvider";
 
 export default function CheckoutClient() {
   const router = useRouter();
-  const { items, itemCount, subtotal, isReady, clearCart } = useCart();
+  const { items, itemCount, subtotal, isReady } = useCart();
 
   const [customerName, setCustomerName] = useState("");
   const [phone, setPhone] = useState("");
@@ -32,7 +32,8 @@ export default function CheckoutClient() {
     );
   }
 
-  if (items.length === 0) {
+  // While submitting, keep showing the form even if cart is later cleared elsewhere
+  if (items.length === 0 && !submitting) {
     return (
       <div className="mx-auto min-h-[50vh] w-full max-w-5xl px-5 py-16 text-center sm:px-8">
         <ShoppingBag
@@ -70,7 +71,7 @@ export default function CheckoutClient() {
 
     try {
       const result = await placeOrder(form, items);
-      clearCart();
+      // Navigate first; success page clears the cart when a real order code is present
       router.push(
         "/checkout/success?code=" +
           encodeURIComponent(result.orderCode) +
@@ -177,7 +178,8 @@ export default function CheckoutClient() {
 
           <div className="rounded-2xl border border-dashed border-[#e9cbd3] bg-[#fff8f8] p-4 text-xs leading-6 text-[#817477]">
             پرداخت به‌صورت شبیه‌سازی‌شده ثبت می‌شود و سفارش با وضعیت «در انتظار»
-            در پنل مدیریت ذخیره می‌گردد. در نسخه بعدی می‌توان درگاه واقعی متصل کرد.
+            در پنل مدیریت ذخیره می‌گردد. مبلغ نهایی بر اساس قیمت و موجودی زنده
+            سرور محاسبه می‌شود.
           </div>
 
           {error && (

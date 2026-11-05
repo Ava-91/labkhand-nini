@@ -1,5 +1,4 @@
 import type { CartItem } from "./cart";
-import { getCartItemLineTotal, getCartItemUnitPrice, getCartSubtotal } from "./cart";
 
 export type CheckoutFormData = {
   customerName: string;
@@ -8,37 +7,11 @@ export type CheckoutFormData = {
   notes?: string;
 };
 
-export type OrderLineSnapshot = {
-  productId: string;
-  slug: string;
-  title: string;
-  quantity: number;
-  unitPrice: number;
-  lineTotal: number;
-  discount: number;
-};
-
-export type PlaceOrderPayload = CheckoutFormData & {
-  items: CartItem[];
-};
-
 export type PlaceOrderResult = {
   orderCode: string;
   subtotal: number;
   status: string;
 };
-
-export function buildOrderLines(items: CartItem[]): OrderLineSnapshot[] {
-  return items.map((item) => ({
-    productId: item.productId,
-    slug: item.slug,
-    title: item.title,
-    quantity: item.quantity,
-    unitPrice: getCartItemUnitPrice(item),
-    lineTotal: getCartItemLineTotal(item),
-    discount: item.discount,
-  }));
-}
 
 export function validateCheckoutForm(data: CheckoutFormData): string | null {
   const name = data.customerName.trim();
@@ -67,13 +40,10 @@ export function validateCheckoutForm(data: CheckoutFormData): string | null {
   return null;
 }
 
-export function generateClientOrderCode(): string {
-  const now = Date.now().toString(36).toUpperCase();
-  const rand = Math.random().toString(36).slice(2, 6).toUpperCase();
-  return "LN-" + now + "-" + rand;
-}
-
-/** Submit order via Next.js API (server proxies to Strapi). */
+/**
+ * Submit order via Next.js API.
+ * Only productId + quantity are sent; the server recomputes prices and stock.
+ */
 export async function placeOrder(
   form: CheckoutFormData,
   items: CartItem[],
@@ -95,9 +65,10 @@ export async function placeOrder(
       phone: form.phone.trim(),
       address: form.address.trim(),
       notes: form.notes?.trim() || "",
-      items: buildOrderLines(items),
-      subtotal: getCartSubtotal(items),
-      orderCode: generateClientOrderCode(),
+      items: items.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+      })),
     }),
   });
 
@@ -110,8 +81,7 @@ export async function placeOrder(
 
   if (!response.ok) {
     throw new Error(
-      payload.error ||
-        "ثبت سفارش ناموفق بود. لطفاً دوباره تلاش کن.",
+      payload.error || "ثبت سفارش ناموفق بود. لطفاً دوباره تلاش کن.",
     );
   }
 
