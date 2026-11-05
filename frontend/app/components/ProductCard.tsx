@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { getDiscountedPrice, type Product } from "@/lib/products";
+import AddToCartControls from "./AddToCartControls";
 
 const money = (price: number) =>
   new Intl.NumberFormat("fa-IR").format(price) + " تومان";
@@ -23,7 +24,9 @@ export default function ProductCard({ product }: { product: Product }) {
             className="h-full w-full object-cover transition duration-300 hover:scale-105"
           />
         ) : (
-          <span className="text-6xl" aria-hidden="true">{product.emoji}</span>
+          <span className="text-6xl" aria-hidden="true">
+            {product.emoji}
+          </span>
         )}
 
         {hasDiscount && (
@@ -53,13 +56,18 @@ export default function ProductCard({ product }: { product: Product }) {
               <del className="mt-1 text-xs text-[#a49a9c]">{money(product.price)}</del>
             )}
           </div>
-          <span className={product.stock > 0
-            ? "rounded-full bg-[#e8f5ee] px-3 py-1 text-xs font-bold text-[#367557]"
-            : "rounded-full bg-[#fbe8ec] px-3 py-1 text-xs font-bold text-[#a84766]"
-          }>
+          <span
+            className={
+              product.stock > 0
+                ? "rounded-full bg-[#e8f5ee] px-3 py-1 text-xs font-bold text-[#367557]"
+                : "rounded-full bg-[#fbe8ec] px-3 py-1 text-xs font-bold text-[#a84766]"
+            }
+          >
             {product.stock > 0 ? "موجود" : "ناموجود"}
           </span>
         </div>
+
+        <AddToCartControls product={product} variant="card" />
       </div>
     </article>
   );
