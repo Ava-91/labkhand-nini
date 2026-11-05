@@ -90,22 +90,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const addItem = useCallback((product: Product, quantity = 1): number => {
     if (product.stock <= 0) return 0;
 
-    let added = 0;
+    const safeQty = Math.max(1, quantity);
+    const existing = items.find((item) => item.productId === product.id);
+    const currentQty = existing?.quantity ?? 0;
+    const nextQty = Math.min(product.stock, currentQty + safeQty);
+    const added = nextQty - currentQty;
+
+    if (added <= 0) return 0;
 
     setItems((prev) => {
-      const existing = prev.find((item) => item.productId === product.id);
-      const safeQty = Math.max(1, quantity);
+      const existingInPrev = prev.find((item) => item.productId === product.id);
 
-      if (existing) {
-        const nextQty = Math.min(product.stock, existing.quantity + safeQty);
-        added = nextQty - existing.quantity;
+      if (existingInPrev) {
+        const clamped = Math.min(
+          product.stock,
+          existingInPrev.quantity + safeQty,
+        );
 
         return prev.map((item) =>
           item.productId === product.id
             ? {
                 ...item,
-                quantity: nextQty,
-                // Always refresh merchandising fields from the live product
+                quantity: clamped,
                 slug: product.slug,
                 title: product.title,
                 price: product.price,
@@ -118,13 +124,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
         );
       }
 
-      const qtyToAdd = Math.min(product.stock, safeQty);
-      added = qtyToAdd;
-      return [...prev, productToCartItem(product, qtyToAdd)];
+      return [...prev, productToCartItem(product, Math.min(product.stock, safeQty))];
     });
 
     return added;
-  }, []);
+  }, [items]);
 
   const removeItem = useCallback((productId: string) => {
     setItems((prev) => prev.filter((item) => item.productId !== productId));
