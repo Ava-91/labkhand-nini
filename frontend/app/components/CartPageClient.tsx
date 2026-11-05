@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { AlertTriangle, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 import {
@@ -15,9 +15,14 @@ import { useCart } from "./CartProvider";
 type CartPageClientProps = {
   /** Live catalog from Strapi so persisted cart lines get current price/stock. */
   products: Product[];
+  /** True only when getProducts() succeeded (even if the list is empty). */
+  catalogAvailable: boolean;
 };
 
-export default function CartPageClient({ products }: CartPageClientProps) {
+export default function CartPageClient({
+  products,
+  catalogAvailable,
+}: CartPageClientProps) {
   const {
     items,
     itemCount,
@@ -33,10 +38,12 @@ export default function CartPageClient({ products }: CartPageClientProps) {
   const didSync = useRef(false);
 
   useEffect(() => {
-    if (!isReady || didSync.current || products.length === 0) return;
+    // Only reconcile against a successfully loaded catalog.
+    // On failure, keep localStorage lines as-is and show the warning banner.
+    if (!isReady || didSync.current || !catalogAvailable) return;
     didSync.current = true;
     syncWithProducts(products);
-  }, [isReady, products, syncWithProducts]);
+  }, [isReady, catalogAvailable, products, syncWithProducts]);
 
   if (!isReady) {
     return (
@@ -89,11 +96,37 @@ export default function CartPageClient({ products }: CartPageClientProps) {
         </button>
       </div>
 
+      {!catalogAvailable && (
+        <div
+          className="mt-6 flex gap-3 rounded-2xl border border-[#e8c6d1] bg-[#fff0f3] p-4 text-sm leading-7 text-[#875366]"
+          role="alert"
+        >
+          <AlertTriangle
+            className="mt-0.5 shrink-0 text-[#c65f7d]"
+            size={20}
+            strokeWidth={1.8}
+            aria-hidden="true"
+          />
+          <div>
+            <p className="font-bold text-[#a84766]">
+              اطلاعات به‌روز محصولات در دسترس نیست
+            </p>
+            <p className="mt-1">
+              قیمت، تخفیف و موجودی نمایش‌داده‌شده ممکن است قدیمی باشد. تا اتصال
+              دوباره برقرار شود، افزایش تعداد غیرفعال است و این ارقام به‌عنوان
+              دادهٔ قطعی در نظر گرفته نمی‌شوند.
+            </p>
+          </div>
+        </div>
+      )}
+
       <ul className="mt-8 space-y-4">
         {items.map((item) => {
           const unitPrice = getCartItemUnitPrice(item);
           const lineTotal = getCartItemLineTotal(item);
           const hasDiscount = item.discount > 0;
+          const canIncrease =
+            catalogAvailable && item.quantity < item.stock;
 
           return (
             <li
@@ -133,6 +166,11 @@ export default function CartPageClient({ products }: CartPageClientProps) {
                       {formatMoney(item.price)}
                     </del>
                   )}
+                  {!catalogAvailable && (
+                    <span className="text-[11px] font-bold text-[#a84766]">
+                      (ممکن است به‌روز نباشد)
+                    </span>
+                  )}
                 </div>
               </div>
 
@@ -152,8 +190,13 @@ export default function CartPageClient({ products }: CartPageClientProps) {
                   <button
                     type="button"
                     onClick={() => increment(item.productId)}
-                    disabled={item.quantity >= item.stock}
+                    disabled={!canIncrease}
                     aria-label="افزایش تعداد"
+                    title={
+                      !catalogAvailable
+                        ? "تا دریافت موجودی به‌روز، افزایش تعداد ممکن نیست"
+                        : undefined
+                    }
                     className="grid h-9 w-9 place-items-center rounded-full text-[#a84766] transition hover:bg-[#fff0f3] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     <Plus size={14} strokeWidth={2} aria-hidden="true" />
@@ -180,13 +223,17 @@ export default function CartPageClient({ products }: CartPageClientProps) {
 
       <div className="mt-8 rounded-3xl border border-[#f0e4e3] bg-[#fff8f8] p-5 sm:p-6">
         <div className="flex items-center justify-between gap-4">
-          <span className="text-sm font-bold text-[#69595d]">جمع کل</span>
+          <span className="text-sm font-bold text-[#69595d]">
+            {catalogAvailable ? "جمع کل" : "جمع تقریبی"}
+          </span>
           <strong className="text-xl font-black text-[#553d44] sm:text-2xl">
             {formatMoney(subtotal)}
           </strong>
         </div>
         <p className="mt-3 text-xs leading-6 text-[#817477]">
-          هزینه ارسال و تخفیف نهایی در مرحله بعد محاسبه می‌شود.
+          {catalogAvailable
+            ? "هزینه ارسال و تخفیف نهایی در مرحله بعد محاسبه می‌شود."
+            : "این مبلغ بر اساس داده‌های ذخیره‌شده است و تا به‌روزرسانی اطلاعات محصولات قطعی نیست."}
         </p>
         <button
           type="button"

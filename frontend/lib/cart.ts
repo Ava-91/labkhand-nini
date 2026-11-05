@@ -24,7 +24,6 @@ export function applyProductToCartItem(
   product: Product,
 ): CartItem {
   const stock = Math.max(0, product.stock);
-  const quantity = Math.min(Math.max(1, item.quantity), stock || item.quantity);
 
   return {
     productId: product.id,
@@ -54,7 +53,13 @@ export function productToCartItem(product: Product, quantity = 1): CartItem {
   };
 }
 
-/** Reconcile stored cart lines with current catalog; drops zero-stock lines. */
+/**
+ * Reconcile stored cart lines with the live catalog.
+ * - Updates price, discount, stock, and display fields from products
+ * - Clamps quantity to current stock
+ * - Removes lines for products missing from the catalog or with zero stock
+ * Call only after a successful catalog fetch.
+ */
 export function syncCartItemsWithProducts(
   items: CartItem[],
   products: Product[],
@@ -64,10 +69,10 @@ export function syncCartItemsWithProducts(
   return items
     .map((item) => {
       const product = byId.get(item.productId);
-      if (!product) return item; // keep line if product temporarily unavailable
+      if (!product) return null; // unpublished or deleted
       return applyProductToCartItem(item, product);
     })
-    .filter((item) => item.quantity > 0 && item.stock > 0);
+    .filter((item): item is CartItem => item !== null && item.quantity > 0 && item.stock > 0);
 }
 
 export function getCartItemUnitPrice(item: CartItem): number {

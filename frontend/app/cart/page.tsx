@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import CartPageClient from "../components/CartPageClient";
 import { getProducts } from "@/lib/products";
+import type { Product } from "@/lib/products";
 
 export const metadata: Metadata = {
   title: "سبد خرید",
@@ -9,18 +10,20 @@ export const metadata: Metadata = {
 };
 
 export default async function CartPage() {
-  let products: Awaited<ReturnType<typeof getProducts>> = [];
+  let products: Product[] = [];
+  let catalogAvailable = false;
 
   try {
     products = await getProducts();
+    catalogAvailable = true;
   } catch (error) {
-    // Cart still works offline from localStorage; live price/stock sync is best-effort.
+    // Keep cart contents; client must not treat stored price/stock as live data.
     console.error("[cart] Failed to load products for cart sync:", error);
   }
 
   return (
     <main>
-      <CartPageClient products={products} />
+      <CartPageClient products={products} catalogAvailable={catalogAvailable} />
     </main>
   );
 }
