@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { getDiscountedPrice, getProductBySlug } from "@/lib/products";
 import { getSiteSettings } from "@/lib/site-settings";
 import ProductDetailActions from "../../components/ProductDetailActions";
+import FavoriteButton from "../../components/FavoriteButton";
 
 const money = (price: number) =>
   new Intl.NumberFormat("fa-IR").format(price) + " تومان";
@@ -114,6 +115,13 @@ export default async function ProductDetailPage({ params }: PageProps) {
           </div>
 
           <ProductDetailActions product={product} />
+          <div className="mt-4">
+            <FavoriteButton
+              productId={product.id}
+              productTitle={product.title}
+              variant="detail"
+            />
+          </div>
 
           <div className="mt-5 flex gap-3 rounded-2xl border border-[#f0e4e3] bg-white p-4 sm:p-5">
             <Heart

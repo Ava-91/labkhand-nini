@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { getDiscountedPrice, type Product } from "@/lib/products";
 import AddToCartControls from "./AddToCartControls";
+import FavoriteButton from "./FavoriteButton";
 
 const money = (price: number) =>
   new Intl.NumberFormat("fa-IR").format(price) + " تومان";
@@ -12,6 +13,7 @@ export default function ProductCard({ product }: { product: Product }) {
 
   return (
     <article className="overflow-hidden rounded-3xl border border-[#f0e4e3] bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+      <div className="relative">
       <Link
         href={"/products/" + product.slug}
         className="relative grid aspect-[4/3] place-items-center overflow-hidden bg-gradient-to-br from-[#fff0f3] to-[#f5effb]"
@@ -35,6 +37,8 @@ export default function ProductCard({ product }: { product: Product }) {
           </span>
         )}
       </Link>
+      <FavoriteButton productId={product.id} productTitle={product.title} />
+      </div>
 
       <div className="p-5">
         <span className="text-xs font-bold text-[#a84766]">{product.category}</span>
