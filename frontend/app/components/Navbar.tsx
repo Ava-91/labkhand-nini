@@ -3,6 +3,7 @@ import { Menu, Search } from "lucide-react"; // آیکون‌های منو و ج
 
 import { auth } from "@/auth"; // بررسی وضعیت ورود کاربر
 import type { SiteSettings } from "@/lib/site-settings"; // نوع تنظیمات سایت
+import CartButton from "./CartButton"; // دکمه سبد خرید
 import LogoutButton from "./LogoutButton"; // کامپوننت دکمه خروج
 
 // ساخت نوار ناوبری به‌صورت async برای دریافت سشن کاربر
@@ -100,83 +101,94 @@ export default async function Navbar({
           </label>
         </form>
 
-        <div className="hidden shrink-0 items-center gap-3 text-sm lg:flex">
-          {/* نمایش گزینه‌های حساب کاربری در صفحه‌های متوسط و بزرگ‌تر */}
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          <CartButton />
 
-          {session ? ( // اگر کاربر وارد شده باشد
-            <>
-              <Link
-                className="whitespace-nowrap rounded-full border border-[#f0e4e3] bg-white px-4 py-2 font-semibold transition hover:border-[#c65f7d]"
-                href="/dashboard" // رفتن به پنل کاربر
-              >
-                حساب من
-              </Link>
-              <LogoutButton /> {/* نمایش دکمه خروج */}
-            </>
-          ) : ( // اگر کاربر وارد نشده باشد
-            <>
-              <Link className="whitespace-nowrap px-2 py-2 hover:text-[#a84766]" href="/login">
-                ورود {/* لینک صفحه ورود */}
-              </Link>
-              <Link
-                className="whitespace-nowrap rounded-full bg-[#c65f7d] px-4 py-2.5 font-bold text-white shadow-sm transition hover:bg-[#a84766] sm:px-5"
-                href="/register" // رفتن به صفحه ثبت‌نام
-              >
-                عضویت
-              </Link>
-            </>
-          )}
-        </div>
-
-        <details className="relative shrink-0 lg:hidden">
-          {/* منوی بازشونده مخصوص موبایل */}
-
-          <summary className="cursor-pointer list-none rounded-xl border border-[#f0e4e3] bg-white p-2 text-xl">
-            <Menu aria-hidden="true" size={21} strokeWidth={1.8} /> {/* آیکون منو */}
-            <span className="sr-only">باز کردن منو</span> {/* متن مخصوص صفحه‌خوان */}
-          </summary>
-
-          <div className="absolute left-0 top-12 flex min-w-44 flex-col gap-1 rounded-2xl border border-[#f0e4e3] bg-white p-3 shadow-xl">
-            {/* محتوای منوی موبایل */}
-
-            {settings.navLinks.map((item) => ( // نمایش لینک‌های منو در موبایل
-              <Link
-                href={item.href} // آدرس مقصد
-                key={"mobile-" + item.href + item.label} // کلید یکتا برای آیتم موبایل
-                className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
-              >
-                {item.label} {/* متن لینک */}
-              </Link>
-            ))}
+          <div className="hidden items-center gap-3 text-sm lg:flex">
+            {/* نمایش گزینه‌های حساب کاربری در صفحه‌های متوسط و بزرگ‌تر */}
 
             {session ? ( // اگر کاربر وارد شده باشد
               <>
                 <Link
-                  className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
-                  href="/dashboard" // لینک پنل کاربری
+                  className="whitespace-nowrap rounded-full border border-[#f0e4e3] bg-white px-4 py-2 font-semibold transition hover:border-[#c65f7d]"
+                  href="/dashboard" // رفتن به پنل کاربر
                 >
                   حساب من
                 </Link>
-                <LogoutButton /> {/* دکمه خروج در موبایل */}
+                <LogoutButton /> {/* نمایش دکمه خروج */}
               </>
             ) : ( // اگر کاربر وارد نشده باشد
               <>
-                <Link
-                  className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
-                  href="/login" // لینک ورود
-                >
-                  ورود
+                <Link className="whitespace-nowrap px-2 py-2 hover:text-[#a84766]" href="/login">
+                  ورود {/* لینک صفحه ورود */}
                 </Link>
                 <Link
-                  className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
-                  href="/register" // لینک ثبت‌نام
+                  className="whitespace-nowrap rounded-full bg-[#c65f7d] px-4 py-2.5 font-bold text-white shadow-sm transition hover:bg-[#a84766] sm:px-5"
+                  href="/register" // رفتن به صفحه ثبت‌نام
                 >
-                  ثبت‌نام
+                  عضویت
                 </Link>
               </>
             )}
           </div>
-        </details>
+
+          <details className="relative shrink-0 lg:hidden">
+            {/* منوی بازشونده مخصوص موبایل */}
+
+            <summary className="cursor-pointer list-none rounded-xl border border-[#f0e4e3] bg-white p-2 text-xl">
+              <Menu aria-hidden="true" size={21} strokeWidth={1.8} /> {/* آیکون منو */}
+              <span className="sr-only">باز کردن منو</span> {/* متن مخصوص صفحه‌خوان */}
+            </summary>
+
+            <div className="absolute left-0 top-12 flex min-w-44 flex-col gap-1 rounded-2xl border border-[#f0e4e3] bg-white p-3 shadow-xl">
+              {/* محتوای منوی موبایل */}
+
+              {settings.navLinks.map((item) => ( // نمایش لینک‌های منو در موبایل
+                <Link
+                  href={item.href} // آدرس مقصد
+                  key={"mobile-" + item.href + item.label} // کلید یکتا برای آیتم موبایل
+                  className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
+                >
+                  {item.label} {/* متن لینک */}
+                </Link>
+              ))}
+
+              <Link
+                className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
+                href="/cart"
+              >
+                سبد خرید
+              </Link>
+
+              {session ? ( // اگر کاربر وارد شده باشد
+                <>
+                  <Link
+                    className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
+                    href="/dashboard" // لینک پنل کاربری
+                  >
+                    حساب من
+                  </Link>
+                  <LogoutButton /> {/* دکمه خروج در موبایل */}
+                </>
+              ) : ( // اگر کاربر وارد نشده باشد
+                <>
+                  <Link
+                    className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
+                    href="/login" // لینک ورود
+                  >
+                    ورود
+                  </Link>
+                  <Link
+                    className="rounded-xl px-3 py-2 text-sm hover:bg-[#fff0f3]"
+                    href="/register" // لینک ثبت‌نام
+                  >
+                    ثبت‌نام
+                  </Link>
+                </>
+              )}
+            </div>
+          </details>
+        </div>
       </nav>
     </header>
   );
