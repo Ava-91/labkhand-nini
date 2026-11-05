@@ -26,8 +26,7 @@ export default factories.createCoreController(
   'api::order.order',
   ({ strapi }: { strapi: Core.Strapi }) => ({
     /**
-     * Create an order and decrement product stock atomically.
-     * Re-reads live stock inside the transaction so concurrent checkouts cannot oversell.
+     * Create an order and decrement product stock atomically so concurrent checkouts cannot oversell.
      */
     async create(ctx) {
       const body = ctx.request.body as { data?: OrderCreateData };
@@ -67,24 +66,14 @@ export default factories.createCoreController(
               );
             }
 
-            const stock = Number(product.stock ?? 0);
-            if (!Number.isFinite(stock) || stock < quantity) {
-              const title =
-                typeof product.title === 'string' && product.title
-                  ? product.title
-                  : productId;
-              throw new ApplicationError(
-                `Insufficient stock for «${title}» (requested ${quantity}, available ${Math.max(0, stock)})`,
-              );
+            const affected = await strapi.db
+              .connection('products')
+              .where({ document_id: productId })
+              .andWhere('stock', '>=', quantity)
+              .decrement('stock', quantity);
+            if (!affected) {
+              throw new ApplicationError(`Insufficient stock for ${productId}`);
             }
-
-            await strapi.documents('api::product.product').update({
-              documentId: productId,
-              data: {
-                stock: stock - quantity,
-              },
-              status: 'published',
-            });
           }
 
           return strapi.documents('api::order.order').create({
