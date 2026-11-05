@@ -42,10 +42,24 @@ type StrapiProduct = {
   featured?: boolean; // وضعیت ویژه بودن محصول
 };
 
-// تعریف ساختار پاسخ API محصولات
+// تعریف ساختار پاسخ API محصولات (با متادیتای صفحه‌بندی Strapi)
 type ProductsResponse = {
   data: StrapiProduct[]; // آرایه محصولات دریافتی
+  meta?: {
+    pagination?: {
+      page?: number;
+      pageSize?: number;
+      pageCount?: number;
+      total?: number;
+    };
+  };
 };
+
+/** Page size for catalog fetches. All pages are walked until complete. */
+const PRODUCTS_PAGE_SIZE = 100;
+
+/** Safety cap so a bad API cannot loop forever. */
+const PRODUCTS_MAX_PAGES = 100;
 
 // تعیین ایموجی پیش‌فرض برای هر دسته‌بندی
 const categoryEmojis: Record<string, string> = {
@@ -89,7 +103,51 @@ function mapProduct(item: StrapiProduct): Product {
   };
 }
 
-// دریافت فهرست محصولات
+function buildProductsPageUrl(
+  strapiUrl: string,
+  page: number,
+  pageSize: number,
+): string {
+  const params = new URLSearchParams();
+  params.set("populate", "*");
+  params.set("pagination[page]", String(page));
+  params.set("pagination[pageSize]", String(pageSize));
+  return strapiUrl + "/api/products?" + params.toString();
+}
+
+async function fetchProductsPage(
+  strapiUrl: string,
+  page: number,
+  pageSize: number,
+): Promise<ProductsResponse> {
+  const response = await fetch(buildProductsPageUrl(strapiUrl, page, pageSize), {
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      "Unable to load products from Strapi (HTTP " +
+        response.status +
+        ", page " +
+        page +
+        "). Check the public product.find permission and publish the products.",
+    );
+  }
+
+  const result = (await response.json()) as ProductsResponse;
+
+  if (!Array.isArray(result.data)) {
+    throw new Error(
+      "Strapi returned an unexpected products response on page " +
+        page +
+        ". Check the /api/products endpoint.",
+    );
+  }
+
+  return result;
+}
+
+// دریافت فهرست کامل محصولات (همه صفحات)
 export async function getProducts(): Promise<Product[]> {
   const strapiUrl = getStrapiUrl(); // بررسی آدرس سرور Strapi
 
@@ -101,31 +159,44 @@ export async function getProducts(): Promise<Product[]> {
   }
 
   try {
-    // درخواست دریافت محصولات از API همراه با تصاویر و اطلاعات مرتبط
-    const response = await fetch(
-      strapiUrl + "/api/products?populate=*&pagination[pageSize]=100",
-      { cache: "no-store" }, // جلوگیری از استفاده از پاسخ کش‌شده
+    const allRaw: StrapiProduct[] = [];
+
+    // First page establishes pagination metadata
+    const first = await fetchProductsPage(strapiUrl, 1, PRODUCTS_PAGE_SIZE);
+    allRaw.push(...first.data);
+
+    const pageCount = Math.max(
+      1,
+      Number(first.meta?.pagination?.pageCount ?? 1),
     );
+    const total = Number(first.meta?.pagination?.total);
 
-    if (!response.ok) {
+    if (pageCount > PRODUCTS_MAX_PAGES) {
       throw new Error(
-        "Unable to load products from Strapi (HTTP " +
-          response.status +
-          "). Check the public product.find permission and publish the products.",
+        "Strapi reported too many product pages (" +
+          pageCount +
+          "). Refusing incomplete catalog load so cart sync cannot drop valid items.",
       );
     }
 
-    // تبدیل داده‌های دریافتی از API به داده‌های قابل استفاده
-    const result = (await response.json()) as ProductsResponse;
+    // Fetch remaining pages sequentially so a mid-way failure aborts the whole load
+    for (let page = 2; page <= pageCount; page += 1) {
+      const next = await fetchProductsPage(strapiUrl, page, PRODUCTS_PAGE_SIZE);
+      allRaw.push(...next.data);
+    }
 
-    if (!Array.isArray(result.data)) {
+    // If Strapi reported a total, ensure we did not silently truncate
+    if (Number.isFinite(total) && total >= 0 && allRaw.length < total) {
       throw new Error(
-        "Strapi returned an unexpected products response. Check the /api/products endpoint.",
+        "Incomplete product catalog: received " +
+          allRaw.length +
+          " of " +
+          total +
+          " products. Cart sync requires a full catalog.",
       );
     }
 
-    // تبدیل تمام محصولات به ساختار استاندارد
-    return result.data.map(mapProduct);
+    return allRaw.map(mapProduct);
   } catch (error) {
     // خطای ارتباطی یا پاسخ نامعتبر نباید با فروشگاه خالی پنهان شود
     console.error("[storefront] Failed to load products from Strapi:", error);
