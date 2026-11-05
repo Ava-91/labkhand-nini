@@ -110,7 +110,6 @@ export async function POST(request: Request) {
   }
 
   const byId = new Map(products.map((p) => [p.id, p]));
-  // Merge duplicate productIds from the client into a single quantity
   const quantityById = new Map<string, number>();
   for (const line of clientLines) {
     quantityById.set(
@@ -176,6 +175,7 @@ export async function POST(request: Request) {
   const orderCode = generateOrderCode();
 
   // status and paymentMethod are always set server-side — never from the client
+  // Stock is decremented inside Strapi's order.create controller (transaction)
   const orderData = {
     orderCode,
     customerName: body.customerName.trim(),
@@ -211,10 +211,26 @@ export async function POST(request: Request) {
         return NextResponse.json(
           {
             error:
-              "توکن STRAPI_API_TOKEN نامعتبر است یا اجازه create روی Order ندارد. Public create را فعال نکن؛ از Full access API token با دسترسی Order استفاده کن.",
+              "توکن STRAPI_API_TOKEN نامعتبر است یا اجازه Order create / Product update ندارد. Public را باز نکن؛ از API token با این دسترسی‌ها استفاده کن.",
           },
           { status: 502 },
         );
+      }
+
+      // Strapi custom controller returns 400 when stock is insufficient at create time
+      if (response.status === 400) {
+        let message = "موجودی کافی نیست یا داده سفارش نامعتبر است.";
+        try {
+          const parsed = JSON.parse(detail) as {
+            error?: { message?: string };
+            message?: string;
+          };
+          message =
+            parsed.error?.message || parsed.message || message;
+        } catch {
+          // keep default
+        }
+        return NextResponse.json({ error: message }, { status: 400 });
       }
 
       return NextResponse.json(
