@@ -3,6 +3,7 @@ import Link from "next/link"; // کامپوننت لینک‌دهی در Next.js
 import localFont from "next/font/local"; // بارگذاری فونت محلی
 
 import { CartProvider } from "./components/CartProvider"; // ارائه‌دهنده سبد خرید
+import { WishlistProvider } from "./components/WishlistProvider"; // ارائه‌دهنده علاقه‌مندی‌ها
 import Navbar from "./components/Navbar"; // کامپوننت نوار ناوبری
 import { getSiteSettings } from "@/lib/site-settings"; // دریافت تنظیمات سایت
 import "./globals.css"; // وارد کردن استایل‌های سراسری
@@ -42,6 +43,7 @@ export default async function RootLayout({
       {/* اعمال فونت، رنگ پس‌زمینه و استایل کلی صفحه */}
       <body className={`${vazirmatn.className} min-h-screen bg-[#fffaf6] text-[#443a3c] antialiased`}>
         <CartProvider>
+          <WishlistProvider>
           {/* لینک دسترسی سریع برای رفتن به محتوای اصلی با صفحه‌کلید */}
           <a
             href="#main-content"
@@ -100,6 +102,7 @@ export default async function RootLayout({
               <span className="text-xs text-[#817477]">{settings.copyrightText}</span>
             </div>
           </footer>
+          </WishlistProvider>
         </CartProvider>
       </body>
     </html>
