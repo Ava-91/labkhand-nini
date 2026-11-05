@@ -147,7 +147,11 @@ async function fetchProductsPage(
   return result;
 }
 
-// دریافت فهرست کامل محصولات (همه صفحات)
+/**
+ * Load the full published product catalog from Strapi.
+ * Walks every pagination page so cart sync never treats
+ * off-page products as deleted.
+ */
 export async function getProducts(): Promise<Product[]> {
   const strapiUrl = getStrapiUrl(); // بررسی آدرس سرور Strapi
 
