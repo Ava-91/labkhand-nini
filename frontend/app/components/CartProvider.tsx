@@ -15,6 +15,7 @@ import {
   getCartItemCount,
   getCartSubtotal,
   productToCartItem,
+  syncCartItemsWithProducts,
   type CartItem,
   type CartState,
 } from "@/lib/cart";
@@ -25,13 +26,16 @@ type CartContextValue = {
   itemCount: number;
   subtotal: number;
   isReady: boolean;
-  addItem: (product: Product, quantity?: number) => void;
+  /** Returns how many units were actually added (0 if none). */
+  addItem: (product: Product, quantity?: number) => number;
   removeItem: (productId: string) => void;
   setQuantity: (productId: string, quantity: number) => void;
   increment: (productId: string) => void;
   decrement: (productId: string) => void;
   clearCart: () => void;
   getItemQuantity: (productId: string) => number;
+  /** Refresh price, discount, stock, and details from live product list. */
+  syncWithProducts: (products: Product[]) => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -83,8 +87,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     saveCartToStorage(items);
   }, [items, isReady]);
 
-  const addItem = useCallback((product: Product, quantity = 1) => {
-    if (product.stock <= 0) return;
+  const addItem = useCallback((product: Product, quantity = 1): number => {
+    if (product.stock <= 0) return 0;
+
+    let added = 0;
 
     setItems((prev) => {
       const existing = prev.find((item) => item.productId === product.id);
@@ -92,18 +98,32 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       if (existing) {
         const nextQty = Math.min(product.stock, existing.quantity + safeQty);
+        added = nextQty - existing.quantity;
+
         return prev.map((item) =>
           item.productId === product.id
-            ? { ...item, quantity: nextQty, stock: product.stock }
+            ? {
+                ...item,
+                quantity: nextQty,
+                // Always refresh merchandising fields from the live product
+                slug: product.slug,
+                title: product.title,
+                price: product.price,
+                discount: product.discount,
+                image: product.image,
+                emoji: product.emoji,
+                stock: product.stock,
+              }
             : item,
         );
       }
 
-      return [
-        ...prev,
-        productToCartItem(product, Math.min(product.stock, safeQty)),
-      ];
+      const qtyToAdd = Math.min(product.stock, safeQty);
+      added = qtyToAdd;
+      return [...prev, productToCartItem(product, qtyToAdd)];
     });
+
+    return added;
   }, []);
 
   const removeItem = useCallback((productId: string) => {
@@ -162,6 +182,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [items],
   );
 
+  const syncWithProducts = useCallback((products: Product[]) => {
+    setItems((prev) => syncCartItemsWithProducts(prev, products));
+  }, []);
+
   const value = useMemo<CartContextValue>(
     () => ({
       items,
@@ -175,6 +199,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       decrement,
       clearCart,
       getItemQuantity,
+      syncWithProducts,
     }),
     [
       items,
@@ -186,6 +211,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
       decrement,
       clearCart,
       getItemQuantity,
+      syncWithProducts,
     ],
   );
 

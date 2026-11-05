@@ -2,15 +2,22 @@
 
 import Link from "next/link";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 import {
   formatMoney,
   getCartItemLineTotal,
   getCartItemUnitPrice,
 } from "@/lib/cart";
+import type { Product } from "@/lib/products";
 import { useCart } from "./CartProvider";
 
-export default function CartPageClient() {
+type CartPageClientProps = {
+  /** Live catalog from Strapi so persisted cart lines get current price/stock. */
+  products: Product[];
+};
+
+export default function CartPageClient({ products }: CartPageClientProps) {
   const {
     items,
     itemCount,
@@ -20,7 +27,16 @@ export default function CartPageClient() {
     decrement,
     removeItem,
     clearCart,
+    syncWithProducts,
   } = useCart();
+
+  const didSync = useRef(false);
+
+  useEffect(() => {
+    if (!isReady || didSync.current || products.length === 0) return;
+    didSync.current = true;
+    syncWithProducts(products);
+  }, [isReady, products, syncWithProducts]);
 
   if (!isReady) {
     return (

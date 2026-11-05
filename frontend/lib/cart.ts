@@ -1,5 +1,4 @@
 import type { Product } from "./products";
-import { getDiscountedPrice } from "./products";
 
 export type CartItem = {
   productId: string;
@@ -19,7 +18,14 @@ export type CartState = {
 
 export const CART_STORAGE_KEY = "labkhand-nini-cart";
 
-export function productToCartItem(product: Product, quantity = 1): CartItem {
+/** Merge live product fields onto a cart line (keeps quantity, clamps to stock). */
+export function applyProductToCartItem(
+  item: CartItem,
+  product: Product,
+): CartItem {
+  const stock = Math.max(0, product.stock);
+  const quantity = Math.min(Math.max(1, item.quantity), stock || item.quantity);
+
   return {
     productId: product.id,
     slug: product.slug,
@@ -28,9 +34,40 @@ export function productToCartItem(product: Product, quantity = 1): CartItem {
     discount: product.discount,
     image: product.image,
     emoji: product.emoji,
-    quantity: Math.max(1, quantity),
-    stock: product.stock,
+    quantity: stock > 0 ? Math.min(item.quantity, stock) : 0,
+    stock,
   };
+}
+
+export function productToCartItem(product: Product, quantity = 1): CartItem {
+  const stock = Math.max(0, product.stock);
+  return {
+    productId: product.id,
+    slug: product.slug,
+    title: product.title,
+    price: product.price,
+    discount: product.discount,
+    image: product.image,
+    emoji: product.emoji,
+    quantity: Math.min(Math.max(1, quantity), stock || 1),
+    stock,
+  };
+}
+
+/** Reconcile stored cart lines with current catalog; drops zero-stock lines. */
+export function syncCartItemsWithProducts(
+  items: CartItem[],
+  products: Product[],
+): CartItem[] {
+  const byId = new Map(products.map((p) => [p.id, p]));
+
+  return items
+    .map((item) => {
+      const product = byId.get(item.productId);
+      if (!product) return item; // keep line if product temporarily unavailable
+      return applyProductToCartItem(item, product);
+    })
+    .filter((item) => item.quantity > 0 && item.stock > 0);
 }
 
 export function getCartItemUnitPrice(item: CartItem): number {

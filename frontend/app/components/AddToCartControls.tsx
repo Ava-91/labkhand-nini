@@ -1,7 +1,7 @@
 "use client";
 
 import { Minus, Plus, ShoppingCart } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useCart } from "./CartProvider";
 import type { Product } from "@/lib/products";
@@ -22,7 +22,16 @@ export default function AddToCartControls({
 
   const isInStock = product.stock > 0;
   const inCartQty = getItemQuantity(product.id);
-  const maxQty = product.stock;
+  const remaining = Math.max(0, product.stock - inCartQty);
+  const maxQty = Math.max(1, remaining);
+
+  // Keep selected quantity within remaining capacity when cart changes
+  useEffect(() => {
+    setQuantity((q) => {
+      if (remaining <= 0) return 1;
+      return Math.min(q, remaining);
+    });
+  }, [remaining]);
 
   function handleDecrement() {
     setQuantity((q) => Math.max(1, q - 1));
@@ -33,10 +42,16 @@ export default function AddToCartControls({
   }
 
   function handleAdd() {
-    if (!isInStock) return;
-    addItem(product, quantity);
-    setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 1800);
+    if (!isInStock || remaining <= 0) return;
+
+    const toAdd = Math.min(quantity, remaining);
+    const added = addItem(product, toAdd);
+
+    if (added > 0) {
+      setQuantity(1);
+      setJustAdded(true);
+      setTimeout(() => setJustAdded(false), 1800);
+    }
   }
 
   if (!isInStock) {
@@ -50,6 +65,23 @@ export default function AddToCartControls({
       >
         فعلاً ناموجود
       </p>
+    );
+  }
+
+  if (remaining <= 0) {
+    return (
+      <div className={variant === "detail" ? "mt-6" : "mt-4"}>
+        <p
+          className={
+            variant === "detail"
+              ? "text-sm font-bold text-[#367557]"
+              : "text-center text-xs font-bold text-[#367557]"
+          }
+        >
+          حداکثر موجودی در سبد است ({" "}
+          {new Intl.NumberFormat("fa-IR").format(inCartQty)} عدد)
+        </p>
+      </div>
     );
   }
 
@@ -77,7 +109,7 @@ export default function AddToCartControls({
             <button
               type="button"
               onClick={handleIncrement}
-              disabled={quantity >= maxQty}
+              disabled={quantity >= remaining}
               aria-label="افزایش تعداد"
               className="grid h-11 w-11 place-items-center rounded-full text-[#a84766] transition hover:bg-[#fff0f3] disabled:cursor-not-allowed disabled:opacity-40"
             >
@@ -94,7 +126,8 @@ export default function AddToCartControls({
         <button
           type="button"
           onClick={handleAdd}
-          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#c65f7d] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#a84766] sm:w-auto sm:min-w-48"
+          disabled={remaining <= 0}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#c65f7d] px-6 py-3.5 text-sm font-bold text-white shadow-sm transition hover:bg-[#a84766] disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:min-w-48"
         >
           <ShoppingCart size={18} strokeWidth={1.8} aria-hidden="true" />
           {justAdded ? "به سبد اضافه شد ✓" : "افزودن به سبد خرید"}
@@ -126,7 +159,7 @@ export default function AddToCartControls({
           <button
             type="button"
             onClick={handleIncrement}
-            disabled={quantity >= maxQty}
+            disabled={quantity >= remaining}
             aria-label="افزایش تعداد"
             className="grid h-8 w-8 place-items-center rounded-full text-[#a84766] transition hover:bg-[#fff0f3] disabled:cursor-not-allowed disabled:opacity-40"
           >
@@ -137,7 +170,8 @@ export default function AddToCartControls({
         <button
           type="button"
           onClick={handleAdd}
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-[#c65f7d] px-3 py-2 text-xs font-bold text-white transition hover:bg-[#a84766]"
+          disabled={remaining <= 0}
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-full bg-[#c65f7d] px-3 py-2 text-xs font-bold text-white transition hover:bg-[#a84766] disabled:cursor-not-allowed disabled:opacity-50"
         >
           <ShoppingCart size={14} strokeWidth={1.8} aria-hidden="true" />
           {justAdded ? "اضافه شد ✓" : "افزودن"}
